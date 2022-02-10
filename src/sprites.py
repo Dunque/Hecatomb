@@ -1,7 +1,6 @@
 import pygame as pg
-from cards import Card
-
-from settings import *
+from .cards import Card
+from .settings import *
 
 vec = pg.math.Vector2
 

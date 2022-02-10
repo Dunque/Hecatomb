@@ -1,5 +1,5 @@
 import pygame as pg
-from settings import *
+from .settings import *
 vec = pg.math.Vector2
 
 

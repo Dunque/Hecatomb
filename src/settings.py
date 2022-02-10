@@ -4,7 +4,8 @@ FPS = 60
 TILESIZE = 64
 GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
-TITLE = "A* Path Finding Algorithm"
+TITLE = "Hecatomb"
+FONT = "Arial"
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -23,5 +24,8 @@ CROSSHAIR_IMG = 'crosshair.png'
 CAMERA_X = 0
 CAMERA_Y = 0
 MOVEMENT_MULTIPLIER = 20
-X_BORDER = 60  # 60%
-Y_BORDER = 60  # 60%
+X_BORDER = 80  # 80%
+Y_BORDER = 80  # 80%
+
+MAP_DIR = "map/"
+IMG_DIR = "img/"

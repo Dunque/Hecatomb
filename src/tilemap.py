@@ -1,5 +1,6 @@
 import pygame as pg
-from settings import *
+from .settings import *
+
 vec = pg.math.Vector2
 
 
@@ -7,7 +8,7 @@ class Map:
 	def __init__(self, filename):
 		self.data = []
 		self.min_x, self.max_x, self.min_y, self.max_y = 0, 0, 0, 0
-		with open(filename, 'rt') as map_file:
+		with open(MAP_DIR+filename, 'rt') as map_file:
 			for line in map_file:
 				if line.startswith("[DATA]") or line == "\n":
 					break
