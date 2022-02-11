@@ -28,7 +28,6 @@ class Camera:
         self.halfs = vec(int(WIDTH / 2), int(HEIGHT / 2))
         self.def_cords = vec(CAMERA_X, CAMERA_Y)
 
-
         self.def_cords = vec(CAMERA_X, CAMERA_Y)
         
         self.x = 0
@@ -50,6 +49,6 @@ class Camera:
         self.x = max(-(self.width - WIDTH), self.x)  # right
         self.y = max(-(self.height - HEIGHT), self.y)  # bottom
 
-        self.camera = pg.Rect(self.def_cords.x, self.def_cords.y, self.width_height.x, self.width_height.y)
+        #self.camera = pg.Rect(self.def_cords.x, self.def_cords.y, self.width_height.x, self.width_height.y)
 
-        #self.camera = pg.Rect(self.x, self.y, self.width, self.height)
+        self.camera = pg.Rect(self.x, self.y, self.width, self.height)
