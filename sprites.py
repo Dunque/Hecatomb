@@ -31,15 +31,21 @@ class Player(pg.sprite.Sprite):
         self.isFlipped = False
 
         #GUN
-        self.gun = Gun(self.game, self.pos.x, self.pos.y)
+        #self.gun_offset_X = self.rect.width // 2  - 10
+        #self.gun_offset_Y = self.rect.height // 2 - 10
+        self.gun_offset_X = 0
+        self.gun_offset_Y = 0
+        self.gun = Gun(self.game, self.pos.x - self.gun_offset_X, self.pos.y - self.gun_offset_Y)
 
     def get_keys(self):
         self.vel = vec(0, 0)
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -PLAYER_SPEED
+            self.isFlipped = True
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vel.x = PLAYER_SPEED
+            self.isFlipped = False
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vel.y = -PLAYER_SPEED
         if keys[pg.K_DOWN] or keys[pg.K_s]:
@@ -95,7 +101,15 @@ class Player(pg.sprite.Sprite):
 
         self.rect.center = self.hit_rect.center
 
-        self.gun.update_position(self.pos.x, self.pos.y, self.rect)
+        #GUN
+        self.gun.update_position(self.pos.x - self.gun_offset_X, self.pos.y - self.gun_offset_Y, self.rect)
+
+        #FLIP SPRITE
+        self.image = pg.transform.flip(self.image, self.isFlipped, False)
+
+        #Debug points
+        pg.draw.circle(self.game.screen, RED, (self.hit_rect.centerx,self.hit_rect.centery), 50)
+        pg.display.update()
 
 
 class Wall(pg.sprite.Sprite):
@@ -106,6 +120,7 @@ class Wall(pg.sprite.Sprite):
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
+        self.pos = vec(x,y)
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
@@ -184,7 +199,13 @@ class Gun(pg.sprite.Sprite):
             self.behind = False
 
         #self.pos = vec(x - x_offset + x_offset_side, y - y_offset + y_offset_side)
+        #self.pos = vec(x - x_offset + x_offset_side, y - y_offset + y_offset_side)
         self.pos = vec(x,y)
+
+        pg.draw.circle(self.game.screen, BLUE, (x-cam_moved[0],y-cam_moved[1]), 5)
+        pg.display.update()
+        
+        #ROTATION
         rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
         if 90 < self.rot + 180 < 270:
             self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
@@ -213,8 +234,8 @@ class Gun(pg.sprite.Sprite):
         """ if (self.current_cd >= self.data.cooldown):
             self.can_shoot = True """
         
-        self.rect.x = self.pos.x+(self.shoot_offset*0.5).x
-        self.rect.y = self.pos.y+(self.shoot_offset*0.5).y
+        #self.rect.x = self.pos.x+(self.shoot_offset*0.5).x
+        #self.rect.y = self.pos.y+(self.shoot_offset*0.5).y
 
 """ class Bullet(pg.sprite.Sprite):
     def __init__(self, x, y, shoot_direction, game, target_group, gun_data):
