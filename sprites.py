@@ -78,7 +78,7 @@ class Player(pg.sprite.Sprite):
 
         self.rect.center = self.hit_rect.center
 
-        self.gun.update_position(self.pos.x, self.pos.y)
+        self.gun.update_position(self.pos.x, self.pos.y, self.rect)
 
 
 class Wall(pg.sprite.Sprite):
@@ -109,18 +109,18 @@ class Gun(pg.sprite.Sprite):
         
         # Init image and store it to rotate easilly
         self.image = self.game.gun_img
-        self.orig_img = self.image
         self.rect = self.image.get_rect()
 
         # Init position and rotation
         self.pos = vec(x, y) * TILESIZE
-        self.rotation = 0
+        self.rot = 0
 
         # Init shoot direction vector and shoot offset
         # The shoot vector indicates the bullet direction and
         # the offset indicates the spawn point
         self.shoot_vector = vec(0,1)
         self.shoot_offset = vec(16, 16)
+        self.behind = False
 
         # Init gun stats (Cooldown and damage)
         # This stats will vary depending on the gun type
@@ -130,19 +130,52 @@ class Gun(pg.sprite.Sprite):
         self.can_shoot = True
 
         self.damage = 1
-    
-    def update_position(self, x, y):
-        self.pos = vec(x,y)
-        cam_moved = self.game.camera.get_moved()
 
+    def update_position(self, x, y, player_rect):
         mouse_x, mouse_y = pg.mouse.get_pos()
+        cam_moved = self.game.camera.get_moved()
 
         mouse_x = mouse_x - cam_moved[0]
         mouse_y = mouse_y - cam_moved[1]
 
+        x_offset = (player_rect[2] / 2)
+        y_offset = (player_rect[3] / 2)
+
+        if mouse_x > x + x_offset:
+            x_offset_side = 50
+            middle = False
+        elif mouse_x < x - x_offset:
+            x_offset_side = -50
+            middle = False
+        else:
+            x_offset_side = mouse_x - x
+            middle = True
+
+        if mouse_y > y + y_offset:
+            y_offset_side = 50
+            up = False
+        elif mouse_y < y - y_offset:
+            y_offset_side = -50
+            up = True
+        else:
+            y_offset_side = mouse_y - y
+            up = False
+
+        if up and middle:
+            self.behind = True
+        else:
+            self.behind = False
+
+        self.pos = vec(x - x_offset + x_offset_side, y - y_offset + y_offset_side)
+
         rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
-        self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
-        self.image = pg.transform.rotate(self.game.gun_img, self.rot)
+        if 90 < self.rot + 180 < 270:
+            self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
+            is_flipped = False
+        else:
+            self.rot = int((180 / math.pi) * math.atan2(rel_y, rel_x))
+            is_flipped = True
+        self.image = pg.transform.flip(pg.transform.rotate(self.game.gun_img, self.rot), False, is_flipped)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 

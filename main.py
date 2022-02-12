@@ -21,7 +21,7 @@ class Game:
         game_folder = path.dirname(__file__)
         self.map = Map(path.join(game_folder, 'map.txt'))
         self.player_img = pg.image.load("crosshair.png").convert_alpha()
-        self.gun_img = pg.image.load("raqueta.png").convert_alpha()
+        self.gun_img = pg.image.load("gun.png").convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game
