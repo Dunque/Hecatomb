@@ -1,6 +1,7 @@
 import pygame as pg
 from settings import *
 from tilemap import collide_hit_rect
+from anim import *
 import math
 vec = pg.math.Vector2
 
@@ -18,6 +19,18 @@ class Player(pg.sprite.Sprite):
         self.hit_rect.center = self.rect.center
         self.rot = 0
 
+        #Aniamtion stuff
+        self.anim_sheet = pg.image.load("./player_sheet_walk.png")
+
+        self.animation = Anim(self.anim_sheet,(SPRITESIZE,SPRITESIZE),5,0,6)
+
+        self.image = self.animation.get_frame()
+        self.original_image = self.image
+        self.rect = self.image.get_rect()
+
+        self.isFlipped = False
+
+        #GUN
         self.gun = Gun(self.game, self.pos.x, self.pos.y)
 
     def get_keys(self):
@@ -70,6 +83,10 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.pos """
 
+        #ANIMATION
+        self.image = self.animation.get_frame()
+
+        #MOVEMENT
         self.pos += self.vel * self.game.dt
         self.hit_rect.centerx = self.pos.x
         self.collide_with_walls('x')
@@ -145,7 +162,7 @@ class Gun(pg.sprite.Sprite):
             x_offset_side = 50
             middle = False
         elif mouse_x < x - x_offset:
-            x_offset_side = -50
+            x_offset_side = 0
             middle = False
         else:
             x_offset_side = mouse_x - x
@@ -155,7 +172,7 @@ class Gun(pg.sprite.Sprite):
             y_offset_side = 50
             up = False
         elif mouse_y < y - y_offset:
-            y_offset_side = -50
+            y_offset_side = 0
             up = True
         else:
             y_offset_side = mouse_y - y
@@ -166,8 +183,8 @@ class Gun(pg.sprite.Sprite):
         else:
             self.behind = False
 
-        self.pos = vec(x - x_offset + x_offset_side, y - y_offset + y_offset_side)
-
+        #self.pos = vec(x - x_offset + x_offset_side, y - y_offset + y_offset_side)
+        self.pos = vec(x,y)
         rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
         if 90 < self.rot + 180 < 270:
             self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
