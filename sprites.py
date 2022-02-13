@@ -124,14 +124,14 @@ class Character(pg.sprite.Sprite):
         self.rect.center = self.hit_rect.center
 
         #WEAPON
-        self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self.rect)
+        self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self.isFlipped)
 
 
 class Player(Character):
     def __init__(self, game, x, y):
 
         #Aniamtion stuff
-        self.idleAnim = Anim(game.playerIdleSheet,(SPRITESIZE,SPRITESIZE),8,0,4)
+        self.idleAnim = Anim(game.playerIdleSheet,(SPRITESIZE,SPRITESIZE),10,0,4)
         self.walkAnim = Anim(game.playerWalkSheet,(SPRITESIZE,SPRITESIZE),7,0,6)
         self.deathAnim = Anim(game.playerDeathSheet,(SPRITESIZE,SPRITESIZE),10,0,7)
         self.dodgeAnim = Anim(game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),5,0,5)
@@ -146,7 +146,7 @@ class Player(Character):
         #AIMING
         self.weaponOffsetX = -20
         self.weaponOffsetY = -10
-        self.weapon = Gun(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+        self.weapon = Gun(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self)
 
     def move(self):
         self.vel = vec(0, 0)
@@ -175,8 +175,10 @@ class Player(Character):
 
         if 90 < self.rot + 180 < 270:
             self.isFlipped = False
+            self.weaponOffsetX = -20
         else:
             self.isFlipped = True
+            self.weaponOffsetX = 20
 
     def update(self):
 
@@ -198,13 +200,14 @@ class Wall(pg.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 class Gun(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, character):
         # Init sprite and groups
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
 
         # Init data
         #self.data = gun_data
+        self.char = character
 
         # Set game instance and target_group
         self.game = game
@@ -234,57 +237,27 @@ class Gun(pg.sprite.Sprite):
 
         self.damage = 1
 
-    def updatePos(self, x, y, player_rect):
+    def updatePos(self, x, y, flipWeapon):
         mouse_x, mouse_y = pg.mouse.get_pos()
         cam_moved = self.game.camera.get_moved()
 
         mouse_x = mouse_x - cam_moved[0]
         mouse_y = mouse_y - cam_moved[1]
 
-        x_offset = (player_rect[2] / 2)
-        y_offset = (player_rect[3] / 2)
-
-        if mouse_x > x + x_offset:
-            x_offset_side = 50
-            middle = False
-        elif mouse_x < x - x_offset:
-            x_offset_side = 0
-            middle = False
-        else:
-            x_offset_side = mouse_x - x
-            middle = True
-
-        if mouse_y > y + y_offset:
-            y_offset_side = 50
-            up = False
-        elif mouse_y < y - y_offset:
-            y_offset_side = 0
-            up = True
-        else:
-            y_offset_side = mouse_y - y
-            up = False
-
-        if up and middle:
-            self.behind = True
-        else:
-            self.behind = False
-
-        #self.pos = vec(x - x_offset + x_offset_side, y - y_offset + y_offset_side)
-        #self.pos = vec(x - x_offset + x_offset_side, y - y_offset + y_offset_side)
         self.pos = vec(x,y)
 
         pg.draw.circle(self.game.screen, BLUE, (x-cam_moved[0],y-cam_moved[1]), 5)
         pg.display.update()
         
         #ROTATION
-        rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
+        rel_x, rel_y = mouse_x - self.char.rect.centerx, mouse_y - self.char.rect.centery
         if 90 < self.rot + 180 < 270:
             self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
-            is_flipped = False
+            #is_flipped = False
         else:
             self.rot = int((180 / math.pi) * math.atan2(rel_y, rel_x))
-            is_flipped = True
-        self.image = pg.transform.flip(pg.transform.rotate(self.game.playerGunImg, self.rot), False, is_flipped)
+            #is_flipped = True
+        self.image = pg.transform.flip(pg.transform.rotate(self.game.playerGunImg, self.rot), False, flipWeapon)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 
