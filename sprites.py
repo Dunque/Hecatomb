@@ -5,13 +5,28 @@ from anim import *
 import math
 vec = pg.math.Vector2
 
-class Player(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
+#Abstract class that can represent all humanoid entities (player, enemies)
+class Character(pg.sprite.Sprite):
+
+    def __init__(self, game, x, y, animation, groups):
+
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = self.game.player_img
+
+        #Aniamtion stuff
+
+        self.walkAnim = Anim(self.game.playerWalkSheet,(SPRITESIZE,SPRITESIZE),5,0,6)
+        self.idleAnim = Anim(self.game.playerIdleSheet,(SPRITESIZE,SPRITESIZE),5,0,4)
+        self.dodgeAnim = Anim(self.game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),5,0,5)
+
+        self.image = self.walkAnim.get_frame()
+        self.original_image = self.image
         self.rect = self.image.get_rect()
+
+        self.isFlipped = False
+
+        #MOVEMENT
         self.vel = vec(0, 0)
         self.pos = vec(x, y) * TILESIZE
 
@@ -19,22 +34,9 @@ class Player(pg.sprite.Sprite):
         self.hit_rect.center = self.rect.center
         self.rot = 0
 
-        #Aniamtion stuff
-        self.anim_sheet = pg.image.load("./player_sheet_walk.png")
-
-        self.animation = Anim(self.anim_sheet,(SPRITESIZE,SPRITESIZE),5,0,6)
-
-        self.image = self.animation.get_frame()
-        self.original_image = self.image
-        self.rect = self.image.get_rect()
-
-        self.isFlipped = False
-
         #GUN
-        #self.gun_offset_X = self.rect.width // 2  - 10
-        #self.gun_offset_Y = self.rect.height // 2 - 10
-        self.gun_offset_X = 0
-        self.gun_offset_Y = 0
+        self.gun_offset_X = -20
+        self.gun_offset_Y = -10
         self.gun = Gun(self.game, self.pos.x - self.gun_offset_X, self.pos.y - self.gun_offset_Y)
 
     def get_keys(self):
@@ -42,10 +44,8 @@ class Player(pg.sprite.Sprite):
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -PLAYER_SPEED
-            self.isFlipped = True
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vel.x = PLAYER_SPEED
-            self.isFlipped = False
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vel.y = -PLAYER_SPEED
         if keys[pg.K_DOWN] or keys[pg.K_s]:
@@ -76,7 +76,7 @@ class Player(pg.sprite.Sprite):
     def update(self):
         self.get_keys()
 
-        """ cam_moved = self.game.camera.get_moved()
+        cam_moved = self.game.camera.get_moved()
 
         mouse_x, mouse_y = pg.mouse.get_pos()
 
@@ -85,12 +85,122 @@ class Player(pg.sprite.Sprite):
 
         rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
         self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
-        self.image = pg.transform.rotate(self.game.player_img, self.rot)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos """
+
+        if 90 < self.rot + 180 < 270:
+            self.isFlipped = False
+        else:
+            self.isFlipped = True
 
         #ANIMATION
-        self.image = self.animation.get_frame()
+        self.image = self.walkAnim.get_frame()
+
+        #MOVEMENT
+        self.pos += self.vel * self.game.dt
+        self.hit_rect.centerx = self.pos.x
+        self.collide_with_walls('x')
+        self.hit_rect.centery = self.pos.y
+        self.collide_with_walls('y')
+
+        self.rect.center = self.hit_rect.center
+
+        #GUN
+        self.gun.update_position(self.pos.x - self.gun_offset_X, self.pos.y - self.gun_offset_Y, self.rect)
+
+        #FLIP SPRITE
+        self.image = pg.transform.flip(self.image, self.isFlipped, False)
+
+        #Debug points
+        pg.draw.circle(self.game.screen, RED, (self.hit_rect.centerx,self.hit_rect.centery), 50)
+        pg.display.update()
+
+
+
+class Player(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+
+        #Aniamtion stuff
+
+        self.walkAnim = Anim(self.game.playerWalkSheet,(SPRITESIZE,SPRITESIZE),5,0,6)
+        self.idleAnim = Anim(self.game.playerIdleSheet,(SPRITESIZE,SPRITESIZE),5,0,4)
+        self.dodgeAnim = Anim(self.game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),5,0,5)
+        self.deathAnim = Anim(self.game.playerDeathSheet,(SPRITESIZE,SPRITESIZE),15,0,7)
+
+        self.image = self.deathAnim.get_frame()
+        self.original_image = self.image
+        self.rect = self.image.get_rect()
+
+        self.isFlipped = False
+
+        #MOVEMENT
+        self.vel = vec(0, 0)
+        self.pos = vec(x, y) * TILESIZE
+
+        self.hit_rect = PLAYER_HIT_RECT
+        self.hit_rect.center = self.rect.center
+        self.rot = 0
+
+        #GUN
+        self.gun_offset_X = -20
+        self.gun_offset_Y = -10
+        self.gun = Gun(self.game, self.pos.x - self.gun_offset_X, self.pos.y - self.gun_offset_Y)
+
+    def get_keys(self):
+        self.vel = vec(0, 0)
+        keys = pg.key.get_pressed()
+        if keys[pg.K_LEFT] or keys[pg.K_a]:
+            self.vel.x = -PLAYER_SPEED
+        if keys[pg.K_RIGHT] or keys[pg.K_d]:
+            self.vel.x = PLAYER_SPEED
+        if keys[pg.K_UP] or keys[pg.K_w]:
+            self.vel.y = -PLAYER_SPEED
+        if keys[pg.K_DOWN] or keys[pg.K_s]:
+            self.vel.y = PLAYER_SPEED
+        if self.vel.x != 0 and self.vel.y != 0:
+            self.vel *= 0.7071
+
+    def collide_with_walls(self, dir):
+        if dir == 'x':
+            hits = pg.sprite.spritecollide(self, self.game.walls, False, collide_hit_rect)
+            if hits:
+                if self.vel.x > 0:
+                    self.pos.x = hits[0].rect.left - self.hit_rect.width / 2.0
+                if self.vel.x < 0:
+                    self.pos.x = hits[0].rect.right + self.hit_rect.width / 2.0
+                self.vel.x = 0
+                self.hit_rect.centerx = self.pos.x
+        if dir == 'y':
+            hits = pg.sprite.spritecollide(self, self.game.walls, False, collide_hit_rect)
+            if hits:
+                if self.vel.y > 0:
+                    self.pos.y = hits[0].rect.top - self.hit_rect.height / 2.0
+                if self.vel.y < 0:
+                    self.pos.y = hits[0].rect.bottom + self.hit_rect.height / 2.0
+                self.vel.y = 0
+                self.hit_rect.centery = self.pos.y
+
+    def update(self):
+        self.get_keys()
+
+        cam_moved = self.game.camera.get_moved()
+
+        mouse_x, mouse_y = pg.mouse.get_pos()
+
+        mouse_x = mouse_x - cam_moved[0]
+        mouse_y = mouse_y - cam_moved[1]
+
+        rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
+        self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
+
+        if 90 < self.rot + 180 < 270:
+            self.isFlipped = False
+        else:
+            self.isFlipped = True
+
+        #ANIMATION
+        self.image = self.deathAnim.get_frame()
 
         #MOVEMENT
         self.pos += self.vel * self.game.dt
@@ -140,7 +250,7 @@ class Gun(pg.sprite.Sprite):
         #self.target_group = target_group
         
         # Init image and store it to rotate easilly
-        self.image = self.game.gun_img
+        self.image = self.game.playerGunImg
         self.rect = self.image.get_rect()
 
         # Init position and rotation
@@ -213,7 +323,7 @@ class Gun(pg.sprite.Sprite):
         else:
             self.rot = int((180 / math.pi) * math.atan2(rel_y, rel_x))
             is_flipped = True
-        self.image = pg.transform.flip(pg.transform.rotate(self.game.gun_img, self.rot), False, is_flipped)
+        self.image = pg.transform.flip(pg.transform.rotate(self.game.playerGunImg, self.rot), False, is_flipped)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 

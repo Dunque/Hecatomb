@@ -18,10 +18,16 @@ class Game:
         self.load_data()
 
     def load_data(self):
+        #MAP DATA
         game_folder = path.dirname(__file__)
-        self.map = Map(path.join(game_folder, 'map.txt'))
-        self.player_img = pg.image.load("crosshair.png").convert_alpha()
-        self.gun_img = pg.image.load("gun.png").convert_alpha()
+        self.map = Map(path.join(game_folder, './maps/map.txt'))
+
+        #PLAYER DATA
+        self.playerWalkSheet = pg.image.load("./sprites/playerWalkSheet.png").convert_alpha()
+        self.playerIdleSheet = pg.image.load("./sprites/playerIdleSheet.png").convert_alpha()
+        self.playerDodgeSheet =  pg.image.load("./sprites/playerDodgeSheet.png").convert_alpha()
+        self.playerDeathSheet =  pg.image.load("./sprites/playerDeathSheet.png").convert_alpha()
+        self.playerGunImg = pg.image.load("./sprites/gun.png").convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game
