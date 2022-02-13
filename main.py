@@ -27,7 +27,7 @@ class Game:
         self.playerIdleSheet = pg.image.load("./sprites/playerIdleSheet.png").convert_alpha()
         self.playerDodgeSheet =  pg.image.load("./sprites/playerDodgeSheet.png").convert_alpha()
         self.playerDeathSheet =  pg.image.load("./sprites/playerDeathSheet.png").convert_alpha()
-        self.playerGunImg = pg.image.load("./sprites/gun.png").convert_alpha()
+        self.playerGunImg = pg.image.load("./sprites/gun2.png").convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game

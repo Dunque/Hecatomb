@@ -124,7 +124,7 @@ class Character(pg.sprite.Sprite):
         self.rect.center = self.hit_rect.center
 
         #WEAPON
-        self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self.isFlipped)
+        self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
 
 
 class Player(Character):
@@ -237,7 +237,7 @@ class Gun(pg.sprite.Sprite):
 
         self.damage = 1
 
-    def updatePos(self, x, y, flipWeapon):
+    def updatePos(self, x, y):
         mouse_x, mouse_y = pg.mouse.get_pos()
         cam_moved = self.game.camera.get_moved()
 
@@ -245,18 +245,16 @@ class Gun(pg.sprite.Sprite):
         mouse_y = mouse_y - cam_moved[1]
 
         self.pos = vec(x,y)
-
-        pg.draw.circle(self.game.screen, BLUE, (x-cam_moved[0],y-cam_moved[1]), 5)
-        pg.display.update()
         
         #ROTATION
         rel_x, rel_y = mouse_x - self.char.rect.centerx, mouse_y - self.char.rect.centery
+        print(self.rot)
         if 90 < self.rot + 180 < 270:
             self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
-            #is_flipped = False
+            flipWeapon = False
         else:
             self.rot = int((180 / math.pi) * math.atan2(rel_y, rel_x))
-            #is_flipped = True
+            flipWeapon = True
         self.image = pg.transform.flip(pg.transform.rotate(self.game.playerGunImg, self.rot), False, flipWeapon)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
