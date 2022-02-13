@@ -7,51 +7,72 @@ vec = pg.math.Vector2
 
 #Abstract class that can represent all humanoid entities (player, enemies)
 class Character(pg.sprite.Sprite):
-
-    def __init__(self, game, x, y, animation, groups):
-
-        self.groups = game.all_sprites
-        pg.sprite.Sprite.__init__(self, self.groups)
+    #TODO 
+    #Hay que añadir aqui al consturecotr de chjaracter el grupo de sprites
+    #Hay que crear grupo jugador, grupo enemigos, gerupo objetos etc
+    def __init__(self, game, x, y, animList, spriteGroup):
+        pg.sprite.Sprite.__init__(self, spriteGroup)
         self.game = game
 
-        #Aniamtion stuff
+        #Assign animations
+        self.idleAnim = animList[0]
+        self.walkAnim = animList[1]
+        self.deathAnim = animList[2]
+        self.dodgeAnim = animList[3]
 
-        self.walkAnim = Anim(self.game.playerWalkSheet,(SPRITESIZE,SPRITESIZE),5,0,6)
-        self.idleAnim = Anim(self.game.playerIdleSheet,(SPRITESIZE,SPRITESIZE),5,0,4)
-        self.dodgeAnim = Anim(self.game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),5,0,5)
+        #Set the idle animation as the starting one 
+        self.currentAnim = self.idleAnim
 
-        self.image = self.walkAnim.get_frame()
+        #Get the first frame of the anim to set up the rect
+        self.image = self.deathAnim.get_frame()
         self.original_image = self.image
         self.rect = self.image.get_rect()
-
+        #Boolean to flip the sprite
         self.isFlipped = False
 
         #MOVEMENT
         self.vel = vec(0, 0)
         self.pos = vec(x, y) * TILESIZE
 
+        #Player hitbox is smaller
         self.hit_rect = PLAYER_HIT_RECT
         self.hit_rect.center = self.rect.center
         self.rot = 0
 
-        #GUN
-        self.gun_offset_X = -20
-        self.gun_offset_Y = -10
-        self.gun = Gun(self.game, self.pos.x - self.gun_offset_X, self.pos.y - self.gun_offset_Y)
+        #AIMING
+        self.weaponOffsetX = 0
+        self.weaponOffsetY = 0
+        self.weapon = None
 
-    def get_keys(self):
-        self.vel = vec(0, 0)
-        keys = pg.key.get_pressed()
-        if keys[pg.K_LEFT] or keys[pg.K_a]:
-            self.vel.x = -PLAYER_SPEED
-        if keys[pg.K_RIGHT] or keys[pg.K_d]:
-            self.vel.x = PLAYER_SPEED
-        if keys[pg.K_UP] or keys[pg.K_w]:
-            self.vel.y = -PLAYER_SPEED
-        if keys[pg.K_DOWN] or keys[pg.K_s]:
-            self.vel.y = PLAYER_SPEED
-        if self.vel.x != 0 and self.vel.y != 0:
-            self.vel *= 0.7071
+        #STATE MACHINE MANAGEMENT
+        self.isActive = False
+
+        self.current_dodge_time = 0
+        self.dodge_direction = Vector2(0,0)
+
+        self.stateList = ["IDLE", "WALKING", "DODGING", "DYING"]
+        self.currentState = "IDLE"
+
+    #Handles movement logic
+    def move(self):
+        pass
+    
+    #Handles the rotation of the equipped weapon
+    def aim(self):
+        pass
+    
+    #Plays the death animation and destroys the entity
+    def die(self):
+        pass
+
+    def stateUpdate(self):
+        #Not moving, idle state
+        if self.vel == vec(0,0):
+            self.currentAnim = self.idleAnim
+            self.currentState = "IDLE"
+        else:
+            self.currentAnim = self.walkAnim
+            self.currentState = "WALKING"
 
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -73,18 +94,12 @@ class Character(pg.sprite.Sprite):
                 self.vel.y = 0
                 self.hit_rect.centery = self.pos.y
 
+
     def update(self):
-        self.get_keys()
 
-        cam_moved = self.game.camera.get_moved()
-
-        mouse_x, mouse_y = pg.mouse.get_pos()
-
-        mouse_x = mouse_x - cam_moved[0]
-        mouse_y = mouse_y - cam_moved[1]
-
-        rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
-        self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
+        #Movement and aiming
+        self.move()
+        self.aim()
 
         if 90 < self.rot + 180 < 270:
             self.isFlipped = False
@@ -92,10 +107,15 @@ class Character(pg.sprite.Sprite):
             self.isFlipped = True
 
         #ANIMATION
-        self.image = self.walkAnim.get_frame()
+        self.image = self.currentAnim.get_frame()
+        self.image = pg.transform.flip(self.image, self.isFlipped, False)
+
+        #Update current state
+        self.stateUpdate()
 
         #MOVEMENT
         self.pos += self.vel * self.game.dt
+
         self.hit_rect.centerx = self.pos.x
         self.collide_with_walls('x')
         self.hit_rect.centery = self.pos.y
@@ -103,51 +123,32 @@ class Character(pg.sprite.Sprite):
 
         self.rect.center = self.hit_rect.center
 
-        #GUN
-        self.gun.update_position(self.pos.x - self.gun_offset_X, self.pos.y - self.gun_offset_Y, self.rect)
-
-        #FLIP SPRITE
-        self.image = pg.transform.flip(self.image, self.isFlipped, False)
-
-        #Debug points
-        pg.draw.circle(self.game.screen, RED, (self.hit_rect.centerx,self.hit_rect.centery), 50)
-        pg.display.update()
+        #WEAPON
+        self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self.rect)
 
 
-
-class Player(pg.sprite.Sprite):
+class Player(Character):
     def __init__(self, game, x, y):
-        self.groups = game.all_sprites
-        pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
 
         #Aniamtion stuff
+        self.idleAnim = Anim(game.playerIdleSheet,(SPRITESIZE,SPRITESIZE),8,0,4)
+        self.walkAnim = Anim(game.playerWalkSheet,(SPRITESIZE,SPRITESIZE),7,0,6)
+        self.deathAnim = Anim(game.playerDeathSheet,(SPRITESIZE,SPRITESIZE),10,0,7)
+        self.dodgeAnim = Anim(game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),5,0,5)
 
-        self.walkAnim = Anim(self.game.playerWalkSheet,(SPRITESIZE,SPRITESIZE),5,0,6)
-        self.idleAnim = Anim(self.game.playerIdleSheet,(SPRITESIZE,SPRITESIZE),5,0,4)
-        self.dodgeAnim = Anim(self.game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),5,0,5)
-        self.deathAnim = Anim(self.game.playerDeathSheet,(SPRITESIZE,SPRITESIZE),15,0,7)
+        self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.dodgeAnim]
+        
+        #TODO 
+        #Hay que añadir aqui al consturecotr de chjaracter el grupo de sprites
+        #Hay que crear grupo jugador, grupo enemigos, gerupo objetos etc
+        super(Player, self).__init__(game, x, y, self.animList, game.all_sprites)
 
-        self.image = self.deathAnim.get_frame()
-        self.original_image = self.image
-        self.rect = self.image.get_rect()
+        #AIMING
+        self.weaponOffsetX = -20
+        self.weaponOffsetY = -10
+        self.weapon = Gun(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
 
-        self.isFlipped = False
-
-        #MOVEMENT
-        self.vel = vec(0, 0)
-        self.pos = vec(x, y) * TILESIZE
-
-        self.hit_rect = PLAYER_HIT_RECT
-        self.hit_rect.center = self.rect.center
-        self.rot = 0
-
-        #GUN
-        self.gun_offset_X = -20
-        self.gun_offset_Y = -10
-        self.gun = Gun(self.game, self.pos.x - self.gun_offset_X, self.pos.y - self.gun_offset_Y)
-
-    def get_keys(self):
+    def move(self):
         self.vel = vec(0, 0)
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
@@ -161,29 +162,7 @@ class Player(pg.sprite.Sprite):
         if self.vel.x != 0 and self.vel.y != 0:
             self.vel *= 0.7071
 
-    def collide_with_walls(self, dir):
-        if dir == 'x':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False, collide_hit_rect)
-            if hits:
-                if self.vel.x > 0:
-                    self.pos.x = hits[0].rect.left - self.hit_rect.width / 2.0
-                if self.vel.x < 0:
-                    self.pos.x = hits[0].rect.right + self.hit_rect.width / 2.0
-                self.vel.x = 0
-                self.hit_rect.centerx = self.pos.x
-        if dir == 'y':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False, collide_hit_rect)
-            if hits:
-                if self.vel.y > 0:
-                    self.pos.y = hits[0].rect.top - self.hit_rect.height / 2.0
-                if self.vel.y < 0:
-                    self.pos.y = hits[0].rect.bottom + self.hit_rect.height / 2.0
-                self.vel.y = 0
-                self.hit_rect.centery = self.pos.y
-
-    def update(self):
-        self.get_keys()
-
+    def aim(self):
         cam_moved = self.game.camera.get_moved()
 
         mouse_x, mouse_y = pg.mouse.get_pos()
@@ -199,27 +178,9 @@ class Player(pg.sprite.Sprite):
         else:
             self.isFlipped = True
 
-        #ANIMATION
-        self.image = self.deathAnim.get_frame()
+    def update(self):
 
-        #MOVEMENT
-        self.pos += self.vel * self.game.dt
-        self.hit_rect.centerx = self.pos.x
-        self.collide_with_walls('x')
-        self.hit_rect.centery = self.pos.y
-        self.collide_with_walls('y')
-
-        self.rect.center = self.hit_rect.center
-
-        #GUN
-        self.gun.update_position(self.pos.x - self.gun_offset_X, self.pos.y - self.gun_offset_Y, self.rect)
-
-        #FLIP SPRITE
-        self.image = pg.transform.flip(self.image, self.isFlipped, False)
-
-        #Debug points
-        pg.draw.circle(self.game.screen, RED, (self.hit_rect.centerx,self.hit_rect.centery), 50)
-        pg.display.update()
+        super(Player, self).update()
 
 
 class Wall(pg.sprite.Sprite):
@@ -273,7 +234,7 @@ class Gun(pg.sprite.Sprite):
 
         self.damage = 1
 
-    def update_position(self, x, y, player_rect):
+    def updatePos(self, x, y, player_rect):
         mouse_x, mouse_y = pg.mouse.get_pos()
         cam_moved = self.game.camera.get_moved()
 
