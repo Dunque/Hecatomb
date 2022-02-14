@@ -2,6 +2,7 @@ import pygame as pg
 from settings import *
 from tilemap import collide_hit_rect
 from anim import *
+from entitydata import *
 import math
 vec = pg.math.Vector2
 
@@ -10,9 +11,10 @@ class Character(pg.sprite.Sprite):
     #TODO 
     #Hay que añadir aqui al consturecotr de chjaracter el grupo de sprites
     #Hay que crear grupo jugador, grupo enemigos, gerupo objetos etc
-    def __init__(self, game, x, y, animList, spriteGroup):
+    def __init__(self, game, x, y, animList, spriteGroup, entityData):
         pg.sprite.Sprite.__init__(self, spriteGroup)
         self.game = game
+        self.entityData = entityData
 
         #Assign animations
         self.idleAnim = animList[0]
@@ -44,14 +46,12 @@ class Character(pg.sprite.Sprite):
         self.weaponOffsetY = 0
         self.weapon = None
 
-        #STATE MACHINE MANAGEMENT
-        self.isActive = False
+        #DODGING
+        self.dodgeDir = vec(0,0)
 
-        self.current_dodge_time = 0
-        self.dodge_direction = Vector2(0,0)
-
-        self.stateList = ["IDLE", "WALKING", "DODGING", "DYING"]
-        self.currentState = "IDLE"
+        #STATES
+        self.stateList = ["GROUNDED", "DODGING", "DYING"]
+        self.currentState = "GROUNDED"
 
     #Handles movement logic
     def move(self):
@@ -63,16 +63,10 @@ class Character(pg.sprite.Sprite):
     
     #Plays the death animation and destroys the entity
     def die(self):
-        pass
-
-    def stateUpdate(self):
-        #Not moving, idle state
-        if self.vel == vec(0,0):
-            self.currentAnim = self.idleAnim
-            self.currentState = "IDLE"
-        else:
-            self.currentAnim = self.walkAnim
-            self.currentState = "WALKING"
+        self.entityData.currentDeathAnimTimer += 1
+        if (self.entityData.currentDeathAnimTimer >= self.entityData.deathAnimTimer):
+            self.kill()
+            self.weapon.kill()
 
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -93,39 +87,85 @@ class Character(pg.sprite.Sprite):
                     self.pos.y = hits[0].rect.bottom + self.hit_rect.height / 2.0
                 self.vel.y = 0
                 self.hit_rect.centery = self.pos.y
+    
+    def takeDamage(self, dmg):
+        if self.entityData.vulnerable and (self.currentState != "DODGING"):
+            self.entityData.takeDamage(dmg)
 
+    def stateUpdate(self):
+        if (self.currentState == "GROUNDED"):
+            #Not moving -> idle animation
+            if self.vel == vec(0,0):
+                self.currentAnim = self.idleAnim
+            else:
+                self.currentAnim = self.walkAnim
+
+            #Movement and aiming
+            self.move()
+            self.aim()
+
+            if 90 < self.rot + 180 < 270:
+                self.isFlipped = False
+            else:
+                self.isFlipped = True
+
+            #MOVEMENT
+            self.pos += self.vel * self.game.dt
+
+            self.hit_rect.centerx = self.pos.x
+            self.collide_with_walls('x')
+            self.hit_rect.centery = self.pos.y
+            self.collide_with_walls('y')
+
+            self.rect.center = self.hit_rect.center
+
+            #WEAPON
+            self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+            return
+
+        if (self.currentState == "DYING"):
+            self.currentAnim = self.deathAnim
+            self.die()
+            return
+        
+        if (self.currentState == "DODGING"):
+            self.currentAnim = self.dodgeAnim
+            if (self.entityData.currentDodgeTimer <= self.entityData.dodgeTimer ):
+                self.entityData.currentDodgeTimer += 1
+                self.vel = self.dodgeDir
+
+                self.pos += self.vel * self.game.dt
+
+                self.hit_rect.centerx = self.pos.x
+                self.collide_with_walls('x')
+                self.hit_rect.centery = self.pos.y
+                self.collide_with_walls('y')
+
+                self.rect.center = self.hit_rect.center
+
+                #TODO this is a little trick that renders the gun out of bounds instead of not drawing it
+                #I did it this way because it was easier, but nevertheless we should change it
+                self.weapon.updatePos(self.pos.x - 100000, self.pos.y - 100000)
+                
+            else:
+                self.currentState = "GROUNDED"
+                self.entityData.currentDodgeTimer = 0
+            return
 
     def update(self):
+        #Check if the character should die
+        if (self.entityData.isAlive == False):
+            self.currentState = "DYING"
 
-        #Movement and aiming
-        self.move()
-        self.aim()
-
-        if 90 < self.rot + 180 < 270:
-            self.isFlipped = False
-        else:
-            self.isFlipped = True
+        #Update current state
+        self.stateUpdate()
 
         #ANIMATION
         self.image = self.currentAnim.get_frame()
         self.image = pg.transform.flip(self.image, self.isFlipped, False)
 
-        #Update current state
-        self.stateUpdate()
-
-        #MOVEMENT
-        self.pos += self.vel * self.game.dt
-
-        self.hit_rect.centerx = self.pos.x
-        self.collide_with_walls('x')
-        self.hit_rect.centery = self.pos.y
-        self.collide_with_walls('y')
-
-        self.rect.center = self.hit_rect.center
-
-        #WEAPON
-        self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
-
+        # Update entity's data
+        self.entityData.update()
 
 class Player(Character):
     def __init__(self, game, x, y):
@@ -134,14 +174,14 @@ class Player(Character):
         self.idleAnim = Anim(game.playerIdleSheet,(SPRITESIZE,SPRITESIZE),10,0,4)
         self.walkAnim = Anim(game.playerWalkSheet,(SPRITESIZE,SPRITESIZE),7,0,6)
         self.deathAnim = Anim(game.playerDeathSheet,(SPRITESIZE,SPRITESIZE),10,0,7)
-        self.dodgeAnim = Anim(game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),5,0,5)
+        self.dodgeAnim = Anim(game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),7,0,5)
 
         self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.dodgeAnim]
         
         #TODO 
         #Hay que añadir aqui al consturecotr de chjaracter el grupo de sprites
         #Hay que crear grupo jugador, grupo enemigos, gerupo objetos etc
-        super(Player, self).__init__(game, x, y, self.animList, game.all_sprites)
+        super(Player, self).__init__(game, x, y, self.animList, game.all_sprites, PlayerStats())
 
         #AIMING
         self.weaponOffsetX = -20
@@ -149,18 +189,28 @@ class Player(Character):
         self.weapon = Gun(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self)
 
     def move(self):
+        #We are able to move freely
         self.vel = vec(0, 0)
+
         keys = pg.key.get_pressed()
-        if keys[pg.K_LEFT] or keys[pg.K_a]:
-            self.vel.x = -PLAYER_SPEED
-        if keys[pg.K_RIGHT] or keys[pg.K_d]:
-            self.vel.x = PLAYER_SPEED
-        if keys[pg.K_UP] or keys[pg.K_w]:
-            self.vel.y = -PLAYER_SPEED
-        if keys[pg.K_DOWN] or keys[pg.K_s]:
-            self.vel.y = PLAYER_SPEED
+        if keys[pg.K_a]:
+            self.vel.x = -self.entityData.speed
+        if keys[pg.K_d]:
+            self.vel.x = self.entityData.speed
+        if keys[pg.K_w]:
+            self.vel.y = -self.entityData.speed
+        if keys[pg.K_s]:
+            self.vel.y = self.entityData.speed
         if self.vel.x != 0 and self.vel.y != 0:
             self.vel *= 0.7071
+
+        if keys[pg.K_SPACE]:
+            self.currentState = "DODGING"
+            self.dodgeDir = self.vel * self.entityData.dodgeSpeed
+
+        ##DEBUG KEY TO KILL YOURSELF
+        if keys[pg.K_0]:
+            self.takeDamage(100)
 
     def aim(self):
         cam_moved = self.game.camera.get_moved()
@@ -248,7 +298,7 @@ class Gun(pg.sprite.Sprite):
         
         #ROTATION
         rel_x, rel_y = mouse_x - self.char.rect.centerx, mouse_y - self.char.rect.centery
-        print(self.rot)
+
         if 90 < self.rot + 180 < 270:
             self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
             flipWeapon = False
