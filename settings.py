@@ -14,7 +14,7 @@ BLUE = (0,0,255)
 WIDTH = 1024   # 16 * 64 or 32 * 32 or 64 * 16
 HEIGHT = 768  # 16 * 48 or 32 * 24 or 64 * 12
 FPS = 60
-TITLE = "Tilemap Demo"
+TITLE = "Hecatomb"
 BGCOLOR = DARKGREY
 
 TILESIZE = 64
@@ -23,8 +23,6 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 
 # Player settings
 PLAYER_SPEED = 300
-PLAYER_ROT_SPEED = 250.0
-PLAYER_IMG = 'manBlue_gun.png'
 PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 35)
 
 CAMERA_X = 0

@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 from settings import *
 
 vec = pg.math.Vector2
@@ -33,6 +34,13 @@ class Camera:
         self.x = 0
         self.y = 0
 
+        #Camera shake
+        self.doShake = False
+        self.shakeMaxTime = 0
+        self.shakeTimer = 0
+        self.shakeAmount = 0
+        
+
     def apply(self, entity):
         return entity.rect.move(self.camera.topleft)
 
@@ -49,6 +57,22 @@ class Camera:
         self.x = max(-(self.width - WIDTH), self.x)  # right
         self.y = max(-(self.height - HEIGHT), self.y)  # bottom
 
-        #self.camera = pg.Rect(self.def_cords.x, self.def_cords.y, self.width_height.x, self.width_height.y)
+        # Shake logic
+        if self.doShake:
+            if (self.shakeTimer <= self.shakeMaxTime):
+                self.shakeTimer += 1
+                self.x += random.randint(0, self.shakeAmount) - self.shakeAmount // 2
+                self.y += random.randint(0, self.shakeAmount) - self.shakeAmount // 2
+            else:
+                self.doShake = False
+                self.shakeMaxTime = 0
+                self.shakeTimer = 0
+                self.shakeAmount = 0
 
         self.camera = pg.Rect(self.x, self.y, self.width, self.height)
+
+    def cameraShake(self, amount, time):
+        self.doShake = True
+        self.shakeAmount = amount
+        self.shakeMaxTime = time
+

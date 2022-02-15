@@ -37,7 +37,7 @@ class Character(pg.sprite.Sprite):
         self.pos = vec(x, y) * TILESIZE
 
         #Player hitbox is smaller
-        self.hit_rect = PLAYER_HIT_RECT
+        self.hit_rect = PLAYER_HIT_RECT.copy()
         self.hit_rect.center = self.rect.center
         self.rot = 0
 
@@ -50,7 +50,7 @@ class Character(pg.sprite.Sprite):
         self.dodgeDir = vec(0,0)
 
         #STATES
-        self.stateList = ["GROUNDED", "DODGING", "DYING"]
+        # "GROUNDED", "DODGING", "DYING"
         self.currentState = "GROUNDED"
 
     #Handles movement logic
@@ -99,54 +99,21 @@ class Character(pg.sprite.Sprite):
                 self.currentAnim = self.idleAnim
             else:
                 self.currentAnim = self.walkAnim
-
             #Movement and aiming
             self.move()
             self.aim()
-
-            if 90 < self.rot + 180 < 270:
-                self.isFlipped = False
-            else:
-                self.isFlipped = True
-
-            #MOVEMENT
-            self.pos += self.vel * self.game.dt
-
-            self.hit_rect.centerx = self.pos.x
-            self.collide_with_walls('x')
-            self.hit_rect.centery = self.pos.y
-            self.collide_with_walls('y')
-
-            self.rect.center = self.hit_rect.center
-
-            #WEAPON
-            #self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
-            #return
+            return
 
         if (self.currentState == "DYING"):
             self.currentAnim = self.deathAnim
             self.die()
             return
-        
+
         if (self.currentState == "DODGING"):
             self.currentAnim = self.dodgeAnim
             if (self.entityData.currentDodgeTimer <= self.entityData.dodgeTimer ):
                 self.entityData.currentDodgeTimer += 1
                 self.vel = self.dodgeDir
-
-                self.pos += self.vel * self.game.dt
-
-                self.hit_rect.centerx = self.pos.x
-                self.collide_with_walls('x')
-                self.hit_rect.centery = self.pos.y
-                self.collide_with_walls('y')
-
-                self.rect.center = self.hit_rect.center
-
-                #TODO this is a little trick that renders the gun out of bounds instead of not drawing it
-                #I did it this way because it was easier, but nevertheless we should change it
-                self.weapon.updatePos(self.pos.x - 100000, self.pos.y - 100000)
-                
             else:
                 self.currentState = "GROUNDED"
                 self.entityData.currentDodgeTimer = 0
@@ -159,6 +126,21 @@ class Character(pg.sprite.Sprite):
 
         #Update current state
         self.stateUpdate()
+
+        if 90 < self.rot + 180 < 270:
+            self.isFlipped = False
+        else:
+            self.isFlipped = True
+
+        #MOVEMENT
+        self.pos += self.vel * self.game.dt
+
+        self.hit_rect.centerx = self.pos.x
+        self.collide_with_walls('x')
+        self.hit_rect.centery = self.pos.y
+        self.collide_with_walls('y')
+
+        self.rect.center = self.hit_rect.center
 
         #ANIMATION
         self.image = self.currentAnim.get_frame()
@@ -204,6 +186,11 @@ class Player(Character):
         if self.vel.x != 0 and self.vel.y != 0:
             self.vel *= 0.7071
 
+        mouse = pg.mouse.get_pressed()
+        #Left click
+        if mouse[0]:
+            self.game.camera.cameraShake(2,6)
+
         if keys[pg.K_SPACE]:
             self.currentState = "DODGING"
             self.dodgeDir = self.vel * self.entityData.dodgeSpeed
@@ -233,6 +220,9 @@ class Player(Character):
     def update(self):
 
         super(Player, self).update()
+
+        #WEAPON
+        self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
 
 
 class Wall(pg.sprite.Sprite):

@@ -1,7 +1,3 @@
-# KidsCanCode - Game Development with Pygame video series
-# Tile-based game - Part 5
-# Player Graphics
-# Video link: https://youtu.be/FVLRUmkV27Q
 import pygame as pg
 import sys
 from os import path
@@ -48,7 +44,7 @@ class Game:
                 if tile == 'P':
                     self.player = Player(self, col, row)
                 if tile == 'W':
-                    self.mob = Mob(self, col, row)
+                    Mob(self, col, row)
         self.camera = Camera(self.map.width, self.map.height)
 
     def run(self):
