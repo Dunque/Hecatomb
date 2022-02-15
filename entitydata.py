@@ -55,4 +55,16 @@ class PlayerStats(CharacterStats):
         self.speed = 300
         self.dodgeSpeed = 2 #It's a multiplier
         self.dodgeTimer = 35
+
+class MobStats(CharacterStats):
+    def __init__(self):
+        super(MobStats, self).__init__()
+        #Health
+        self.maxHP = 100
+        self.actualHP = self.maxHP
+
+        #Movement
+        self.speed = 300
+        self.dodgeSpeed = 2 #It's a multiplier
+        self.dodgeTimer = 35
   

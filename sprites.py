@@ -120,8 +120,8 @@ class Character(pg.sprite.Sprite):
             self.rect.center = self.hit_rect.center
 
             #WEAPON
-            self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
-            return
+            #self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+            #return
 
         if (self.currentState == "DYING"):
             self.currentAnim = self.deathAnim
@@ -386,4 +386,27 @@ class Gun(pg.sprite.Sprite):
         
         # Update render position
         self.rect.x = self.pos.x
-        self.rect.y = self.pos.y   """ 
+        self.rect.y = self.pos.y   """
+
+class Mob(Character):
+    def __init__(self, game, x, y):
+        # Aniamtion stuff
+        self.idleAnim = Anim(game.wormIdleSheet, (90, 90), 10, 0, 9)
+        self.walkAnim = Anim(game.wormWalkSheet, (90, 90), 10, 0, 9)
+        self.deathAnim = Anim(game.wormDeathSheet, (90, 90), 13, 0, 8)
+        self.attackAnim = Anim(game.wormAttackSheet, (90, 90), 10, 0, 16)
+        self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim]
+
+        super(Mob, self).__init__(game, x, y, self.animList, game.all_sprites, MobStats())
+
+        self.groups = game.all_sprites, game.mobs
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.pos = vec(x, y) * TILESIZE
+        self.rect.center = self.pos
+        self.rot = 0
+
+    def update(self):
+        self.rot = (self.game.player.pos - self.pos).angle_to(vec(1, 0))
+        super(Mob, self).update()
+        self.rect.center = self.pos

@@ -29,9 +29,17 @@ class Game:
         self.playerDeathSheet =  pg.image.load("./sprites/playerDeathSheet.png").convert_alpha()
         self.playerGunImg = pg.image.load("./sprites/gun.png").convert_alpha()
 
+        # MOB DATA
+        self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
+        self.wormIdleSheet = pg.image.load("./sprites/Worm/Idle.png").convert_alpha()
+        self.wormHitSheet = pg.image.load("./sprites/Worm/GetHit.png").convert_alpha()
+        self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
+        self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
+
     def new(self):
         # initialize all variables and do all the setup for a new game
         self.all_sprites = pg.sprite.Group()
+        self.mobs = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
@@ -39,6 +47,8 @@ class Game:
                     Wall(self, col, row)
                 if tile == 'P':
                     self.player = Player(self, col, row)
+                if tile == 'W':
+                    self.mob = Mob(self, col, row)
         self.camera = Camera(self.map.width, self.map.height)
 
     def run(self):

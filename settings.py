@@ -30,5 +30,9 @@ PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 35)
 CAMERA_X = 0
 CAMERA_Y = 0
 
+# MOBS Settings
+#Fire Worm
+WORM_MOB_IMAGE = 'Walk.png'
+
 #ANIMATION STUFF
 SPRITESIZE = 96
