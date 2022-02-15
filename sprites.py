@@ -115,6 +115,7 @@ class Character(pg.sprite.Sprite):
 
         if (self.currentState == "ATTACK"):
             self.currentAnim = self.attackAnim
+            self.aim()
             if (self.entityData.currentAttackTimer <= self.entityData.AttackTimer ):
                 self.entityData.currentAttackTimer += 1
                 self.vel = self.AttackDir
