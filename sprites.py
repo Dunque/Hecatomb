@@ -89,7 +89,6 @@ class Character(pg.sprite.Sprite):
                     self.pos.y = hits[0].rect.bottom + self.hit_rect.height / 2.0
                 self.vel.y = 0
                 self.hit_rect.centery = self.pos.y
-
     
     def takeDamage(self, dmg):
         if self.entityData.vulnerable and (self.currentState != "DODGING"):

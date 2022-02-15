@@ -1,6 +1,9 @@
+import re
 import pygame as pg
 import random
+import numpy as np
 from settings import *
+from sprites import *
 
 vec = pg.math.Vector2
 
@@ -9,15 +12,35 @@ def collide_hit_rect(one, two):
 
 class Map:
     def __init__(self, filename):
-        self.data = []
-        with open(filename, 'rt') as f:
-            for line in f:
-                self.data.append(line.strip())
+        self.mapFile = filename
+        self.rooms = []
 
-        self.tilewidth = len(self.data[0])
-        self.tileheight = len(self.data)
+        self.parseRooms()
+    
+    def parseRooms(self):
+        with open(self.mapFile, 'rt') as f:
+            tmpRoom = []
+            for line in f:
+                if line.__contains__("/"):
+                    roomMatrix = np.array(list(map(list, tmpRoom)))
+                    #print(roomMatrix)
+                    self.rooms.append(roomMatrix)
+                    tmpRoom = []
+                elif len(line) == 0 or line.isspace():
+                    pass
+                else:
+                    tmpRoom.append(line.strip())
+        
+        self.joinRooms()
+
+        self.tilewidth = len(self.finalMap[0])
+        self.tileheight = len(self.finalMap)
         self.width = self.tilewidth * TILESIZE
         self.height = self.tileheight * TILESIZE
+
+    def joinRooms(self):
+        self.finalMap = np.concatenate([self.rooms[0],self.rooms[1],self.rooms[2]],axis = 0)
+        
 
 class Camera:
     def __init__(self, width, height):
@@ -76,3 +99,5 @@ class Camera:
         self.shakeAmount = amount
         self.shakeMaxTime = time
 
+""" m = Map('./maps/map.txt')
+m.parseRooms() """
