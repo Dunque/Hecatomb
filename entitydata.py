@@ -12,7 +12,7 @@ class CharacterStats:
         self.dodgeSpeed = 2 #It's a multiplier
         self.dodgeTimer = 35
         self.currentDodgeTimer = 0
-        
+        self.currentAttackTimer = 0
         #Stablishing invencibility frames in order to not be able
         #to be damaged several times in the span of miliseconds
         self.vulnerable = True
@@ -65,6 +65,6 @@ class MobStats(CharacterStats):
 
         #Movement
         self.speed = 300
-        self.dodgeSpeed = 2 #It's a multiplier
-        self.dodgeTimer = 35
+        self.Attackspeed = 2 #It's a multiplier
+        self.AttackTimer = 350
   

@@ -1,3 +1,7 @@
+# KidsCanCode - Game Development with Pygame video series
+# Tile-based game - Part 5
+# Player Graphics
+# Video link: https://youtu.be/FVLRUmkV27Q
 import pygame as pg
 import sys
 from os import path
@@ -44,7 +48,7 @@ class Game:
                 if tile == 'P':
                     self.player = Player(self, col, row)
                 if tile == 'W':
-                    Mob(self, col, row)
+                    self.mob = Mob(self, col, row)
         self.camera = Camera(self.map.width, self.map.height)
 
     def run(self):
@@ -64,6 +68,9 @@ class Game:
         # update portion of the game loop
         self.all_sprites.update()
         self.camera.update(self.player)
+        hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
+        for hit in hits:
+            hit.currentState = "ATTACK"
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):

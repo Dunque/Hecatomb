@@ -21,6 +21,7 @@ class Character(pg.sprite.Sprite):
         self.walkAnim = animList[1]
         self.deathAnim = animList[2]
         self.dodgeAnim = animList[3]
+        self.attackAnim = animList[4]
 
         #Set the idle animation as the starting one 
         self.currentAnim = self.idleAnim
@@ -48,7 +49,8 @@ class Character(pg.sprite.Sprite):
 
         #DODGING
         self.dodgeDir = vec(0,0)
-
+        # ATTACK
+        self.AttackDir = vec(0, 0)
         #STATES
         # "GROUNDED", "DODGING", "DYING"
         self.currentState = "GROUNDED"
@@ -87,6 +89,7 @@ class Character(pg.sprite.Sprite):
                     self.pos.y = hits[0].rect.bottom + self.hit_rect.height / 2.0
                 self.vel.y = 0
                 self.hit_rect.centery = self.pos.y
+
     
     def takeDamage(self, dmg):
         if self.entityData.vulnerable and (self.currentState != "DODGING"):
@@ -99,6 +102,7 @@ class Character(pg.sprite.Sprite):
                 self.currentAnim = self.idleAnim
             else:
                 self.currentAnim = self.walkAnim
+
             #Movement and aiming
             self.move()
             self.aim()
@@ -109,11 +113,22 @@ class Character(pg.sprite.Sprite):
             self.die()
             return
 
+        if (self.currentState == "ATTACK"):
+            self.currentAnim = self.attackAnim
+            if (self.entityData.currentAttackTimer <= self.entityData.AttackTimer ):
+                self.entityData.currentAttackTimer += 1
+                self.vel = self.AttackDir
+            else:
+                self.currentState = "GROUNDED"
+                self.entityData.currentAttackTimer = 0
+            return
+
         if (self.currentState == "DODGING"):
             self.currentAnim = self.dodgeAnim
             if (self.entityData.currentDodgeTimer <= self.entityData.dodgeTimer ):
                 self.entityData.currentDodgeTimer += 1
                 self.vel = self.dodgeDir
+
             else:
                 self.currentState = "GROUNDED"
                 self.entityData.currentDodgeTimer = 0
@@ -137,6 +152,7 @@ class Character(pg.sprite.Sprite):
 
         self.hit_rect.centerx = self.pos.x
         self.collide_with_walls('x')
+
         self.hit_rect.centery = self.pos.y
         self.collide_with_walls('y')
 
@@ -158,7 +174,7 @@ class Player(Character):
         self.deathAnim = Anim(game.playerDeathSheet,(SPRITESIZE,SPRITESIZE),10,0,7)
         self.dodgeAnim = Anim(game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),7,0,5)
 
-        self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.dodgeAnim]
+        self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.dodgeAnim,self.dodgeAnim] #repito esa animacion para hace pruebas de atque con los mobs
         
         #TODO 
         #Hay que añadir aqui al consturecotr de chjaracter el grupo de sprites
@@ -385,7 +401,7 @@ class Mob(Character):
         self.walkAnim = Anim(game.wormWalkSheet, (90, 90), 7, 0, 9)
         self.deathAnim = Anim(game.wormDeathSheet, (90, 90), 13, 0, 8)
         self.attackAnim = Anim(game.wormAttackSheet, (90, 90), 10, 0, 16)
-        self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim]
+        self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim ,self.attackAnim]
 
         super(Mob, self).__init__(game, x, y, self.animList, game.all_sprites, MobStats())
 
@@ -398,11 +414,18 @@ class Mob(Character):
         self.rect.center = self.pos
         self.rot = 0
 
-    def update(self):
+    def aim(self):
         self.rot = (self.game.player.pos - self.pos).angle_to(vec(1, 0))
-        super(Mob, self).update()
-        self.rect.center = self.pos
+
+    def move(self):
         self.acc = vec(150).rotate(-self.rot)
         self.vel = self.acc * self.game.dt * 15
         self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2
+
+
+
+    def update(self):
+        self.stateUpdate()
+        super(Mob, self).update()
+
 
