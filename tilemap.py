@@ -35,6 +35,8 @@ class Map:
         self.width = self.tilewidth * TILESIZE
         self.height = self.tileheight * TILESIZE
 
+    #TODO hacer que esto sea aleatorio, y mejorar el mapa global a una matriz enorme en vez de ir
+    #juntando matrices pequeñas con el concatenate
     def joinRooms(self):
         #self.finalMap = np.concatenate([self.rooms[3],self.rooms[2]],axis = 1)
         map1 = np.concatenate([self.rooms[0],self.rooms[2],self.rooms[2],self.rooms[1]],axis = 1)
@@ -137,6 +139,3 @@ class Camera:
         self.doShake = True
         self.shakeAmount = amount
         self.shakeMaxTime = time
-
-""" m = Map('./maps/map.txt')
-m.parseRooms() """
