@@ -16,7 +16,7 @@ class Game:
     def load_data(self):
         #MAP DATA
         game_folder = path.dirname(__file__)
-        self.map = Map(path.join(game_folder, './maps/map.txt'))
+        self.map = Map(path.join(game_folder, './maps/map4.txt'))
 
         #PLAYER DATA
         self.playerWalkSheet = pg.image.load("./sprites/playerWalkSheet.png").convert_alpha()
@@ -66,6 +66,9 @@ class Game:
         # update portion of the game loop
         self.all_sprites.update()
         self.camera.update(self.player)
+        hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
+        for hit in hits:
+            hit.currentState = "ATTACK"
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):

@@ -39,7 +39,10 @@ class Map:
         self.height = self.tileheight * TILESIZE
 
     def joinRooms(self):
-        self.finalMap = np.concatenate([self.rooms[0],self.rooms[1],self.rooms[2]],axis = 0)
+        #self.finalMap = np.concatenate([self.rooms[0],self.rooms[1],self.rooms[2]],axis = 0)
+        map1 = np.concatenate([self.rooms[0],self.rooms[2],self.rooms[2],self.rooms[1]],axis = 1)
+        map2 = np.concatenate([self.rooms[3],self.rooms[4],self.rooms[4],self.rooms[0]],axis = 1)
+        self.finalMap = np.concatenate([map1,map2],axis = 0)
         
 
 class Camera:

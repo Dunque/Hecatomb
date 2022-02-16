@@ -11,8 +11,8 @@ YELLOW = (255, 255, 0)
 BLUE = (0,0,255)
 
 # game settings
-WIDTH = 1024   # 16 * 64 or 32 * 32 or 64 * 16
-HEIGHT = 768  # 16 * 48 or 32 * 24 or 64 * 12
+WIDTH = 1280   # 16 * 64 or 32 * 32 or 64 * 16
+HEIGHT = 720  # 16 * 48 or 32 * 24 or 64 * 12
 FPS = 60
 TITLE = "Hecatomb"
 BGCOLOR = DARKGREY

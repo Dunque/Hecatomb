@@ -400,7 +400,7 @@ class Mob(Character):
         self.idleAnim = Anim(game.wormIdleSheet, (90, 90), 10, 0, 9)
         self.walkAnim = Anim(game.wormWalkSheet, (90, 90), 7, 0, 9)
         self.deathAnim = Anim(game.wormDeathSheet, (90, 90), 13, 0, 8)
-        self.attackAnim = Anim(game.wormAttackSheet, (90, 90), 10, 0, 16)
+        self.attackAnim = Anim(game.wormAttackSheet, (90, 90), 3, 0, 16)
         self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim ,self.attackAnim]
 
         super(Mob, self).__init__(game, x, y, self.animList, game.all_sprites, MobStats())
