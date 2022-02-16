@@ -1,6 +1,5 @@
 import pygame as pg
 import sys
-from os import path
 from settings import *
 from sprites import *
 from tilemap import *
@@ -15,8 +14,7 @@ class Game:
 
     def load_data(self):
         #MAP DATA
-        game_folder = path.dirname(__file__)
-        self.map = Map(path.join(game_folder, './maps/map4.txt'))
+        self.map = Map(self, './maps/map4.txt')
 
         #PLAYER DATA
         self.playerWalkSheet = pg.image.load("./sprites/playerWalkSheet.png").convert_alpha()
@@ -37,8 +35,11 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.walls = pg.sprite.Group()
+        #print(self.map.finalMap)
+        self.map.generateMap()
         
-        for row in range(self.map.finalMap.shape[0]):
+        #TODO hay que quitar de aqui esta funcion y dejarla en tilemap.py
+        """ for row in range(self.map.finalMap.shape[0]):
             for col in range(self.map.finalMap.shape[1]):
                 if self.map.finalMap[row][col] == '1':
                     Wall(self, col, row)
@@ -46,8 +47,36 @@ class Game:
                     self.player = Player(self, col, row)
                 if self.map.finalMap[row][col] == 'W':
                     Mob(self, col, row)
+                if self.map.finalMap[row][col] == '-':
+                    self.closeDoors('-',row,col)
+                if self.map.finalMap[row][col] == '_':
+                    self.closeDoors('_',row,col)    
 
-        self.camera = Camera(self.map.width, self.map.height)
+        self.camera = Camera(self.map.width, self.map.height) """
+    
+    #TODO hay que quitar de aqui esta funcion y dejarla en tilemap.py
+    def closeDoors(self,wallChar,row,col):
+        door = False
+        try:
+            #These are the limits of the map, so we skip the check
+            if row == 0 or col == 0 or row == self.map.finalMap.shape[0] or col == self.map.finalMap.shape[1]:
+                door = False
+            else:
+                if self.map.finalMap[row+1][col] == wallChar:
+                    door = True
+                if self.map.finalMap[row-1][col] == wallChar:
+                    door = True
+                if self.map.finalMap[row][col+1] == wallChar:
+                    door = True
+                if self.map.finalMap[row][col-1] == wallChar:
+                    door = True
+        except IndexError as e:
+            pass
+
+        if door:
+            pass
+        else:
+            Wall(self, col, row)
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -105,3 +134,4 @@ while True:
     g.new()
     g.run()
     g.show_go_screen()
+ 

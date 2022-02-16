@@ -1,10 +1,12 @@
 import pygame as pg
 from settings import *
-from tilemap import collide_hit_rect
 from anim import *
 from entitydata import *
 import math
 vec = pg.math.Vector2
+
+def collide_hit_rect(one, two):
+    return one.hit_rect.colliderect(two.rect)
 
 #Abstract class that can represent all humanoid entities (player, enemies)
 class Character(pg.sprite.Sprite):

@@ -1,17 +1,14 @@
-import re
 import pygame as pg
 import random
 import numpy as np
-from settings import *
 from sprites import *
+from settings import *
 
 vec = pg.math.Vector2
 
-def collide_hit_rect(one, two):
-    return one.hit_rect.colliderect(two.rect)
-
 class Map:
-    def __init__(self, filename):
+    def __init__(self, game, filename):
+        self.game = game
         self.mapFile = filename
         self.rooms = []
 
@@ -39,11 +36,50 @@ class Map:
         self.height = self.tileheight * TILESIZE
 
     def joinRooms(self):
-        #self.finalMap = np.concatenate([self.rooms[0],self.rooms[1],self.rooms[2]],axis = 0)
+        #self.finalMap = np.concatenate([self.rooms[3],self.rooms[2]],axis = 1)
         map1 = np.concatenate([self.rooms[0],self.rooms[2],self.rooms[2],self.rooms[1]],axis = 1)
         map2 = np.concatenate([self.rooms[3],self.rooms[4],self.rooms[4],self.rooms[0]],axis = 1)
         self.finalMap = np.concatenate([map1,map2],axis = 0)
-        
+
+    #TODO mirar por que esto no funciona por culpa de los imports, no tiene sentido ninguno
+    def closeDoors(self,wallChar,row,col):
+        door = False
+        try:
+            #These are the limits of the map, so we skip the check
+            if row == 0 or col == 0 or row == self.finalMap.shape[1]-1 or row == self.finalMap.shape[0]-1:
+                door = False
+            else:
+                if self.finalMap[row+1][col] == wallChar:
+                    door = True
+                if self.finalMap[row-1][col] == wallChar:
+                    door = True
+                if self.finalMap[row][col+1] == wallChar:
+                    door = True
+                if self.finalMap[row][col-1] == wallChar:
+                    door = True
+        except IndexError as e:
+            pass
+
+        if door:
+            pass
+        else:
+            Wall(self.game, col, row)
+
+    def generateMap(self):
+        for row in range(self.finalMap.shape[0]):
+            for col in range(self.finalMap.shape[1]):
+                if self.finalMap[row][col] == '1':
+                    Wall(self.game, col, row)
+                if self.finalMap[row][col] == 'P':
+                    self.game.player = Player(self.game, col, row)
+                if self.finalMap[row][col] == 'W':
+                    Mob(self.game, col, row)
+                if self.finalMap[row][col] == '-':
+                    self.closeDoors('-',row,col)
+                if self.finalMap[row][col] == '_':
+                    self.closeDoors('_',row,col)      
+
+        self.game.camera = Camera(self.width, self.height)
 
 class Camera:
     def __init__(self, width, height):
