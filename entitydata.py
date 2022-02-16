@@ -66,5 +66,5 @@ class MobStats(CharacterStats):
         #Movement
         self.speed = 300
         self.Attackspeed = 2 #It's a multiplier
-        self.AttackTimer = 160
+        self.AttackTimer = 225
   
