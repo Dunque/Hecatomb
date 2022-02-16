@@ -22,6 +22,10 @@ class Game:
         self.playerDodgeSheet =  pg.image.load("./sprites/playerDodgeSheet.png").convert_alpha()
         self.playerDeathSheet =  pg.image.load("./sprites/playerDeathSheet.png").convert_alpha()
         self.playerGunImg = pg.image.load("./sprites/gun.png").convert_alpha()
+        self.playerSwordImg = pg.image.load("./sprites/sword.png").convert_alpha()
+
+        #HUD
+        self.radialMenuImg = pg.image.load("./sprites/radial_menu.png").convert_alpha()
 
         # MOB DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
@@ -35,6 +39,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.walls = pg.sprite.Group()
+        self.menus = []
 
         self.map.generateMap()
 
@@ -58,6 +63,8 @@ class Game:
         hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
         for hit in hits:
             hit.currentState = "ATTACK"
+        for menu in self.menus:
+            menu.update()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -80,6 +87,8 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.quit()
+                if event.key == pg.K_TAB:
+                    self.player.show_weapon_menu()
 
     def show_start_screen(self):
         pass
