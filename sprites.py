@@ -195,7 +195,6 @@ class Player(Character):
 		self.weapon_slot = None
 		self.weapon_menu = WeaponMenu(self.game)
 		self.game.menus.append(self.weapon_menu)
-		#self.weapon = Gun(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self)
 
 		self.keys_pressed = []
 
@@ -262,30 +261,26 @@ class Player(Character):
 
 	def change_weapon(self, slot):
 		if self.weapon_slot != slot and slot == 0:
-			if self.has_weapon:
+			if self.weapon is not None:
 				self.weapon.deactivate()
 			self.weapon = Gun(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
 			self.weapon.activate()
-			self.has_weapon = True
 			self.weapon_slot = slot
 		elif self.weapon_slot != slot and slot == 2:
-			if self.has_weapon:
+			if self.weapon is not None:
 				self.weapon.deactivate()
-				self.has_weapon = False
 				self.weapon_slot = slot
 		elif self.weapon_slot != slot and slot == 1:
 			if self.weapon is not None:
 				self.weapon.deactivate()
 			self.weapon = Sword(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
 			self.weapon.activate()
-			self.has_weapon = True
 			self.weapon_slot = slot
 		elif self.weapon_slot != slot and slot == 3:
 			if self.weapon is not None:
 				self.weapon.deactivate()
 			self.weapon = Sword(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
 			self.weapon.activate()
-			self.has_weapon = True
 			self.weapon_slot = slot
 
 
