@@ -1,3 +1,5 @@
+from random import uniform
+
 import pygame as pg
 from settings import *
 from anim import *
@@ -120,7 +122,10 @@ class Character(pg.sprite.Sprite):
             if (self.entityData.currentAttackTimer <= self.entityData.AttackTimer ):
                 self.entityData.currentAttackTimer += 1
                 self.vel = self.AttackDir
+
             else:
+                # pos = self.pos + FIR_OFFSET.rotate(-self.rot)
+                Mob(self.scene, self.pos.x+1, self.pos.y+1) #sinceramente ni puta idea, como hago para hacer que aparezca una entidad nueva?
                 self.currentState = "GROUNDED"
                 self.entityData.currentAttackTimer = 0
             return
@@ -248,8 +253,8 @@ class Wall(pg.sprite.Sprite):
         self.groups = scene.all_sprites, scene.walls
         pg.sprite.Sprite.__init__(self, self.groups)
         self.scene = scene
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(GREEN)
+        self.image =pg.image.load("./sprites/arbol_rosa.png")#pg.Surface((TILESIZE, TILESIZE))
+        #self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.pos = vec(x,y)
         self.x = x
@@ -429,5 +434,30 @@ class Mob(Character):
     def update(self):
         self.stateUpdate()
         super(Mob, self).update()
+
+class Fireball(pg.sprite.Sprite):
+    def __init__(self, scene, x, y):
+        self.groups = scene.all_sprites, scene.fire_balls
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.scene = scene
+        self.image = scene.fire_ballMoveSheet
+        self.rect = self.image.get_rect()
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.pos = vec(x, y) * TILESIZE
+        self.rect.center = self.pos
+        spread = uniform(-FIRE_BALL_SPREAD, FIRE_BALL_SPREAD)
+        self.vel =  FIRE_BALL_SPEED
+        self.spawn_time = pg.time.get_ticks()
+        self.rot = 0
+
+    def update(self):
+        self.acc = vec(150).rotate(-self.rot)
+        self.vel = self.acc * self.scene.dt * 15
+        self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
+        self.rect.center = self.pos
+        if pg.sprite.spritecollideany(self, self.scene.walls):
+            self.kill()
+        if pg.time.get_ticks() - self.spawn_time > FIRE_BALL_LIFETIME:
+            self.kill()
 
 

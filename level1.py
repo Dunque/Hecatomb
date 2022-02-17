@@ -17,7 +17,7 @@ class Level1(Scene):
         self.all_sprites = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.walls = pg.sprite.Group()
-
+        self.fire_balls = pg.sprite.Group()
         self.map.generateMap()
 
     def load_data(self):
@@ -38,6 +38,9 @@ class Level1(Scene):
         self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
         self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
 
+        #BULLETS/AMMUNITION DATA
+        self.fire_ballMoveSheet = pg.image.load("./sprites/Fire_Ball/Move.png").convert_alpha()
+        self.fire_ballExplosionSheet = pg.image.load("./sprites/Fire_Ball/Explosion.png").convert_alpha()
     def update(self, time):
         self.dt = time
         # update portion of the game loop
