@@ -12,6 +12,8 @@ class Map:
         self.mapFile = filename
         self.rooms = []
 
+        self.finalMap = np.empty((80,120), dtype=str)
+
         self.parseRooms()
     
     def parseRooms(self):
@@ -43,7 +45,6 @@ class Map:
         map2 = np.concatenate([self.rooms[3],self.rooms[4],self.rooms[4],self.rooms[0]],axis = 1)
         self.finalMap = np.concatenate([map1,map2],axis = 0)
 
-    #TODO mirar por que esto no funciona por culpa de los imports, no tiene sentido ninguno
     def closeDoors(self,wallChar,row,col):
         door = False
         try:

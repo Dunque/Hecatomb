@@ -13,9 +13,9 @@ class Character(pg.sprite.Sprite):
     #TODO 
     #Hay que añadir aqui al consturecotr de chjaracter el grupo de sprites
     #Hay que crear grupo jugador, grupo enemigos, gerupo objetos etc
-    def __init__(self, game, x, y, animList, spriteGroup, entityData):
+    def __init__(self, scene, x, y, animList, spriteGroup, entityData):
         pg.sprite.Sprite.__init__(self, spriteGroup)
-        self.game = game
+        self.scene = scene
         self.entityData = entityData
 
         #Assign animations
@@ -74,7 +74,7 @@ class Character(pg.sprite.Sprite):
 
     def collide_with_walls(self, dir):
         if dir == 'x':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False, collide_hit_rect)
+            hits = pg.sprite.spritecollide(self, self.scene.walls, False, collide_hit_rect)
             if hits:
                 if self.vel.x > 0:
                     self.pos.x = hits[0].rect.left - self.hit_rect.width / 2.0
@@ -83,7 +83,7 @@ class Character(pg.sprite.Sprite):
                 self.vel.x = 0
                 self.hit_rect.centerx = self.pos.x
         if dir == 'y':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False, collide_hit_rect)
+            hits = pg.sprite.spritecollide(self, self.scene.walls, False, collide_hit_rect)
             if hits:
                 if self.vel.y > 0:
                     self.pos.y = hits[0].rect.top - self.hit_rect.height / 2.0
@@ -150,7 +150,7 @@ class Character(pg.sprite.Sprite):
             self.isFlipped = True
 
         #MOVEMENT
-        self.pos += self.vel * self.game.dt
+        self.pos += self.vel * self.scene.dt
 
         self.hit_rect.centerx = self.pos.x
         self.collide_with_walls('x')
@@ -168,25 +168,25 @@ class Character(pg.sprite.Sprite):
         self.entityData.update()
 
 class Player(Character):
-    def __init__(self, game, x, y):
+    def __init__(self, scene, x, y):
 
         #Aniamtion stuff
-        self.idleAnim = Anim(game.playerIdleSheet,(SPRITESIZE,SPRITESIZE),10,0,4)
-        self.walkAnim = Anim(game.playerWalkSheet,(SPRITESIZE,SPRITESIZE),7,0,6)
-        self.deathAnim = Anim(game.playerDeathSheet,(SPRITESIZE,SPRITESIZE),10,0,7)
-        self.dodgeAnim = Anim(game.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),7,0,5)
+        self.idleAnim = Anim(scene.playerIdleSheet,(SPRITESIZE,SPRITESIZE),10,0,4)
+        self.walkAnim = Anim(scene.playerWalkSheet,(SPRITESIZE,SPRITESIZE),7,0,6)
+        self.deathAnim = Anim(scene.playerDeathSheet,(SPRITESIZE,SPRITESIZE),10,0,7)
+        self.dodgeAnim = Anim(scene.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),7,0,5)
 
         self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.dodgeAnim,self.dodgeAnim] #repito esa animacion para hace pruebas de atque con los mobs
         
         #TODO 
         #Hay que añadir aqui al consturecotr de chjaracter el grupo de sprites
         #Hay que crear grupo jugador, grupo enemigos, gerupo objetos etc
-        super(Player, self).__init__(game, x, y, self.animList, game.all_sprites, PlayerStats())
+        super(Player, self).__init__(scene, x, y, self.animList, scene.all_sprites, PlayerStats())
 
         #AIMING
         self.weaponOffsetX = -20
         self.weaponOffsetY = -10
-        self.weapon = Gun(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self)
+        self.weapon = Gun(self.scene, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self)
 
     def move(self):
         #We are able to move freely
@@ -207,7 +207,7 @@ class Player(Character):
         mouse = pg.mouse.get_pressed()
         #Left click
         if mouse[0]:
-            self.game.camera.cameraShake(2,6)
+            self.scene.camera.cameraShake(2,6)
 
         if keys[pg.K_SPACE]:
             self.currentState = "DODGING"
@@ -218,7 +218,7 @@ class Player(Character):
             self.takeDamage(100)
 
     def aim(self):
-        cam_moved = self.game.camera.get_moved()
+        cam_moved = self.scene.camera.get_moved()
 
         mouse_x, mouse_y = pg.mouse.get_pos()
 
@@ -244,10 +244,10 @@ class Player(Character):
 
 
 class Wall(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.walls
+    def __init__(self, scene, x, y):
+        self.groups = scene.all_sprites, scene.walls
         pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
+        self.scene = scene
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
@@ -258,21 +258,21 @@ class Wall(pg.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 class Gun(pg.sprite.Sprite):
-    def __init__(self, game, x, y, character):
+    def __init__(self, scene, x, y, character):
         # Init sprite and groups
-        self.groups = game.all_sprites
+        self.groups = scene.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
 
         # Init data
         #self.data = gun_data
         self.char = character
 
-        # Set game instance and target_group
-        self.game = game
+        # Set scene instance and target_group
+        self.scene = scene
         #self.target_group = target_group
         
         # Init image and store it to rotate easilly
-        self.image = self.game.playerGunImg
+        self.image = self.scene.playerGunImg
         self.rect = self.image.get_rect()
 
         # Init position and rotation
@@ -297,7 +297,7 @@ class Gun(pg.sprite.Sprite):
 
     def updatePos(self, x, y):
         mouse_x, mouse_y = pg.mouse.get_pos()
-        cam_moved = self.game.camera.get_moved()
+        cam_moved = self.scene.camera.get_moved()
 
         mouse_x = mouse_x - cam_moved[0]
         mouse_y = mouse_y - cam_moved[1]
@@ -313,17 +313,17 @@ class Gun(pg.sprite.Sprite):
         else:
             self.rot = int((180 / math.pi) * math.atan2(rel_y, rel_x))
             flipWeapon = True
-        self.image = pg.transform.flip(pg.transform.rotate(self.game.playerGunImg, self.rot), False, flipWeapon)
+        self.image = pg.transform.flip(pg.transform.rotate(self.scene.playerGunImg, self.rot), False, flipWeapon)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 
     """ def shoot(self):
         if (self.can_shoot):
-                self.game.audio_mgr.play_sfx("gun")
+                self.scene.audio_mgr.play_sfx("gun")
 
                 shoot_pos_x = self.pos.x+self.shoot_offset.x 
                 shoot_pos_y = self.pos.y+self.shoot_offset.y
-                Bullet(shoot_pos_x, shoot_pos_y, self.shoot_vector, self.game, self.target_group, self.data)
+                Bullet(shoot_pos_x, shoot_pos_y, self.shoot_vector, self.scene, self.target_group, self.data)
                 self.current_cd = 0
                 self.can_shoot = False """
 
@@ -338,11 +338,11 @@ class Gun(pg.sprite.Sprite):
         #self.rect.y = self.pos.y+(self.shoot_offset*0.5).y
 
 """ class Bullet(pg.sprite.Sprite):
-    def __init__(self, x, y, shoot_direction, game, target_group, gun_data):
-        self.groups = game.all_sprites
+    def __init__(self, x, y, shoot_direction, scene, target_group, gun_data):
+        self.groups = scene.all_sprites
         
         pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
+        self.scene = scene
         
         self.image = pg.Surface((TILESIZE/8, TILESIZE/8))
         self.image.fill(gun_data.bullet_color)
@@ -364,7 +364,7 @@ class Gun(pg.sprite.Sprite):
 
     
     def collide_with_walls(self):
-        hits = pg.sprite.spritecollide(self, self.game.walls_gr, False)
+        hits = pg.sprite.spritecollide(self, self.scene.walls_gr, False)
         if hits: 
             self.kill()
     
@@ -397,19 +397,19 @@ class Gun(pg.sprite.Sprite):
         self.rect.y = self.pos.y   """
 
 class Mob(Character):
-    def __init__(self, game, x, y):
+    def __init__(self, scene, x, y):
         # Aniamtion stuff
-        self.idleAnim = Anim(game.wormIdleSheet, (90, 90), 10, 0, 9)
-        self.walkAnim = Anim(game.wormWalkSheet, (90, 90), 7, 0, 9)
-        self.deathAnim = Anim(game.wormDeathSheet, (90, 90), 13, 0, 8)
-        self.attackAnim = Anim(game.wormAttackSheet, (90, 90), 3, 0, 16)
+        self.idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
+        self.walkAnim = Anim(scene.wormWalkSheet, (90, 90), 7, 0, 9)
+        self.deathAnim = Anim(scene.wormDeathSheet, (90, 90), 13, 0, 8)
+        self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 3, 0, 16)
         self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim ,self.attackAnim]
 
-        super(Mob, self).__init__(game, x, y, self.animList, game.all_sprites, MobStats())
+        super(Mob, self).__init__(scene, x, y, self.animList, scene.all_sprites, MobStats())
 
-        self.groups = game.all_sprites, game.mobs
+        self.groups = scene.all_sprites, scene.mobs
         pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
+        self.scene = scene
         self.pos = vec(x, y) * TILESIZE
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -417,12 +417,12 @@ class Mob(Character):
         self.rot = 0
 
     def aim(self):
-        self.rot = (self.game.player.pos - self.pos).angle_to(vec(1, 0))
+        self.rot = (self.scene.player.pos - self.pos).angle_to(vec(1, 0))
 
     def move(self):
         self.acc = vec(150).rotate(-self.rot)
-        self.vel = self.acc * self.game.dt * 15
-        self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2
+        self.vel = self.acc * self.scene.dt * 15
+        self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
 
 
 
