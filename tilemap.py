@@ -72,13 +72,21 @@ class Map:
         if door >= 2:
             pass
         else:
-            Wall(self.game, col, row)
+            Wall(self.game, col, row,ROCK_IMAGE) #ahi que mirar que tileset quereis aqui
 
     def generateMap(self):
         for row in range(self.finalMap.shape[0]):
             for col in range(self.finalMap.shape[1]):
                 if self.finalMap[row][col] == '1':
-                    Wall(self.game, col, row)
+                    Wall(self.game, col, row,FENCE_IMAGE)
+                if self.finalMap[row][col] == '2':
+                    Wall(self.game, col, row,ARBOL_IMAGE1)
+                if self.finalMap[row][col] == '3':
+                    Wall(self.game, col, row,ARBOL_IMAGE2)
+                if self.finalMap[row][col] == '4':
+                    Wall(self.game, col, row,ARBOL_IMAGE3)
+                if self.finalMap[row][col] == '5':
+                    Wall(self.game, col, row,ARBOL_IMAGE4)
                 if self.finalMap[row][col] == 'P':
                     self.game.player = Player(self.game, col, row)
                 if self.finalMap[row][col] == 'W':

@@ -38,3 +38,12 @@ FIRE_BALL_SPREAD = 5
 
 #ANIMATION STUFF
 SPRITESIZE = 96
+
+ARBOL_IMAGE=pg.image.load("./sprites/arbol_rosa.png")
+ARBOL_IMAGE1=pg.image.load("./sprites/arbol_rosa_1.png")
+ARBOL_IMAGE2=pg.image.load("./sprites/arbol_rosa_2.png")
+ARBOL_IMAGE3=pg.image.load("./sprites/arbol_rosa_3.png")
+ARBOL_IMAGE4=pg.image.load("./sprites/arbol_rosa_4.png")
+BOX_IMAGE= pg.image.load("./sprites/Box.png")
+FENCE_IMAGE= pg.image.load("./sprites/fence.png")
+ROCK_IMAGE= pg.image.load("./sprites/RockPile.png")
