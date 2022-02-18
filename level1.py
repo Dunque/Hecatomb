@@ -17,6 +17,8 @@ class Level1(Scene):
         self.all_sprites = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.walls = pg.sprite.Group()
+        self.fire_balls = pg.sprite.Group()
+        self.menus = []
 
         self.map.generateMap()
 
@@ -30,6 +32,7 @@ class Level1(Scene):
         self.playerDodgeSheet =  pg.image.load("./sprites/playerDodgeSheet.png").convert_alpha()
         self.playerDeathSheet =  pg.image.load("./sprites/playerDeathSheet.png").convert_alpha()
         self.playerGunImg = pg.image.load("./sprites/gun.png").convert_alpha()
+        self.playerSwordImg = pg.image.load("./sprites/sword.png").convert_alpha()
 
         # MOB DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
@@ -37,6 +40,15 @@ class Level1(Scene):
         self.wormHitSheet = pg.image.load("./sprites/Worm/GetHit.png").convert_alpha()
         self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
         self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
+        #BULLETS/AMMUNITION DATA
+        self.fire_ballMoveSheet = pg.image.load(
+            "./sprites/Fire_Ball/Move.png").convert_alpha()
+        self.fire_ballExplosionSheet = pg.image.load(
+            "./sprites/Fire_Ball/Explosion.png").convert_alpha()
+
+                
+        #HUD
+        self.radialMenuImg = pg.image.load("./sprites/radial_menu.png").convert_alpha()
 
     def update(self, time):
         self.dt = time
@@ -46,6 +58,8 @@ class Level1(Scene):
         hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
         for hit in hits:
             hit.currentState = "ATTACK"
+        for menu in self.menus:
+            menu.update()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -64,7 +78,9 @@ class Level1(Scene):
         # catch all events here
         for event in eventList:
             if event.type == pg.QUIT:
-                self.quit()
+                self.sceneManager.exitScene()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.sceneManager.exitScene()
+                if event.key == pg.K_TAB:
+                    self.player.show_weapon_menu()

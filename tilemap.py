@@ -40,30 +40,36 @@ class Map:
     #TODO hacer que esto sea aleatorio, y mejorar el mapa global a una matriz enorme en vez de ir
     #juntando matrices pequeñas con el concatenate
     def joinRooms(self):
+        # - - - - - 
+        # |       |
+        # |       |
+        # |       |
+        # - - - - -
+        
         #self.finalMap = np.concatenate([self.rooms[3],self.rooms[2]],axis = 1)
         map1 = np.concatenate([self.rooms[0],self.rooms[2],self.rooms[2],self.rooms[1]],axis = 1)
         map2 = np.concatenate([self.rooms[3],self.rooms[4],self.rooms[4],self.rooms[0]],axis = 1)
         self.finalMap = np.concatenate([map1,map2],axis = 0)
 
     def closeDoors(self,wallChar,row,col):
-        door = False
+        door = 0
         try:
             #These are the limits of the map, so we skip the check
             if row == 0 or col == 0 or row == self.finalMap.shape[1]-1 or row == self.finalMap.shape[0]-1:
-                door = False
+                door = 0
             else:
                 if self.finalMap[row+1][col] == wallChar:
-                    door = True
+                    door +=1
                 if self.finalMap[row-1][col] == wallChar:
-                    door = True
+                    door +=1
                 if self.finalMap[row][col+1] == wallChar:
-                    door = True
+                    door +=1
                 if self.finalMap[row][col-1] == wallChar:
-                    door = True
+                    door +=1
         except IndexError as e:
             pass
 
-        if door:
+        if door >= 2:
             pass
         else:
             Wall(self.game, col, row)
@@ -78,9 +84,7 @@ class Map:
                 if self.finalMap[row][col] == 'W':
                     Mob(self.game, col, row)
                 if self.finalMap[row][col] == '-':
-                    self.closeDoors('-',row,col)
-                if self.finalMap[row][col] == '_':
-                    self.closeDoors('_',row,col)      
+                    self.closeDoors('-',row,col)     
 
         self.game.camera = Camera(self.width, self.height)
 

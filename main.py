@@ -1,11 +1,11 @@
-import pygame
+import pygame as pg
 from scenemanager import *
 from level1 import *
 
 if __name__ == '__main__':
 
     # Inicializamos la libreria de pygame
-    pygame.init()
+    pg.init()
     # Creamos el director
     sm = SceneManager()
     # Creamos la escena con la pantalla inicial
@@ -15,4 +15,4 @@ if __name__ == '__main__':
     # Y ejecutamos el juego
     sm.execute()
     # Cuando se termine la ejecución, finaliza la librería
-    pygame.quit()
+    pg.quit()
