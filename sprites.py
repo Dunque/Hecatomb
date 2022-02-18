@@ -4,7 +4,9 @@ import pygame as pg
 from settings import *
 from anim import *
 from entitydata import *
+from menus import WeaponMenu
 import math
+from random import uniform
 vec = pg.math.Vector2
 
 def collide_hit_rect(one, two):
@@ -72,7 +74,6 @@ class Character(pg.sprite.Sprite):
         self.entityData.currentDeathAnimTimer += 1
         if (self.entityData.currentDeathAnimTimer >= self.entityData.deathAnimTimer):
             self.kill()
-            self.weapon.kill()
 
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -172,81 +173,125 @@ class Character(pg.sprite.Sprite):
         # Update entity's data
         self.entityData.update()
 
+
 class Player(Character):
-    def __init__(self, scene, x, y):
+	def __init__(self, scene, x, y):
 
-        #Aniamtion stuff
-        self.idleAnim = Anim(scene.playerIdleSheet,(SPRITESIZE,SPRITESIZE),10,0,4)
-        self.walkAnim = Anim(scene.playerWalkSheet,(SPRITESIZE,SPRITESIZE),7,0,6)
-        self.deathAnim = Anim(scene.playerDeathSheet,(SPRITESIZE,SPRITESIZE),10,0,7)
-        self.dodgeAnim = Anim(scene.playerDodgeSheet,(SPRITESIZE,SPRITESIZE),7,0,5)
+		# Aniamtion stuff
+		self.idleAnim = Anim(scene.playerIdleSheet,
+		                     (SPRITESIZE, SPRITESIZE), 10, 0, 4)
+		self.walkAnim = Anim(scene.playerWalkSheet, (SPRITESIZE, SPRITESIZE), 7, 0, 6)
+		self.deathAnim = Anim(scene.playerDeathSheet,
+		                      (SPRITESIZE, SPRITESIZE), 10, 0, 7)
+		self.dodgeAnim = Anim(scene.playerDodgeSheet,
+		                      (SPRITESIZE, SPRITESIZE), 7, 0, 5)
 
-        self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.dodgeAnim,self.dodgeAnim] #repito esa animacion para hace pruebas de atque con los mobs
-        
-        #TODO 
-        #Hay que añadir aqui al consturecotr de chjaracter el grupo de sprites
-        #Hay que crear grupo jugador, grupo enemigos, gerupo objetos etc
-        super(Player, self).__init__(scene, x, y, self.animList, scene.all_sprites, PlayerStats())
+		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.dodgeAnim,
+                   self.dodgeAnim]  # repito esa animacion para hace pruebas de atque con los mobs
 
-        #AIMING
-        self.weaponOffsetX = -20
-        self.weaponOffsetY = -10
-        self.weapon = Gun(self.scene, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self)
+		# TODO
+		# Hay que añadir aqui al consturecotr de chjaracter el grupo de sprites
+		# Hay que crear grupo jugador, grupo enemigos, gerupo objetos etc
+		super(Player, self).__init__(scene, x, y,
+                               self.animList, scene.all_sprites, PlayerStats())
 
-    def move(self):
-        #We are able to move freely
-        self.vel = vec(0, 0)
+		# AIMING
+		self.weaponOffsetX = -20
+		self.weaponOffsetY = -10
+		self.weapon_slot = None
+		self.weapon_menu = WeaponMenu(self.scene)
+		self.scene.menus.append(self.weapon_menu)
+		
+		self.keys_pressed = []
 
-        keys = pg.key.get_pressed()
-        if keys[pg.K_a]:
-            self.vel.x = -self.entityData.speed
-        if keys[pg.K_d]:
-            self.vel.x = self.entityData.speed
-        if keys[pg.K_w]:
-            self.vel.y = -self.entityData.speed
-        if keys[pg.K_s]:
-            self.vel.y = self.entityData.speed
-        if self.vel.x != 0 and self.vel.y != 0:
-            self.vel *= 0.7071
+	def get_keys(self):
+		self.keys_pressed = pg.key.get_pressed()
 
-        mouse = pg.mouse.get_pressed()
-        #Left click
-        if mouse[0]:
-            self.scene.camera.cameraShake(2,6)
+	def move(self):
+		# We are able to move freely
+		self.vel = vec(0, 0)
+		self.get_keys()
+		keys = pg.key.get_pressed()
+		if keys[pg.K_a]:
+			self.vel.x = -self.entityData.speed
+		if keys[pg.K_d]:
+			self.vel.x = self.entityData.speed
+		if keys[pg.K_w]:
+			self.vel.y = -self.entityData.speed
+		if keys[pg.K_s]:
+			self.vel.y = self.entityData.speed
+		if self.vel.x != 0 and self.vel.y != 0:
+			self.vel *= 0.7071
 
-        if keys[pg.K_SPACE]:
-            self.currentState = "DODGING"
-            self.dodgeDir = self.vel * self.entityData.dodgeSpeed
+		mouse = pg.mouse.get_pressed()
+		# Left click
+		if mouse[0]:
+			self.scene.camera.cameraShake(2, 6)
 
-        ##DEBUG KEY TO KILL YOURSELF
-        if keys[pg.K_0]:
-            self.takeDamage(100)
+		if keys[pg.K_SPACE]:
+			self.currentState = "DODGING"
+			self.dodgeDir = self.vel * self.entityData.dodgeSpeed
 
-    def aim(self):
-        cam_moved = self.scene.camera.get_moved()
+		##DEBUG KEY TO KILL YOURSELF
+		if keys[pg.K_0]:
+			self.takeDamage(100)
 
-        mouse_x, mouse_y = pg.mouse.get_pos()
+	def aim(self):
+		cam_moved = self.scene.camera.get_moved()
 
-        mouse_x = mouse_x - cam_moved[0]
-        mouse_y = mouse_y - cam_moved[1]
+		mouse_x, mouse_y = pg.mouse.get_pos()
 
-        rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
-        self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
+		mouse_x = mouse_x - cam_moved[0]
+		mouse_y = mouse_y - cam_moved[1]
 
-        if 90 < self.rot + 180 < 270:
-            self.isFlipped = False
-            self.weaponOffsetX = -20
-        else:
-            self.isFlipped = True
-            self.weaponOffsetX = 20
+		rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
+		self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
 
-    def update(self):
+		if 90 < self.rot + 180 < 270:
+			self.isFlipped = False
+			self.weaponOffsetX = -20
+		else:
+			self.isFlipped = True
+			self.weaponOffsetX = 20
 
-        super(Player, self).update()
+	def update(self):
 
-        #WEAPON
-        self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+		super(Player, self).update()
 
+		# WEAPON
+		if self.weapon is not None:
+			self.weapon.updatePos(self.pos.x - self.weaponOffsetX,
+			                      self.pos.y - self.weaponOffsetY, self.rect)
+
+	def show_weapon_menu(self):
+		self.weapon_menu.toggle_menu()
+
+	def change_weapon(self, slot):
+		if self.weapon_slot != slot and slot == 0:
+			if self.weapon is not None:
+				self.weapon.deactivate()
+			self.weapon = Gun(self.scene, self.pos.x - self.weaponOffsetX,
+			                  self.pos.y - self.weaponOffsetY)
+			self.weapon.activate()
+			self.weapon_slot = slot
+		elif self.weapon_slot != slot and slot == 2:
+			if self.weapon is not None:
+				self.weapon.deactivate()
+				self.weapon_slot = slot
+		elif self.weapon_slot != slot and slot == 1:
+			if self.weapon is not None:
+				self.weapon.deactivate()
+			self.weapon = Sword(self.scene, self.pos.x -
+			                    self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+			self.weapon.activate()
+			self.weapon_slot = slot
+		elif self.weapon_slot != slot and slot == 3:
+			if self.weapon is not None:
+				self.weapon.deactivate()
+			self.weapon = Sword(self.scene, self.pos.x -
+			                    self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+			self.weapon.activate()
+			self.weapon_slot = slot
 
 class Wall(pg.sprite.Sprite):
     def __init__(self, scene, x, y):
@@ -262,144 +307,129 @@ class Wall(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
-class Gun(pg.sprite.Sprite):
-    def __init__(self, scene, x, y, character):
-        # Init sprite and groups
-        self.groups = scene.all_sprites
-        pg.sprite.Sprite.__init__(self, self.groups)
 
-        # Init data
-        #self.data = gun_data
-        self.char = character
+class SingletonMeta(type):
+	_instances = {}
 
-        # Set scene instance and target_group
-        self.scene = scene
-        #self.target_group = target_group
-        
-        # Init image and store it to rotate easilly
-        self.image = self.scene.playerGunImg
-        self.rect = self.image.get_rect()
+	def __call__(cls, *args, **kwargs):
+		if cls not in cls._instances:
+			instance = super().__call__(*args, **kwargs)
+			cls._instances[cls] = instance
+		return cls._instances[cls]
 
-        # Init position and rotation
-        self.pos = vec(x, y) * TILESIZE
-        self.rot = 0
 
-        # Init shoot direction vector and shoot offset
-        # The shoot vector indicates the bullet direction and
-        # the offset indicates the spawn point
-        self.shoot_vector = vec(0,1)
-        self.shoot_offset = vec(16, 16)
-        self.behind = False
+class Weapon(metaclass=SingletonMeta):
+	def __init__(self, scene, x, y, image):
+		# Init sprite and groups
+		self.groups = scene.all_sprites
+		pg.sprite.Sprite.__init__(self, [])
+		# Set scene instance and target_group
+		self.scene = scene
 
-        # Init gun stats (Cooldown and damage)
-        # This stats will vary depending on the gun type
-        # Cooldown -> wait time between shoots
-        # Damage   -> damage dealt by bullet
-        self.current_cd = 0
-        self.can_shoot = True
+		self.orig_image = image
+		self.image = image
+		self.rect = self.image.get_rect()
 
-        self.damage = 1
+		# Init position and rotation
+		self.pos = vec(x, y) * TILESIZE
+		self.rot = 0
 
-    def updatePos(self, x, y):
-        mouse_x, mouse_y = pg.mouse.get_pos()
-        cam_moved = self.scene.camera.get_moved()
+		self.damage = 1
 
-        mouse_x = mouse_x - cam_moved[0]
-        mouse_y = mouse_y - cam_moved[1]
+	def updatePos(self, x, y, player_rect):
+		mouse_x, mouse_y = pg.mouse.get_pos()
+		cam_moved = self.scene.camera.get_moved()
 
-        self.pos = vec(x,y)
-        
-        #ROTATION
-        rel_x, rel_y = mouse_x - self.char.rect.centerx, mouse_y - self.char.rect.centery
+		mouse_x = mouse_x - cam_moved[0]
+		mouse_y = mouse_y - cam_moved[1]
 
-        if 90 < self.rot + 180 < 270:
-            self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
-            flipWeapon = False
-        else:
-            self.rot = int((180 / math.pi) * math.atan2(rel_y, rel_x))
-            flipWeapon = True
-        self.image = pg.transform.flip(pg.transform.rotate(self.scene.playerGunImg, self.rot), False, flipWeapon)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos
+		x_offset = (player_rect[2] / 2)
+		y_offset = (player_rect[3] / 2)
 
-    """ def shoot(self):
-        if (self.can_shoot):
-                self.scene.audio_mgr.play_sfx("gun")
+		if mouse_x > x + x_offset:
+			middle = False
+		elif mouse_x < x - x_offset:
+			middle = False
+		else:
+			middle = True
 
-                shoot_pos_x = self.pos.x+self.shoot_offset.x 
-                shoot_pos_y = self.pos.y+self.shoot_offset.y
-                Bullet(shoot_pos_x, shoot_pos_y, self.shoot_vector, self.scene, self.target_group, self.data)
-                self.current_cd = 0
-                self.can_shoot = False """
+		if mouse_y > y + y_offset:
+			up = False
+		elif mouse_y < y - y_offset:
+			up = True
+		else:
+			up = False
 
-    def update(self):
+		if up and middle:
+			self.behind = True
+		else:
+			self.behind = False
 
-        self.current_cd += 1 
+		self.pos = vec(x, y)
 
-        """ if (self.current_cd >= self.data.cooldown):
-            self.can_shoot = True """
-        
-        #self.rect.x = self.pos.x+(self.shoot_offset*0.5).x
-        #self.rect.y = self.pos.y+(self.shoot_offset*0.5).y
+		pg.draw.circle(self.scene.screen, BLUE,
+		               (x - cam_moved[0], y - cam_moved[1]), 5)
+		pg.display.update()
 
-""" class Bullet(pg.sprite.Sprite):
-    def __init__(self, x, y, shoot_direction, scene, target_group, gun_data):
-        self.groups = scene.all_sprites
-        
-        pg.sprite.Sprite.__init__(self, self.groups)
-        self.scene = scene
-        
-        self.image = pg.Surface((TILESIZE/8, TILESIZE/8))
-        self.image.fill(gun_data.bullet_color)
-        self.rect = self.image.get_rect()
+		# ROTATION
+		rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
+		if 90 < self.rot + 180 < 270:
+			self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
+			is_flipped = False
+		else:
+			self.rot = int((180 / math.pi) * math.atan2(rel_y, rel_x))
+			is_flipped = True
+		self.image = pg.transform.flip(pg.transform.rotate(
+		    self.orig_image, self.rot), False, is_flipped)
+		self.rect = self.image.get_rect()
+		self.rect.center = self.pos
 
-        self.pos = vec(x, y)
-        self.direction = shoot_direction
-        
-        self.rect.x = self.pos.x
-        self.rect.y = self.pos.y
-        
-        self.speed = gun_data.bullet_speed
-        self.target_group = target_group
+	def deactivate(self):
+		self.remove(self.scene.all_sprites)
 
-        self.damage = gun_data.damage
+	def activate(self):
+		self.updatePos(self.scene.player.pos.x, self.scene.player.pos.y,
+		               self.scene.player.image.get_rect())
+		self.add(self.scene.all_sprites)
 
-        self.alive_time = 0
-        self.max_alive_time = gun_data.reach
 
-    
-    def collide_with_walls(self):
-        hits = pg.sprite.spritecollide(self, self.scene.walls_gr, False)
-        if hits: 
-            self.kill()
-    
-    def collide_with_enemy(self):
-        hits = pg.sprite.spritecollide(self, self.target_group, False)
-        if hits:
-            for hit in hits:
-                hit.take_damage(self.damage)
-                self.kill()
-        
-    def move(self):
-        self.pos.x += self.direction.x * self.speed
-        self.pos.y += self.direction.y * self.speed
+class Sword(Weapon, pg.sprite.Sprite):
+	def __init__(self, scene, x, y):
+		super().__init__(scene, x, y, scene.playerSwordImg)
+		# Init image and store it to rotate easilly
+		self.image = self.scene.playerSwordImg
+		self.rect = self.image.get_rect()
 
-    def update(self):
-        # Check for bullet dissapear
-        self.alive_time+=1
-        if (self.alive_time > self.max_alive_time):
-            self.kill()
 
-        # Check collisions
-        self.collide_with_enemy()
-        self.collide_with_walls()
+class FireWeapon(Weapon):
+	def __init__(self, scene, x, y):
+		super().__init__(scene, x, y, scene.playerGunImg)
 
-        # Compute movement
-        self.move()
-        
-        # Update render position
-        self.rect.x = self.pos.x
-        self.rect.y = self.pos.y   """
+		# Init shoot direction vector and shoot offset
+		# The shoot vector indicates the bullet direction and
+		# the offset indicates the spawn point
+		self.shoot_vector = vec(0, 1)
+		self.shoot_offset = vec(16, 16)
+		self.behind = False
+
+		# Init gun stats (Cooldown and damage)
+		# This stats will vary depending on the gun type
+		# Cooldown -> wait time between shoots
+		# Damage   -> damage dealt by bullet
+		self.current_cd = 0
+		self.can_shoot = True
+
+	def update(self):
+		self.current_cd += 1
+
+
+class Gun(FireWeapon, pg.sprite.Sprite):
+	def __init__(self, scene, x, y):
+		super().__init__(scene, x, y)
+
+		# Init image and store it to rotate easilly
+		self.image = self.scene.playerGunImg
+		self.rect = self.image.get_rect()
 
 class Mob(Character):
     def __init__(self, scene, x, y):
@@ -461,3 +491,27 @@ class Fireball(pg.sprite.Sprite):
             self.kill()
 
 
+class Fireball(pg.sprite.Sprite):
+    def __init__(self, scene, x, y):
+        self.groups = scene.all_sprites, scene.fire_balls
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.scene = scene
+        self.image = scene.fire_ballMoveSheet
+        self.rect = self.image.get_rect()
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.pos = vec(x, y) * TILESIZE
+        self.rect.center = self.pos
+        spread = uniform(-FIRE_BALL_SPREAD, FIRE_BALL_SPREAD)
+        self.vel = FIRE_BALL_SPEED
+        self.spawn_time = pg.time.get_ticks()
+        self.rot = 0
+
+    def update(self):
+        self.acc = vec(150).rotate(-self.rot)
+        self.vel = self.acc * self.scene.dt * 15
+        self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
+        self.rect.center = self.pos
+        if pg.sprite.spritecollideany(self, self.scene.walls):
+            self.kill()
+        if pg.time.get_ticks() - self.spawn_time > FIRE_BALL_LIFETIME:
+            self.kill()
