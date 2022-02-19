@@ -11,6 +11,7 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.load_data()
+        self.player = None
 
     def load_data(self):
         #MAP DATA
@@ -87,8 +88,6 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.quit()
-                if event.key == pg.K_TAB:
-                    self.player.show_weapon_menu()
 
     def show_start_screen(self):
         pass

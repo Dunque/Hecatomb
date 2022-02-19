@@ -4,6 +4,7 @@ from anim import *
 from entitydata import *
 import math
 from menus import WeaponMenu
+import time
 
 vec = pg.math.Vector2
 
@@ -74,7 +75,8 @@ class Character(pg.sprite.Sprite):
 		self.entityData.currentDeathAnimTimer += 1
 		if self.entityData.currentDeathAnimTimer >= self.entityData.deathAnimTimer:
 			self.kill()
-			self.weapon.kill()
+			if self.weapon is not None:
+				self.weapon.kill()
 
 	def collide_with_walls(self, dir):
 		if dir == 'x':
@@ -196,15 +198,9 @@ class Player(Character):
 		self.weapon_menu = WeaponMenu(self.game)
 		self.game.menus.append(self.weapon_menu)
 
-		self.keys_pressed = []
-
-	def get_keys(self):
-		self.keys_pressed = pg.key.get_pressed()
-
 	def move(self):
 		# We are able to move freely
 		self.vel = vec(0, 0)
-		self.get_keys()
 		keys = pg.key.get_pressed()
 		if keys[pg.K_a]:
 			self.vel.x = -self.entityData.speed
@@ -221,6 +217,11 @@ class Player(Character):
 		# Left click
 		if mouse[0]:
 			self.game.camera.cameraShake(2, 6)
+			if self.weapon:
+				self.weapon.attack()
+		elif not mouse[0]:
+			if self.weapon:
+				self.weapon.stop_attack()
 
 		if keys[pg.K_SPACE]:
 			self.currentState = "DODGING"
@@ -229,6 +230,11 @@ class Player(Character):
 		##DEBUG KEY TO KILL YOURSELF
 		if keys[pg.K_0]:
 			self.takeDamage(100)
+
+		if keys[pg.K_TAB]:
+			self.show_menu = True
+		else:
+			self.show_menu = False
 
 	def aim(self):
 		cam_moved = self.game.camera.get_moved()
@@ -249,34 +255,30 @@ class Player(Character):
 			self.weaponOffsetX = 20
 
 	def update(self):
-
 		super(Player, self).update()
 
 		# WEAPON
 		if self.weapon is not None:
 			self.weapon.updatePos(self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY, self.rect)
 
-	def show_weapon_menu(self):
-		self.weapon_menu.toggle_menu()
-
 	def change_weapon(self, slot):
-		if self.weapon_slot != slot and slot == 0:
+		if self.weapon_slot != slot and slot == "top":
 			if self.weapon is not None:
 				self.weapon.deactivate()
 			self.weapon = Gun(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
 			self.weapon.activate()
 			self.weapon_slot = slot
-		elif self.weapon_slot != slot and slot == 2:
+		elif self.weapon_slot != slot and slot == "down":
 			if self.weapon is not None:
 				self.weapon.deactivate()
 				self.weapon_slot = slot
-		elif self.weapon_slot != slot and slot == 1:
+		elif self.weapon_slot != slot and slot == "right":
 			if self.weapon is not None:
 				self.weapon.deactivate()
 			self.weapon = Sword(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
 			self.weapon.activate()
 			self.weapon_slot = slot
-		elif self.weapon_slot != slot and slot == 3:
+		elif self.weapon_slot != slot and slot == "left":
 			if self.weapon is not None:
 				self.weapon.deactivate()
 			self.weapon = Sword(self.game, self.pos.x - self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
@@ -380,6 +382,12 @@ class Weapon(metaclass=SingletonMeta):
 		self.updatePos(self.game.player.pos.x, self.game.player.pos.y, self.game.player.image.get_rect())
 		self.add(self.game.all_sprites)
 
+	def attack(self):
+		pass
+
+	def stop_attack(self):
+		pass
+
 
 class Sword(Weapon, pg.sprite.Sprite):
 	def __init__(self, game, x, y):
@@ -387,6 +395,90 @@ class Sword(Weapon, pg.sprite.Sprite):
 		# Init image and store it to rotate easilly
 		self.image = self.game.playerSwordImg
 		self.rect = self.image.get_rect()
+
+		self.damage = 10
+
+		self.rot_attack = 0
+		self.reached = 0
+		self.sword_speed = 8
+		self.multiply_speed = 2.5
+		self.top_limit_swing = 50
+		self.down_limit_swing = 100
+		self.attacking = False
+
+	def attack(self):
+		self.attack_movement()
+		if self.attacking:
+			collision = pg.sprite.spritecollide(self, self.game.mobs, False)
+			for enemies in collision:
+				enemies.take_hit(self.damage)
+
+	def attack_movement(self):
+		if self.reached == 0:
+			if self.rot_attack > -self.top_limit_swing:
+				self.rot_attack -= self.sword_speed
+			else:
+				self.reached = 1
+		elif self.reached == 1:
+			self.attacking = True
+			if self.rot_attack < self.down_limit_swing:
+				self.rot_attack += self.sword_speed * self.multiply_speed
+			else:
+				self.reached = 2
+				self.attacking = False
+		elif self.reached == 2 and self.rot_attack > 0:
+				self.rot_attack -= self.sword_speed
+
+	def stop_attack(self):
+		self.rot_attack = 0
+		self.reached = 0
+		self.attacking = False
+
+	def updatePos(self, x, y, player_rect):
+		mouse_x, mouse_y = pg.mouse.get_pos()
+		cam_moved = self.game.camera.get_moved()
+
+		mouse_x = mouse_x - cam_moved[0]
+		mouse_y = mouse_y - cam_moved[1]
+
+		x_offset = (player_rect[2] / 2)
+		y_offset = (player_rect[3] / 2)
+
+		if mouse_x > x + x_offset:
+			middle = False
+		elif mouse_x < x - x_offset:
+			middle = False
+		else:
+			middle = True
+
+		if mouse_y > y + y_offset:
+			up = False
+		elif mouse_y < y - y_offset:
+			up = True
+		else:
+			up = False
+
+		if up and middle:
+			self.behind = True
+		else:
+			self.behind = False
+
+		self.pos = vec(x, y)
+
+		pg.draw.circle(self.game.screen, BLUE, (x - cam_moved[0], y - cam_moved[1]), 5)
+		pg.display.update()
+
+		# ROTATION
+		rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
+		if 90 < self.rot + 180 < 270:
+			self.rot = int((180 / math.pi) * -math.atan2(rel_y, rel_x))
+			is_flipped = False
+		else:
+			self.rot = int((180 / math.pi) * math.atan2(rel_y, rel_x))
+			is_flipped = True
+		self.image = pg.transform.flip(pg.transform.rotate(self.orig_image, self.rot - self.rot_attack), False, is_flipped)
+		self.rect = self.image.get_rect()
+		self.rect.center = self.pos
 
 
 class FireWeapon(Weapon):
@@ -440,6 +532,11 @@ class Mob(Character):
 		self.rect.center = self.pos
 		self.rot = 0
 
+		self.health = 100
+
+		self.time_hit = None
+		self.delta_time_hit = 0.3
+
 	def aim(self):
 		self.rot = (self.game.player.pos - self.pos).angle_to(vec(1, 0))
 
@@ -451,3 +548,18 @@ class Mob(Character):
 	def update(self):
 		self.stateUpdate()
 		super(Mob, self).update()
+
+		if self.health <= 0:
+			self.die()
+
+	def take_hit(self, weapon_damage):
+		time_now = time.time()
+		if not self.time_hit:
+			self.time_hit = time_now
+		delta = time_now - self.time_hit
+		if delta == 0 or delta > self.delta_time_hit:
+			self.health -= weapon_damage
+			self.time_hit = time_now
+
+	def die(self):
+		self.kill()
