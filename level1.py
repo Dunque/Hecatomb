@@ -16,12 +16,14 @@ class Level1(Scene):
         #Initialize sprite groups
         self.all_sprites = pg.sprite.Group()
         self.background_SG = pg.sprite.Group()
-        self.walls_SG= pg.sprite.Group()
+        self.walls_SG = pg.sprite.Group()
         self.mobs_SG = pg.sprite.Group()
         self.player_SG = pg.sprite.Group()
         self.fireBalls_SG = pg.sprite.Group()
 
         self.menus = []
+
+        self.player = None
 
         #Generate a map
         self.map.generateMap()
@@ -88,5 +90,3 @@ class Level1(Scene):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.sceneManager.exitScene()
-                if event.key == pg.K_TAB:
-                    self.player.show_weapon_menu()
