@@ -1,6 +1,6 @@
 import pygame as pg
-import random
 import numpy as np
+from random import seed, randint, random, choice
 from sprites import *
 from settings import *
 
@@ -12,24 +12,29 @@ class Map:
         self.scene = scene
         self.mapFile = filename
         
+        self.tmpRooms = []
         self.rooms = []
         self.roomData = []
 
         #This boolean dictates if the map is active or not
         self.isPlaying = False
 
-        self.finalMap = np.empty((80, 120), dtype=str)
+        self.finalMap = np.empty((5 * ROOMHEIGHT, 5 * ROOMWIDTH), dtype=str)
+        print(self.finalMap.shape[0])
+        print(self.finalMap.shape[1])
 
         self.parseRooms()
 
+    #This function reads the txt file containing the rooms, and it transforms them into
+    #string matrices which contain the information of the tiles, objects, enemies etc
+    #of the room
     def parseRooms(self):
         with open(self.mapFile, 'rt') as f:
             tmpRoom = []
             for line in f:
                 if line.__contains__("/"):
                     roomMatrix = np.array(list(map(list, tmpRoom)))
-                    #print(roomMatrix)
-                    self.rooms.append(roomMatrix)
+                    self.tmpRooms.append(roomMatrix)
                     tmpRoom = []
                 elif len(line) == 0 or line.isspace():
                     pass
@@ -46,18 +51,70 @@ class Map:
     #TODO hacer que esto sea aleatorio, y mejorar el mapa global a una matriz enorme en vez de ir
     #juntando matrices pequeñas con el concatenate
     def joinRooms(self):
-        # - - - - -
-        # |       |
-        # |       |
-        # |       |
-        # - - - - -
 
-        #self.finalMap = np.concatenate([self.rooms[3],self.rooms[2]],axis = 1)
-        map1 = np.concatenate(
-            [self.rooms[0], self.rooms[2], self.rooms[2], self.rooms[1]], axis=1)
-        map2 = np.concatenate(
-            [self.rooms[3], self.rooms[4], self.rooms[4], self.rooms[0]], axis=1)
-        self.finalMap = np.concatenate([map1, map2], axis=0)
+        # Random seed
+        seed()
+        
+        #Avaliable rooms for the generator
+        avaliableRooms = self.tmpRooms
+
+        # Inserting the first room
+        x = randint(0,4)
+        y = randint(0,4)
+
+        roomMatrix = avaliableRooms.pop(0)
+        #print(roomMatrix)
+        i = 0
+        j = 0
+        #Copy it to the position relative to the global map
+        for row in range(y*ROOMHEIGHT, y*ROOMHEIGHT + ROOMHEIGHT):
+            for col in range(x*ROOMWIDTH, x*ROOMWIDTH + ROOMWIDTH):
+                self.finalMap[row][col] = roomMatrix[i][j]
+                j += 1
+            i += 1
+            j = 0
+
+        #Store the room in a list, including it's coordinates in the final map
+        self.rooms.append(Room(roomMatrix, x*ROOMWIDTH, y*ROOMHEIGHT))
+
+        # Now we continue with the rest of the rooms
+        # We repeat this loop until we have chosen a position for each room in the avaliableRooms list
+        while len(avaliableRooms) > 0:
+            #We check the four cardinal directions of each room we have placed, to insert a new one
+            #in any of those free directions
+            avaliablePositions = []
+            for room in self.rooms:
+                try:
+                    #Above the actual room
+                    if room.limitY0 != 0 and self.finalMap[room.limitY0-1][room.limitX0] == "":
+                        avaliablePositions.append((room.limitX0,room.limitY0-ROOMHEIGHT))
+                            
+                    #Below the actual room
+                    if room.limitY != self.finalMap.shape[0] and self.finalMap[room.limitY0+ROOMHEIGHT][room.limitX0] == "":
+                        avaliablePositions.append((room.limitX0,room.limitY0+ROOMHEIGHT))
+                            
+                    #To the left of the actual room
+                    if room.limitX0 != 0 and self.finalMap[room.limitY0][room.limitX0-1] == "":
+                        avaliablePositions.append((room.limitX0-ROOMWIDTH,room.limitY0))
+                        
+                    #To the right of the actual room
+                    if room.limitX != self.finalMap.shape[1] and self.finalMap[room.limitY0][room.limitX0+ROOMWIDTH] == "":
+                        avaliablePositions.append((room.limitX0+ROOMWIDTH,room.limitY0))
+                except IndexError as e:
+                    pass
+            
+            pos = choice(avaliablePositions)
+
+            roomMatrix = avaliableRooms.pop(0)
+            i = 0
+            j = 0
+            #Copy it to the position relative to the global map
+            for row in range(pos[1], pos[1] + ROOMHEIGHT):
+                for col in range(pos[0], pos[0] + ROOMWIDTH):
+                    self.finalMap[row][col] = roomMatrix[i][j]
+                    j += 1
+                i += 1
+                j = 0
 
     def closeDoors(self, wallChar, row, col):
         door = 0
@@ -88,35 +145,49 @@ class Map:
             for col in range(self.finalMap.shape[1]):
                 if self.finalMap[row][col] == '1':
                     Wall(self.scene, col, row, FENCE_IMAGE)
-                if self.finalMap[row][col] == '2':
+                elif self.finalMap[row][col] == '2':
                     Wall(self.scene, col, row, ARBOL_IMAGE1)
-                if self.finalMap[row][col] == '3':
+                elif self.finalMap[row][col] == '3':
                     Wall(self.scene, col, row, ARBOL_IMAGE2)
-                if self.finalMap[row][col] == '4':
+                elif self.finalMap[row][col] == '4':
                     Wall(self.scene, col, row, ARBOL_IMAGE3)
-                if self.finalMap[row][col] == '5':
+                elif self.finalMap[row][col] == '5':
                     Wall(self.scene, col, row, ARBOL_IMAGE4)
-                if self.finalMap[row][col] == 'P':
+                elif self.finalMap[row][col] == 'P':
                     self.scene.player = Player(self.scene, col, row)
-                if self.finalMap[row][col] == 'W':
+                elif self.finalMap[row][col] == 'W':
                     Mob(self.scene, col, row)
-                if self.finalMap[row][col] == '-':
+                elif self.finalMap[row][col] == '-':
                     self.closeDoors('-', row, col)
 
         self.scene.camera = Camera(self.width, self.height)
 
     def update(self):
         # If the floor is still generating, wait
-        if not self.isPlaying:
+        if self.isPlaying == False:
             return
+        else:
+                # Update the active rooms
+            for (boundaries, room) in self.rooms:
+                if self.scene.player.rect.x in range(boundaries[0]+2*TILESIZE, boundaries[1]):
+                    if room.state == "UNCLEARED":
+                        room.start_room()
 
-            # Update the active rooms
-        for (boundaries, room) in self.rooms:
-            if self.game.player.rect.x in range(boundaries[0]+2*TILESIZE, boundaries[1]):
-                if room.state == "UNCLEARED":
-                    room.start_room()
+                room.update()
 
-            room.update()
+class Room:
+    def __init__(self, matrix, limitX, limitY):
+        # Class that defines a room
+        # It contains references to the ENEMIES and the DOOR
+        # the ENTER DOOR will close once the player enters the room and wont open until he finishes it
+        # the EXIT DOOR will open once all enemies are defeated
+        self.matrix = matrix
+
+        # Set the room boundaries in x axis
+        self.limitX0 = limitX
+        self.limitX = limitX + ROOMWIDTH - 1
+        self.limitY0 = limitY
+        self.limitY = limitY + ROOMHEIGHT - 1
 
 class Camera:
     def __init__(self, width, height):
@@ -159,9 +230,9 @@ class Camera:
         if self.doShake:
             if (self.shakeTimer <= self.shakeMaxTime):
                 self.shakeTimer += 1
-                self.x += random.randint(0, self.shakeAmount) - \
+                self.x += randint(0, self.shakeAmount) - \
                     self.shakeAmount // 2
-                self.y += random.randint(0, self.shakeAmount) - \
+                self.y += randint(0, self.shakeAmount) - \
                     self.shakeAmount // 2
             else:
                 self.doShake = False
