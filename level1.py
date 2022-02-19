@@ -13,13 +13,17 @@ class Level1(Scene):
         #Loads all sprite and sound data
         self.load_data()
 
-        #Initialize sprite groups and generate a map
+        #Initialize sprite groups
         self.all_sprites = pg.sprite.Group()
-        self.mobs = pg.sprite.Group()
-        self.walls = pg.sprite.Group()
-        self.fire_balls = pg.sprite.Group()
+        self.background_SG = pg.sprite.Group()
+        self.walls_SG= pg.sprite.Group()
+        self.mobs_SG = pg.sprite.Group()
+        self.player_SG = pg.sprite.Group()
+        self.fireBalls_SG = pg.sprite.Group()
+
         self.menus = []
 
+        #Generate a map
         self.map.generateMap()
 
     def load_data(self):
@@ -27,12 +31,12 @@ class Level1(Scene):
         self.map = Map(self, './maps/map4.txt')
 
         #PLAYER DATA
-        self.playerWalkSheet = pg.image.load("./sprites/playerWalkSheet.png").convert_alpha()
-        self.playerIdleSheet = pg.image.load("./sprites/playerIdleSheet.png").convert_alpha()
-        self.playerDodgeSheet =  pg.image.load("./sprites/playerDodgeSheet.png").convert_alpha()
-        self.playerDeathSheet =  pg.image.load("./sprites/playerDeathSheet.png").convert_alpha()
-        self.playerGunImg = pg.image.load("./sprites/gun.png").convert_alpha()
-        self.playerSwordImg = pg.image.load("./sprites/sword.png").convert_alpha()
+        self.playerWalkSheet = pg.image.load("./sprites/Player/playerWalkSheet.png").convert_alpha()
+        self.playerIdleSheet = pg.image.load("./sprites/Player/playerIdleSheet.png").convert_alpha()
+        self.playerDodgeSheet =  pg.image.load("./sprites/Player/playerDodgeSheet.png").convert_alpha()
+        self.playerDeathSheet =  pg.image.load("./sprites/Player/playerDeathSheet.png").convert_alpha()
+        self.playerGunImg = pg.image.load("./sprites/Weapons/gun.png").convert_alpha()
+        self.playerSwordImg = pg.image.load("./sprites/Weapons/sword.png").convert_alpha()
 
         # MOB DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
@@ -45,21 +49,23 @@ class Level1(Scene):
             "./sprites/Fire_Ball/Move.png").convert_alpha()
         self.fire_ballExplosionSheet = pg.image.load(
             "./sprites/Fire_Ball/Explosion.png").convert_alpha()
-
-                
+     
         #HUD
-        self.radialMenuImg = pg.image.load("./sprites/radial_menu.png").convert_alpha()
+        self.radialMenuImg = pg.image.load(
+            "./sprites/Hud/radial_menu.png").convert_alpha()
 
     def update(self, time):
         self.dt = time
         # update portion of the game loop
         self.all_sprites.update()
         self.camera.update(self.player)
-        hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
+        hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
         for hit in hits:
             hit.currentState = "ATTACK"
         for menu in self.menus:
             menu.update()
+
+        self.map.update()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):

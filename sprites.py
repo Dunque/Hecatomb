@@ -75,7 +75,7 @@ class Character(pg.sprite.Sprite):
 
     def collide_with_walls(self, dir):
         if dir == 'x':
-            hits = pg.sprite.spritecollide(self, self.scene.walls, False, collide_hit_rect)
+            hits = pg.sprite.spritecollide(self, self.scene.walls_SG, False, collide_hit_rect)
             if hits:
                 if self.vel.x > 0:
                     self.pos.x = hits[0].rect.left - self.hit_rect.width / 2.0
@@ -84,7 +84,7 @@ class Character(pg.sprite.Sprite):
                 self.vel.x = 0
                 self.hit_rect.centerx = self.pos.x
         if dir == 'y':
-            hits = pg.sprite.spritecollide(self, self.scene.walls, False, collide_hit_rect)
+            hits = pg.sprite.spritecollide(self, self.scene.walls_SG, False, collide_hit_rect)
             if hits:
                 if self.vel.y > 0:
                     self.pos.y = hits[0].rect.top - self.hit_rect.height / 2.0
@@ -290,10 +290,10 @@ class Player(Character):
 
 class Wall(pg.sprite.Sprite):
     def __init__(self, scene, x, y, tileset):
-        self.groups = scene.all_sprites, scene.walls
+        self.groups = scene.all_sprites, scene.walls_SG
         pg.sprite.Sprite.__init__(self, self.groups)
         self.scene = scene
-        self.image =tileset# pg.Surface((TILESIZE, TILESIZE))
+        self.image = tileset# pg.Surface((TILESIZE, TILESIZE))
        # self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.pos = vec(x,y)
@@ -437,8 +437,9 @@ class Mob(Character):
 
         super(Mob, self).__init__(scene, x, y, self.animList, scene.all_sprites, MobStats())
 
-        self.groups = scene.all_sprites, scene.mobs
+        self.groups = scene.all_sprites, scene.mobs_SG
         pg.sprite.Sprite.__init__(self, self.groups)
+
         self.scene = scene
         self.pos = vec(x, y) * TILESIZE
         self.vel = vec(0, 0)
@@ -454,8 +455,6 @@ class Mob(Character):
         self.vel = self.acc * self.scene.dt * 15
         self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
 
-
-
     def update(self):
         self.stateUpdate()
         super(Mob, self).update()
@@ -463,7 +462,7 @@ class Mob(Character):
 
 class Fireball(pg.sprite.Sprite):
     def __init__(self, scene, x, y):
-        self.groups = scene.all_sprites, scene.fire_balls
+        self.groups = scene.all_sprites, scene.fireBalls_SG
         pg.sprite.Sprite.__init__(self, self.groups)
         self.scene = scene
         self.image = scene.fire_ballMoveSheet
@@ -481,7 +480,51 @@ class Fireball(pg.sprite.Sprite):
         self.vel = self.acc * self.scene.dt * 15
         self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
         self.rect.center = self.pos
-        if pg.sprite.spritecollideany(self, self.scene.walls):
+        if pg.sprite.spritecollideany(self, self.scene.walls_SG):
             self.kill()
         if pg.time.get_ticks() - self.spawn_time > FIRE_BALL_LIFETIME:
             self.kill()
+
+
+class Door(pg.sprite.Sprite):
+    def __init__(self, scene, x, y, isExit):
+        # Assing the groups and init sprite
+        self.groups = scene.all_sprites, scene.walls_gr
+        pg.sprite.Sprite.__init__(self, self.groups)
+
+        # Assign scene manager reference
+        self.scene = scene
+
+        # Init sprite and rect
+        sprite_sheet = "./sprites/door_sprite.png"
+        self.original_image = pg.image.load(sprite_sheet).convert_alpha()
+        self.original_image = pg.transform.scale(
+            self.original_image, (TILESIZE, TILESIZE))
+        
+        self.image = self.original_image
+
+        self.rect = pg.Rect((0, 0), (TILESIZE, TILESIZE))
+
+        # Set position in tilemap
+        self.x = x
+        self.y = y
+
+        # Set position in world
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+    def open_door(self):
+        # In order to open the door we remove the image and
+        # remove it from "walls" group
+        self.scene.walls_gr.remove(self)
+        self.scene.all_sprites.remove(self)
+
+    def close_door(self):
+        # In order to close the door we add the image and
+        # add it to the "walls" group
+        self.scene.walls_gr.add(self)
+        self.scene.all_sprites.add(self)
+
+        self.groups = self.scene.all_sprites, self.scene.walls_gr
+
+        self.image = self.original_image
