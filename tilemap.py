@@ -6,7 +6,14 @@ from settings import *
 
 vec = pg.math.Vector2
 
-
+#el generador de mapas furrula asi:
+#tu pones unas salas en el txt, una de ellas tiene que tener
+#el spawn del jugador, y otra de ellas tiene que tener
+#la salida. LAs habiaciones se ponen una a una en el mapa
+#interconectadas de forma aleatoria, pero se pone solo
+#una vez cada una. Es decir, si queremos tener 8 salas,
+#ponemos 8 salas en el txt, y si queremos tener 2 veces la
+#misma sala, la duplicamos en el txt.
 class Map:
     def __init__(self, scene, filename):
         self.scene = scene
