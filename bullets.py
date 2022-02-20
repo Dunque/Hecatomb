@@ -40,11 +40,13 @@ class Bullet(pg.sprite.Sprite):
 			self.kill()
 		elif target:
 			Explosion(self.scene, self.pos, self.explosionWalls)
-			target.take_hit(self.get_damage())
+			#target.take_hit(self.get_damage())
+			target.entityData.takeDamage(self.get_damage())
 			self.kill()
 		elif targetBully:
 			Explosion(self.scene, self.pos, self.explosionWalls)
-			targetBully.take_hit(self.get_damage())
+			#targetBully.take_hit(self.get_damage())
+			target.entityData.takeDamage(self.get_damage())
 			self.kill()
 		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
 			self.kill()
@@ -84,11 +86,13 @@ class ShotgunBullet(pg.sprite.Sprite):
 			self.kill()
 		elif target:
 			Explosion(self.scene, self.pos, self.explosionWalls, scale=5)
-			target.take_hit(self.get_damage())
+			target.entityData.takeDamage(self.get_damage())
+			#target.take_hit(self.get_damage())
 			self.kill()
 		elif targetBully:
 			Explosion(self.scene, self.pos, self.explosionWalls, scale=5)
-			targetBully.take_hit(self.get_damage())
+			target.entityData.takeDamage(self.get_damage())
+			#targetBully.take_hit(self.get_damage())
 			self.kill()
 		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
 			self.kill()
@@ -123,4 +127,4 @@ class Explosion(pg.sprite.Sprite):
 		enemycollision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
 		enemycollision.extend(pg.sprite.spritecollide(self, self.scene.bully_SG, False))
 		for enemies in enemycollision:
-			enemies.take_hit(10)
+			enemies.entityData.takeDamage(10)

@@ -302,22 +302,7 @@ class Player(Character):
 			self.weapon_slot = slot
 
 
-class Wall(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, tileset):
-		self.groups = scene.all_sprites, scene.walls_SG
-		pg.sprite.Sprite.__init__(self, self.groups)
-		self.scene = scene
-		self.image = tileset  # pg.Surface((TILESIZE, TILESIZE))
-		# self.image.fill(GREEN)
-		self.rect = self.image.get_rect()
-		self.pos = vec(x, y)
-		self.x = x
-		self.y = y
-		self.rect.x = x * TILESIZE
-		self.rect.y = y * TILESIZE
-
-
-class Worn(Character):
+class Worm(Character):
 	def __init__(self, scene, x, y):
 		# Aniamtion stuff
 		self.idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
@@ -326,7 +311,7 @@ class Worn(Character):
 		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 7, 0, 16)
 		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
 
-		super(Worn, self).__init__(scene, x, y, self.animList, scene.all_sprites, WormStats())
+		super(Worm, self).__init__(scene, x, y, self.animList, scene.all_sprites, WormStats())
 
 		self.groups = scene.all_sprites, scene.mobs_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
@@ -355,22 +340,11 @@ class Worn(Character):
 
 	def update(self):
 		self.stateUpdate()
-		super(Worn, self).update()
+		super(Worm, self).update()
 
 		#if self.health <= 0:
 
 			#self.die()
-
-
-	def take_hit(self, weapon_damage):
-		time_now = time.time()
-		if not self.time_hit:
-			self.time_hit = time_now
-		delta = time_now - self.time_hit
-		if delta == 0 or delta > self.delta_time_hit:
-			self.entityData.actualHP -= weapon_damage
-			self.time_hit = time_now
-
 
 	#def die(self):
 
@@ -417,19 +391,6 @@ class Bully(Character):
 		self.stateUpdate()
 		super(Bully, self).update()
 
-		#if self.health <= 0:
-
-			#self.die()
-
-
-	def take_hit(self, weapon_damage):
-		time_now = time.time()
-		if not self.time_hit:
-			self.time_hit = time_now
-		delta = time_now - self.time_hit
-		if delta == 0 or delta > self.delta_time_hit:
-			self.entityData.actualHP -= weapon_damage
-			self.time_hit = time_now
 
 class Fireball(pg.sprite.Sprite):
 	def __init__(self, scene, x, y):
@@ -457,45 +418,59 @@ class Fireball(pg.sprite.Sprite):
 			self.kill()
 
 
-class Door(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, isExit):
-		# Assing the groups and init sprite
-		self.groups = scene.all_sprites, scene.walls_gr
-		pg.sprite.Sprite.__init__(self, self.groups)
+class Wall(pg.sprite.Sprite):
+    def __init__(self, scene, x, y, tileset):
+        self.groups = scene.all_sprites, scene.walls_SG
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.scene = scene
+        self.image = tileset 
+        # pg.Surface((TILESIZE, TILESIZE))
+        # self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.pos = vec(x, y)
 
-		# Assign scene manager reference
-		self.scene = scene
+        #tilemap position
+        self.x = x
+        self.y = y
 
-		# Init sprite and rect
-		sprite_sheet = "./sprites/door_sprite.png"
-		self.original_image = pg.image.load(sprite_sheet).convert_alpha()
-		self.original_image = pg.transform.scale(
-			self.original_image, (TILESIZE, TILESIZE))
+        #Global position
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
 
-		self.image = self.original_image
 
-		self.rect = pg.Rect((0, 0), (TILESIZE, TILESIZE))
+class Door(Wall):
+    def __init__(self, scene, x, y, tileset):
+        # Assing the groups and init sprite
+        self.groups = scene.all_sprites, scene.walls_SG
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.scene = scene
+        self.origImage = tileset
+        self.image = tileset 
+        # pg.Surface((TILESIZE, TILESIZE))
+        # self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.pos = vec(x, y)
 
-		# Set position in tilemap
-		self.x = x
-		self.y = y
+        #tilemap position
+        self.x = x
+        self.y = y
 
-		# Set position in world
-		self.rect.x = x * TILESIZE
-		self.rect.y = y * TILESIZE
+        #Global position
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
 
-	def open_door(self):
-		# In order to open the door we remove the image and
-		# remove it from "walls" group
-		self.scene.walls_gr.remove(self)
-		self.scene.all_sprites.remove(self)
+    def open(self):
+        # In order to open the door we remove the image and
+        # remove it from "walls" group
+        self.scene.walls_SG.remove(self)
+        self.scene.all_sprites.remove(self)
 
-	def close_door(self):
-		# In order to close the door we add the image and
-		# add it to the "walls" group
-		self.scene.walls_gr.add(self)
-		self.scene.all_sprites.add(self)
+    def close(self):
+        # In order to close the door we add the image and
+        # add it to the "walls" group
+        self.scene.walls_SG.add(self)
+        self.scene.all_sprites.add(self)
 
-		self.groups = self.scene.all_sprites, self.scene.walls_gr
+        self.groups = self.scene.all_sprites, self.scene.walls_SG
 
-		self.image = self.original_image
+        self.image = self.origImage

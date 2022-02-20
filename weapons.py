@@ -132,7 +132,8 @@ class Sword(Weapon, pg.sprite.Sprite):
 			collision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
 			collision.extend(pg.sprite.spritecollide(self, self.scene.bully_SG, False))
 			for enemies in collision:
-				enemies.take_hit(self.damage)
+				enemies.entityData.takeDamage(self.damage)
+				#enemies.take_hit(self.damage)
 
 	def attack_movement(self):
 		if self.reached == 0:

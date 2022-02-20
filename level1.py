@@ -10,9 +10,6 @@ class Level1(Scene):
         #Initialize superclass
         Scene.__init__(self, sceneManager)
 
-        #Loads all sprite and sound data
-        self.load_data()
-
         #Initialize sprite groups
         self.all_sprites = pg.sprite.Group()
         self.background_SG = pg.sprite.Group()
@@ -28,13 +25,10 @@ class Level1(Scene):
 
         self.player = None
 
-        #Generate a map
-        self.map.generateMap()
+        #Loads all sprite and sound data
+        self.load_data()
 
     def load_data(self):
-        #MAP DATA
-        self.map = Map(self, './maps/map4.txt')
-
         #PLAYER DATA
         self.playerWalkSheet = pg.image.load("./sprites/Player/playerWalkSheet.png").convert_alpha()
         self.playerIdleSheet = pg.image.load("./sprites/Player/playerIdleSheet.png").convert_alpha()
@@ -68,6 +62,9 @@ class Level1(Scene):
             "./sprites/Hud/radial_menu.png").convert_alpha()
         self.gunCrosshairImg = pg.image.load(
             "./sprites/Hud/gun_crosshair.png").convert_alpha()
+
+        #Map generation
+        self.map = Map(self, './maps/map4.txt')
 
     def update(self, time):
         self.dt = time
