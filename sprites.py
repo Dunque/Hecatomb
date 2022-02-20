@@ -748,7 +748,6 @@ class Explosion(pg.sprite.Sprite):
 		for enemies in enemycollision:
 			enemies.take_hit(10)
 
-
 class Mob(Character):
 	def __init__(self, scene, x, y):
 		# Aniamtion stuff
