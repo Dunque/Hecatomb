@@ -65,6 +65,7 @@ class Character(pg.sprite.Sprite):
 		# "GROUNDED", "DODGING", "DYING"
 		self.currentState = "GROUNDED"
 
+
 	# Handles movement logic
 	def move(self):
 		pass
@@ -117,6 +118,7 @@ class Character(pg.sprite.Sprite):
 			return
 
 		if (self.currentState == "DYING"):
+			self.vel = vec(0, 0)
 			self.currentAnim = self.deathAnim
 			self.die()
 			return
@@ -173,7 +175,8 @@ class Character(pg.sprite.Sprite):
 
 		# Update entity's data
 		self.entityData.update()
-
+		if self.entityData.actualHP <= 0:
+			self.entityData.isAlive = False
 
 class Player(Character):
 	def __init__(self, scene, x, y):
@@ -312,7 +315,6 @@ class Wall(pg.sprite.Sprite):
 		self.y = y
 		self.rect.x = x * TILESIZE
 		self.rect.y = y * TILESIZE
-
 
 class SingletonMeta(type):
 	_instances = {}
@@ -617,7 +619,7 @@ class Mob(Character):
 		# Aniamtion stuff
 		self.idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
 		self.walkAnim = Anim(scene.wormWalkSheet, (90, 90), 7, 0, 9)
-		self.deathAnim = Anim(scene.wormDeathSheet, (90, 90), 13, 0, 8)
+		self.deathAnim = Anim(scene.wormDeathSheet, (90, 90), 5, 0, 8)
 		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 7, 0, 16)
 		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
 
@@ -633,7 +635,7 @@ class Mob(Character):
 		self.rect.center = self.pos
 		self.rot = 0
 
-		self.health = 100
+		self.health = MobStats().maxHP
 
 		self.time_hit = None
 		self.delta_time_hit = 0.3
@@ -652,8 +654,9 @@ class Mob(Character):
 		self.stateUpdate()
 		super(Mob, self).update()
 
-		if self.health <= 0:
-			self.die()
+		#if self.health <= 0:
+
+			#self.die()
 
 
 	def take_hit(self, weapon_damage):
@@ -662,12 +665,14 @@ class Mob(Character):
 			self.time_hit = time_now
 		delta = time_now - self.time_hit
 		if delta == 0 or delta > self.delta_time_hit:
-			self.health -= weapon_damage
+			self.entityData.actualHP -= weapon_damage
 			self.time_hit = time_now
 
 
-	def die(self):
-		self.kill()
+	#def die(self):
+
+
+		#self.kill()
 
 
 class Fireball(pg.sprite.Sprite):

@@ -22,7 +22,7 @@ class Level1(Scene):
         self.fireBalls_SG = pg.sprite.Group()
         self.bullets_SG = pg.sprite.Group()
         self.weapons_SG = pg.sprite.Group()
-
+        self.floor = pg.sprite.Group()
         self.menus = []
 
         self.player = None

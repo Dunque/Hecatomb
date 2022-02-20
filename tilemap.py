@@ -190,7 +190,20 @@ class Map:
         for row in range(self.finalMap.shape[0]):
             for col in range(self.finalMap.shape[1]):
                 if self.finalMap[row][col] == '1':
-                    Wall(self.scene, col, row, FENCE_IMAGE)
+
+                    n_img=randint(1,6)
+                    if n_img==1:
+                        Wall(self.scene, col, row, ARBUSTO_IMAGE_1)
+                    if n_img == 2:
+                        Wall(self.scene, col, row, ARBUSTO_IMAGE_2)
+                    if n_img == 3:
+                        Wall(self.scene, col, row, ROCK_IMAGE_2)
+                    if n_img == 4:
+                        Wall(self.scene, col, row, ROCK_IMAGE_3)
+                    if n_img == 5:
+                        Wall(self.scene, col, row, ROCK_IMAGE_4)
+                    if n_img == 6:
+                        Wall(self.scene, col, row, ROCK_IMAGE_5)
                 elif self.finalMap[row][col] == '2':
                     Wall(self.scene, col, row, ARBOL_IMAGE1)
                 elif self.finalMap[row][col] == '3':
