@@ -34,9 +34,9 @@ class Level1(Scene):
         self.playerIdleSheet = pg.image.load("./sprites/Player/playerIdleSheet.png").convert_alpha()
         self.playerDodgeSheet =  pg.image.load("./sprites/Player/playerDodgeSheet.png").convert_alpha()
         self.playerDeathSheet =  pg.image.load("./sprites/Player/playerDeathSheet.png").convert_alpha()
-        self.playerGunImg = pg.image.load("./sprites/Bully/bully.png").convert_alpha()
-        self.playerShotgunImg = pg.image.load("./sprites/Bully/bully.png").convert_alpha()
-        self.playerSwordImg = pg.image.load("./sprites/Bully/bully.png").convert_alpha()
+        self.playerGunImg = pg.image.load("./sprites/Weapons/gun.png").convert_alpha()
+        self.playerShotgunImg = pg.image.load("./sprites/Weapons/shotgun.png").convert_alpha()
+        self.playerSwordImg = pg.image.load("./sprites/Weapons/sword.png").convert_alpha()
 
         # MOB DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
@@ -45,7 +45,7 @@ class Level1(Scene):
         self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
         self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
         #BULLETS/AMMUNITION DATA
-        self.bulletImg = pg.image.load("./sprites/Bully/bully.png").convert_alpha()
+        self.bulletImg = pg.image.load("./sprites/Fire_Ball/bullet.png").convert_alpha()
         self.fire_ballMoveSheet = pg.image.load(
             "./sprites/Fire_Ball/Move.png").convert_alpha()
         self.fire_ballExplosionSheet = pg.image.load(
