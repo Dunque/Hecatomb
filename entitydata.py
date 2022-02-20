@@ -67,4 +67,16 @@ class MobStats(CharacterStats):
         self.speed = 300
         self.Attackspeed = 2 #It's a multiplier
         self.AttackTimer = 225
+
+class BullyStats(CharacterStats):
+    def __init__(self):
+        super(BullyStats, self).__init__()
+        #Health
+        self.maxHP = 100
+        self.actualHP = self.maxHP
+
+        #Movement
+        self.speed = 300
+        self.Attackspeed = 2 #It's a multiplier
+        self.AttackTimer = 225
   

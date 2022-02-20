@@ -215,7 +215,7 @@ class Map:
                 elif self.finalMap[row][col] == 'P':
                     self.scene.player = Player(self.scene, col, row)
                 elif self.finalMap[row][col] == 'W':
-                    Mob(self.scene, col, row)
+                    Bully(self.scene, col, row)
                 elif self.finalMap[row][col] == '-':
                     self.closeDoors('-', row, col)
 
