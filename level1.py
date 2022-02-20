@@ -20,6 +20,8 @@ class Level1(Scene):
         self.mobs_SG = pg.sprite.Group()
         self.player_SG = pg.sprite.Group()
         self.fireBalls_SG = pg.sprite.Group()
+        self.bullets_SG = pg.sprite.Group()
+        self.weapons_SG = pg.sprite.Group()
 
         self.menus = []
 
@@ -47,6 +49,7 @@ class Level1(Scene):
         self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
         self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
         #BULLETS/AMMUNITION DATA
+        self.bulletImg = pg.image.load("./sprites/Fire_Ball/bullet.png").convert_alpha()
         self.fire_ballMoveSheet = pg.image.load(
             "./sprites/Fire_Ball/Move.png").convert_alpha()
         self.fire_ballExplosionSheet = pg.image.load(
@@ -55,6 +58,8 @@ class Level1(Scene):
         #HUD
         self.radialMenuImg = pg.image.load(
             "./sprites/Hud/radial_menu.png").convert_alpha()
+        self.gunCrosshairImg = pg.image.load(
+            "./sprites/Hud/gun_crosshair.png").convert_alpha()
 
     def update(self, time):
         self.dt = time

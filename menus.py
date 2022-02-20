@@ -29,10 +29,10 @@ class Observer(ABC):
 
 
 class WeaponMenu(MenuManager):
-	def __init__(self, game):
-		self.game = game
+	def __init__(self, scene):
+		self.scene = scene
 
-		self.image = self.game.playerSwordImg
+		self.image = self.scene.playerSwordImg
 		self.rect = self.image.get_rect()
 
 		self.start_pos = vec(WIDTH / 2, HEIGHT / 2)
@@ -41,10 +41,10 @@ class WeaponMenu(MenuManager):
 
 		self._observers = []
 
-		self.attach(WeaponMenuElement(self.game, 'top'))
-		self.attach(WeaponMenuElement(self.game, 'down'))
-		self.attach(WeaponMenuElement(self.game, 'left'))
-		self.attach(WeaponMenuElement(self.game, 'right'))
+		self.attach(WeaponMenuElement(self.scene, 'top'))
+		self.attach(WeaponMenuElement(self.scene, 'down'))
+		self.attach(WeaponMenuElement(self.scene, 'left'))
+		self.attach(WeaponMenuElement(self.scene, 'right'))
 
 		self.active_pos = None
 		self.final_pos = None
@@ -65,21 +65,21 @@ class WeaponMenu(MenuManager):
 				observer.toggle_hover(self.active_pos)
 
 	def update(self):
-		if self.game.player and self.game.player.show_menu:
+		if self.scene.player and self.scene.player.show_menu:
 			self.toggle_menu(True)
 			self.highlight()
 		else:
 			self.toggle_menu(False)
-			if self.game.player:
-				self.game.player.change_weapon(self.active_pos)
+			if self.scene.player:
+				self.scene.player.change_weapon(self.active_pos)
 
 	def toggle_menu(self, visible):
 		if visible:
 			self.notify('update')
-			[button.add(self.game.all_sprites) for button in self._observers]
+			[button.add(self.scene.all_sprites) for button in self._observers]
 			self.is_active = True
 		else:
-			[button.remove(self.game.all_sprites) for button in self._observers]
+			[button.remove(self.scene.all_sprites) for button in self._observers]
 			self.is_active = False
 
 	def highlight(self):
@@ -101,14 +101,14 @@ class WeaponMenu(MenuManager):
 
 
 class WeaponMenuElement(pg.sprite.Sprite, Observer):
-	def __init__(self, game, pos):
-		self.game = game
+	def __init__(self, scene, pos):
+		self.scene = scene
 		pg.sprite.Sprite.__init__(self, [])
 
 		height_dif = 0
 		side_dif = 0
-		self.scale = self.game.radialMenuImg.get_size()
-		self.image = self.game.radialMenuImg
+		self.scale = self.scene.radialMenuImg.get_size()
+		self.image = self.scene.radialMenuImg
 		self.rect = self.image.get_rect()
 		self.pos_string = pos
 
@@ -127,20 +127,20 @@ class WeaponMenuElement(pg.sprite.Sprite, Observer):
 		height_dif = 0
 		if self.pos_string == 'top':
 			height_dif = -separation
-			self.image = pg.transform.smoothscale(self.game.radialMenuImg, self.scale)
+			self.image = pg.transform.smoothscale(self.scene.radialMenuImg, self.scale)
 		elif self.pos_string == 'down':
 			height_dif = separation
-			self.image = pg.transform.smoothscale(pg.transform.flip(self.game.radialMenuImg, False, True), self.scale)
+			self.image = pg.transform.smoothscale(pg.transform.flip(self.scene.radialMenuImg, False, True), self.scale)
 		elif self.pos_string == 'left':
 			side_dif = -separation + (self.orig_size[0] / 2)
 			height_dif = - (self.orig_size[0] / 2)
-			self.image = pg.transform.rotate(pg.transform.scale(self.game.radialMenuImg, self.scale), 90)
+			self.image = pg.transform.rotate(pg.transform.scale(self.scene.radialMenuImg, self.scale), 90)
 		elif self.pos_string == 'right':
 			side_dif = separation + (self.orig_size[0] / 2)
 			height_dif = - (self.orig_size[0] / 2)
-			self.image = pg.transform.rotate(pg.transform.scale(self.game.radialMenuImg, self.scale), -90)
+			self.image = pg.transform.rotate(pg.transform.scale(self.scene.radialMenuImg, self.scale), -90)
 
-		cam_moved = self.game.camera.get_moved()
+		cam_moved = self.scene.camera.get_moved()
 		self.pos = self.start_pos[0] - cam_moved[0] + side_dif + self.hovered_x, self.start_pos[1] - cam_moved[
 			1] + height_dif + self.hovered_y
 		self.rect.center = self.pos

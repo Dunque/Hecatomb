@@ -4,6 +4,7 @@ from anim import *
 from entitydata import *
 from menus import WeaponMenu
 import time
+from random import uniform
 
 import math
 from random import uniform
@@ -272,17 +273,20 @@ class Player(Character):
 				self.weapon.deactivate()
 			self.weapon = Gun(self.scene, self.pos.x - self.weaponOffsetX,
 							  self.pos.y - self.weaponOffsetY)
+			pg.mouse.set_visible(False)
 			self.weapon.activate()
 			self.weapon_slot = slot
 		elif self.weapon_slot != slot and slot == "down":
 			if self.weapon is not None:
 				self.weapon.deactivate()
+				pg.mouse.set_visible(True)
 				self.weapon_slot = slot
 		elif self.weapon_slot != slot and slot == "right":
 			if self.weapon is not None:
 				self.weapon.deactivate()
 			self.weapon = Sword(self.scene, self.pos.x -
 								self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+			pg.mouse.set_visible(True)
 			self.weapon.activate()
 			self.weapon_slot = slot
 		elif self.weapon_slot != slot and slot == "left":
@@ -290,6 +294,7 @@ class Player(Character):
 				self.weapon.deactivate()
 			self.weapon = Sword(self.scene, self.pos.x -
 								self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+			pg.mouse.set_visible(True)
 			self.weapon.activate()
 			self.weapon_slot = slot
 
@@ -334,6 +339,7 @@ class Weapon(metaclass=SingletonMeta):
 		# Init position and rotation
 		self.pos = vec(x, y) * TILESIZE
 		self.rot = 0
+		self.crosshair = None
 
 		self.damage = 1
 
@@ -386,12 +392,16 @@ class Weapon(metaclass=SingletonMeta):
 		self.rect.center = self.pos
 
 	def deactivate(self):
-		self.remove(self.scene.all_sprites)
+		if self.crosshair:
+			self.crosshair.kill()
+		self.kill()
 
 	def activate(self):
 		self.updatePos(self.scene.player.pos.x, self.scene.player.pos.y,
 					   self.scene.player.image.get_rect())
 		self.add(self.scene.all_sprites)
+		if self.crosshair:
+			self.crosshair.activate()
 
 	def attack(self):
 		pass
@@ -407,7 +417,7 @@ class Sword(Weapon, pg.sprite.Sprite):
 		self.image = self.scene.playerSwordImg
 		self.rect = self.image.get_rect()
 
-		self.damage = 10
+		self.damage = 50
 
 		self.rot_attack = 0
 		self.reached = 0
@@ -510,6 +520,7 @@ class FireWeapon(Weapon):
 		# Damage   -> damage dealt by bullet
 		self.current_cd = 0
 		self.can_shoot = True
+		self.last_shot = 0
 
 	def update(self):
 		self.current_cd += 1
@@ -522,6 +533,83 @@ class Gun(FireWeapon, pg.sprite.Sprite):
 		# Init image and store it to rotate easilly
 		self.image = self.scene.playerGunImg
 		self.rect = self.image.get_rect()
+		self.barrel_offset = vec(55, -10)
+		self.bullet_rate = 300
+		self.damage = 100
+		self.kickback = 200
+		self.spread = 5
+		self.crosshair = CrosshairGun(self.scene)
+
+	def get_damage(self):
+		return self.damage
+
+	def attack(self):
+		now = pg.time.get_ticks()
+		if now - self.last_shot > self.bullet_rate or self.last_shot == 0:
+			self.last_shot = now
+			dir = vec(1, 0).rotate(-self.rot)
+			pos = self.pos + self.barrel_offset.rotate(-self.rot)
+			if self.rot <= -90 or self.rot >= 90:
+				dir = vec(dir.x * 1, dir.y * -1)
+				pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
+			Bullet(self.scene, pos, dir)
+			push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
+			self.scene.player.vel = vec(-self.kickback, 0).rotate(-push)
+
+
+class CrosshairGun(pg.sprite.Sprite):
+	def __init__(self, scene):
+		self.scene = scene
+		self.groups = scene.all_sprites
+		pg.sprite.Sprite.__init__(self, self.groups)
+		self.image = scene.gunCrosshairImg
+		self.rect = self.image.get_rect()
+		self.rect.center = pg.mouse.get_pos()
+
+	def update(self):
+		cam_moved = self.scene.camera.get_moved()
+
+		mouse_x, mouse_y = pg.mouse.get_pos()
+
+		mouse_x = mouse_x - cam_moved[0]
+		mouse_y = mouse_y - cam_moved[1]
+		self.rect.center = mouse_x, mouse_y
+
+	def activate(self):
+		self.add(self.scene.all_sprites)
+
+
+class Bullet(pg.sprite.Sprite):
+	def __init__(self, scene, pos, dir):
+		self.groups = scene.all_sprites, scene.bullets_SG
+		pg.sprite.Sprite.__init__(self, self.groups)
+		self.scene = scene
+		rot = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
+		self.image = pg.transform.rotate(scene.bulletImg, rot)
+		self.rect = self.image.get_rect()
+		self.pos = pos
+		self.rect.center = pos
+		spread_val = self.scene.player.weapon.spread
+		self.vel = dir.rotate(uniform(-spread_val, spread_val)) * 1000
+		self.spawn_time = pg.time.get_ticks()
+		self.lifetime = 1000
+		self.damage = 5
+
+	def get_damage(self):
+		return self.damage * self.scene.player.weapon.get_damage()
+
+	def update(self):
+		self.pos += self.vel * self.scene.dt
+		self.rect.center = self.pos
+		target = pg.sprite.spritecollideany(self, self.scene.mobs_SG)
+		if pg.sprite.spritecollideany(self, self.scene.walls_SG):
+			self.scene.camera.cameraShake(self.damage, self.damage)
+			self.kill()
+		elif target:
+			target.take_hit(self.get_damage())
+			self.kill()
+		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
+			self.kill()
 
 
 class Mob(Character):
