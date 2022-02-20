@@ -40,6 +40,7 @@ class Level1(Scene):
         self.playerDodgeSheet =  pg.image.load("./sprites/Player/playerDodgeSheet.png").convert_alpha()
         self.playerDeathSheet =  pg.image.load("./sprites/Player/playerDeathSheet.png").convert_alpha()
         self.playerGunImg = pg.image.load("./sprites/Weapons/gun.png").convert_alpha()
+        self.playerShotgunImg = pg.image.load("./sprites/Weapons/shotgun.png").convert_alpha()
         self.playerSwordImg = pg.image.load("./sprites/Weapons/sword.png").convert_alpha()
 
         # MOB DATA

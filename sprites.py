@@ -292,7 +292,7 @@ class Player(Character):
 		elif self.weapon_slot != slot and slot == "left":
 			if self.weapon is not None:
 				self.weapon.deactivate()
-			self.weapon = Sword(self.scene, self.pos.x -
+			self.weapon = Shotgun(self.scene, self.pos.x -
 								self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
 			pg.mouse.set_visible(True)
 			self.weapon.activate()
@@ -508,8 +508,8 @@ class Sword(Weapon, pg.sprite.Sprite):
 
 
 class FireWeapon(Weapon):
-	def __init__(self, scene, x, y):
-		super().__init__(scene, x, y, scene.playerGunImg)
+	def __init__(self, scene, x, y, image):
+		super().__init__(scene, x, y, image)
 
 		# Init shoot direction vector and shoot offset
 		# The shoot vector indicates the bullet direction and
@@ -530,13 +530,14 @@ class FireWeapon(Weapon):
 		self.current_cd += 1
 
 
+
 class Gun(FireWeapon, pg.sprite.Sprite):
 	def __init__(self, scene, x, y):
-		super().__init__(scene, x, y)
-
-		# Init image and store it to rotate easilly
+		self.scene = scene
 		self.image = self.scene.playerGunImg
 		self.rect = self.image.get_rect()
+		super().__init__(self.scene, x, y, self.image)
+
 		self.barrel_offset = vec(55, -10)
 		self.bullet_rate = 300
 		self.damage = 100
@@ -563,6 +564,42 @@ class Gun(FireWeapon, pg.sprite.Sprite):
 					dir = vec(dir.x * 1, dir.y * -1)
 					pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
 				Bullet(self.scene, pos, dir)
+				push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
+				self.scene.player.vel = vec(-self.kickback, 0).rotate(-push)
+
+class Shotgun(FireWeapon, pg.sprite.Sprite):
+	def __init__(self, scene, x, y):
+		self.scene = scene
+		self.image = self.scene.playerShotgunImg
+		self.rect = self.image.get_rect()
+		super().__init__(self.scene, x, y, self.image)
+
+		self.barrel_offset = vec(55, -10)
+		self.bullet_rate = 1000
+		self.damage = 800
+		self.kickback = 1000
+		self.spread = 10
+		self.crosshair = CrosshairGun(self.scene)
+
+	def get_damage(self):
+		return self.damage
+
+	def deactivate(self):
+		self.kill()
+		self.crosshair.kill()
+		self.active = False
+
+	def attack(self):
+		if self.active:
+			now = pg.time.get_ticks()
+			if now - self.last_shot > self.bullet_rate or self.last_shot == 0:
+				self.last_shot = now
+				dir = vec(1, 0).rotate(-self.rot)
+				pos = self.pos + self.barrel_offset.rotate(-self.rot)
+				if self.rot <= -90 or self.rot >= 90:
+					dir = vec(dir.x * 1, dir.y * -1)
+					pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
+				ShotgunBullet(self.scene, pos, dir)
 				push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
 				self.scene.player.vel = vec(-self.kickback, 0).rotate(-push)
 
@@ -594,6 +631,9 @@ class Bullet(pg.sprite.Sprite):
 		self.groups = scene.all_sprites, scene.bullets_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
 		self.scene = scene
+
+		self.explosionWalls = Anim(scene.fire_ballExplosionSheet, (46, 46), 5, 0, 7)
+
 		rot = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
 		self.image = pg.transform.rotate(scene.bulletImg, rot)
 		self.rect = self.image.get_rect()
@@ -602,6 +642,7 @@ class Bullet(pg.sprite.Sprite):
 		spread_val = self.scene.player.weapon.spread
 		self.vel = dir.rotate(uniform(-spread_val, spread_val)) * 1000
 		self.spawn_time = pg.time.get_ticks()
+
 		self.lifetime = 1000
 		self.damage = 5
 
@@ -614,12 +655,81 @@ class Bullet(pg.sprite.Sprite):
 		target = pg.sprite.spritecollideany(self, self.scene.mobs_SG)
 		if pg.sprite.spritecollideany(self, self.scene.walls_SG):
 			self.scene.camera.cameraShake(self.damage, self.damage)
+			Explosion(self.scene, self.pos, self.explosionWalls)
 			self.kill()
 		elif target:
+			Explosion(self.scene, self.pos, self.explosionWalls)
 			target.take_hit(self.get_damage())
 			self.kill()
 		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
 			self.kill()
+
+
+class ShotgunBullet(pg.sprite.Sprite):
+	def __init__(self, scene, pos, dir):
+		self.groups = scene.all_sprites, scene.bullets_SG
+		pg.sprite.Sprite.__init__(self, self.groups)
+		self.scene = scene
+
+		self.explosionWalls = Anim(scene.fire_ballExplosionSheet, (46, 46), 10, 0, 7)
+
+		rot = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
+		self.image = pg.transform.rotate(scene.bulletImg, rot)
+		self.rect = self.image.get_rect()
+		self.pos = pos
+		self.rect.center = pos
+		spread_val = self.scene.player.weapon.spread
+		self.vel = dir.rotate(uniform(-spread_val, spread_val)) * 1000
+		self.spawn_time = pg.time.get_ticks()
+
+		self.lifetime = 1000
+		self.damage = 15
+
+	def get_damage(self):
+		return self.damage * self.scene.player.weapon.get_damage()
+
+	def update(self):
+		self.pos += self.vel * self.scene.dt
+		self.rect.center = self.pos
+		target = pg.sprite.spritecollideany(self, self.scene.mobs_SG)
+		if pg.sprite.spritecollideany(self, self.scene.walls_SG):
+			self.scene.camera.cameraShake(self.damage, self.damage)
+			Explosion(self.scene, self.pos, self.explosionWalls, scale=5, destroy=True)
+			self.kill()
+		elif target:
+			Explosion(self.scene, self.pos, self.explosionWalls, scale=5)
+			target.take_hit(self.get_damage())
+			self.kill()
+		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
+			self.kill()
+
+
+class Explosion(pg.sprite.Sprite):
+	def __init__(self, scene, pos, anim, scale = 1, destroy = False):
+		self.groups = scene.all_sprites, scene.bullets_SG
+		pg.sprite.Sprite.__init__(self, self.groups)
+		self.scene = scene
+
+		self.explosionAnim = anim
+		orig_size = vec(self.explosionAnim.get_frame().get_rect()[2], self.explosionAnim.get_frame().get_rect()[3])
+		self.new_size = orig_size * scale
+		self.image = self.explosionAnim.get_frame()
+		self.rect = self.image.get_rect()
+		self.pos = pos
+		if scale > 1:
+			self.rect.center = (pos.x-(scale * orig_size.x/2), pos.y-(scale * orig_size.y/2))
+			self.rect[2] *= scale
+			self.rect[3] *= scale
+		else:
+			self.rect.center = pos
+		self.destroy = destroy
+
+	def update(self):
+		self.image = pg.transform.scale(self.explosionAnim.get_frame(), self.new_size)
+		if self.explosionAnim.current_frame == self.explosionAnim.max_frame - 1:
+			self.kill()
+		if self.destroy:
+			aa = pg.sprite.spritecollide(self, self.scene.walls_SG, True)
 
 
 class Mob(Character):
