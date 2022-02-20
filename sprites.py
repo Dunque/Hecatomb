@@ -614,7 +614,7 @@ class Bullet(pg.sprite.Sprite):
 			self.kill()
 
 
-class Mob(Character):
+class Worn(Character):
 	def __init__(self, scene, x, y):
 		# Aniamtion stuff
 		self.idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
@@ -623,7 +623,7 @@ class Mob(Character):
 		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 7, 0, 16)
 		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
 
-		super(Mob, self).__init__(scene, x, y, self.animList, scene.all_sprites, MobStats())
+		super(Worn, self).__init__(scene, x, y, self.animList, scene.all_sprites, MobStats())
 
 		self.groups = scene.all_sprites, scene.mobs_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
@@ -635,17 +635,10 @@ class Mob(Character):
 		self.rect.center = self.pos
 		self.rot = 0
 
-		self.health = 100
+		self.health = MobStats().maxHP
 
 		self.time_hit = None
 		self.delta_time_hit = 0.3
-
-	def update(self):
-		self.stateUpdate()
-		super(Mob, self).update()
-
-		if self.health <= 0:
-			self.die()
 
 	def aim(self):
 		self.rot = (self.scene.player.pos - self.pos).angle_to(vec(1, 0))
@@ -656,18 +649,30 @@ class Mob(Character):
 		self.vel = self.acc * self.scene.dt * 15
 		self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
 
+
+	def update(self):
+		self.stateUpdate()
+		super(Worn, self).update()
+
+		#if self.health <= 0:
+
+			#self.die()
+
+
 	def take_hit(self, weapon_damage):
 		time_now = time.time()
 		if not self.time_hit:
 			self.time_hit = time_now
 		delta = time_now - self.time_hit
 		if delta == 0 or delta > self.delta_time_hit:
-			self.health -= weapon_damage
+			self.entityData.actualHP -= weapon_damage
 			self.time_hit = time_now
 
 
-	def die(self):
-		self.kill()
+	#def die(self):
+
+
+		#self.kill()
 
 class Bully(Character):
 	def __init__(self, scene, x, y):
@@ -680,7 +685,7 @@ class Bully(Character):
 
 		super(Bully, self).__init__(scene, x, y, self.animList, scene.all_sprites, BullyStats())
 
-		self.groups = scene.all_sprites, scene.bully_SG
+		self.groups = scene.all_sprites, scene.mobs_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
 
 		self.scene = scene
@@ -690,7 +695,7 @@ class Bully(Character):
 		self.rect.center = self.pos
 		self.rot = 0
 
-		self.health = 100
+		self.health = BullyStats().maxHP
 
 		self.time_hit = None
 		self.delta_time_hit = 0.3
@@ -709,8 +714,10 @@ class Bully(Character):
 		self.stateUpdate()
 		super(Bully, self).update()
 
-		if self.health <= 0:
-			self.die()
+		#if self.health <= 0:
+
+			#self.die()
+
 
 	def take_hit(self, weapon_damage):
 		time_now = time.time()
@@ -718,13 +725,8 @@ class Bully(Character):
 			self.time_hit = time_now
 		delta = time_now - self.time_hit
 		if delta == 0 or delta > self.delta_time_hit:
-			self.health -= weapon_damage
+			self.entityData.actualHP -= weapon_damage
 			self.time_hit = time_now
-
-
-	def die(self):
-		self.kill()
-
 
 class Fireball(pg.sprite.Sprite):
 	def __init__(self, scene, x, y):

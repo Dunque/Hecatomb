@@ -194,16 +194,22 @@ class Map:
                     n_img=randint(1,6)
                     if n_img==1:
                         Wall(self.scene, col, row, ARBUSTO_IMAGE_1)
-                    if n_img == 2:
+                    elif n_img == 2:
                         Wall(self.scene, col, row, ARBUSTO_IMAGE_2)
-                    if n_img == 3:
+                    elif n_img == 3:
                         Wall(self.scene, col, row, ROCK_IMAGE_2)
-                    if n_img == 4:
+                    elif n_img == 4:
                         Wall(self.scene, col, row, ROCK_IMAGE_3)
-                    if n_img == 5:
+                    elif n_img == 5:
                         Wall(self.scene, col, row, ROCK_IMAGE_4)
-                    if n_img == 6:
+                    elif n_img == 6:
                         Wall(self.scene, col, row, ROCK_IMAGE_5)
+                elif self.finalMap[row][col] == 't':
+                    Wall(self.scene, col, row,TRUNK_IMAGE1)
+                elif self.finalMap[row][col] == 'r':
+                    Wall(self.scene, col, row,TRUNK_IMAGE2)
+                elif self.finalMap[row][col] == 'o':
+                    Wall(self.scene, col, row,TRUNK_IMAGE3)
                 elif self.finalMap[row][col] == '2':
                     Wall(self.scene, col, row, ARBOL_IMAGE1)
                 elif self.finalMap[row][col] == '3':
@@ -215,6 +221,8 @@ class Map:
                 elif self.finalMap[row][col] == 'P':
                     self.scene.player = Player(self.scene, col, row)
                 elif self.finalMap[row][col] == 'W':
+                    Worn(self.scene, col, row)
+                elif self.finalMap[row][col] == 'B':
                     Bully(self.scene, col, row)
                 elif self.finalMap[row][col] == '-':
                     self.closeDoors('-', row, col)

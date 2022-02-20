@@ -60,7 +60,7 @@ class MobStats(CharacterStats):
     def __init__(self):
         super(MobStats, self).__init__()
         #Health
-        self.maxHP = 100
+        self.maxHP = 1000
         self.actualHP = self.maxHP
 
         #Movement
