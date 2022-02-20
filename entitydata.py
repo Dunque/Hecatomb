@@ -56,11 +56,11 @@ class PlayerStats(CharacterStats):
         self.dodgeSpeed = 2 #It's a multiplier
         self.dodgeTimer = 35
 
-class MobStats(CharacterStats):
+class WormStats(CharacterStats):
     def __init__(self):
-        super(MobStats, self).__init__()
+        super(WormStats, self).__init__()
         #Health
-        self.maxHP = 1000
+        self.maxHP = 100
         self.actualHP = self.maxHP
 
         #Movement

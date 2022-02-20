@@ -758,7 +758,7 @@ class Worn(Character):#
 		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 7, 0, 16)
 		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
 
-		super(Worn, self).__init__(scene, x, y, self.animList, scene.all_sprites, MobStats())
+		super(Worn, self).__init__(scene, x, y, self.animList, scene.all_sprites, WormStats())
 
 		self.groups = scene.all_sprites, scene.mobs_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
@@ -770,7 +770,7 @@ class Worn(Character):#
 		self.rect.center = self.pos
 		self.rot = 0
 
-		self.health = MobStats().maxHP
+		self.health = WormStats().maxHP
 
 		self.time_hit = None
 		self.delta_time_hit = 0.3
