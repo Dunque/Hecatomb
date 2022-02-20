@@ -336,6 +336,8 @@ class Weapon(metaclass=SingletonMeta):
 		self.image = image
 		self.rect = self.image.get_rect()
 
+		self.active = False
+
 		# Init position and rotation
 		self.pos = vec(x, y) * TILESIZE
 		self.rot = 0
@@ -395,6 +397,7 @@ class Weapon(metaclass=SingletonMeta):
 		if self.crosshair:
 			self.crosshair.kill()
 		self.kill()
+		self.active = False
 
 	def activate(self):
 		self.updatePos(self.scene.player.pos.x, self.scene.player.pos.y,
@@ -402,6 +405,7 @@ class Weapon(metaclass=SingletonMeta):
 		self.add(self.scene.all_sprites)
 		if self.crosshair:
 			self.crosshair.activate()
+		self.active = True
 
 	def attack(self):
 		pass
@@ -543,18 +547,24 @@ class Gun(FireWeapon, pg.sprite.Sprite):
 	def get_damage(self):
 		return self.damage
 
+	def deactivate(self):
+		self.kill()
+		self.crosshair.kill()
+		self.active = False
+
 	def attack(self):
-		now = pg.time.get_ticks()
-		if now - self.last_shot > self.bullet_rate or self.last_shot == 0:
-			self.last_shot = now
-			dir = vec(1, 0).rotate(-self.rot)
-			pos = self.pos + self.barrel_offset.rotate(-self.rot)
-			if self.rot <= -90 or self.rot >= 90:
-				dir = vec(dir.x * 1, dir.y * -1)
-				pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
-			Bullet(self.scene, pos, dir)
-			push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
-			self.scene.player.vel = vec(-self.kickback, 0).rotate(-push)
+		if self.active:
+			now = pg.time.get_ticks()
+			if now - self.last_shot > self.bullet_rate or self.last_shot == 0:
+				self.last_shot = now
+				dir = vec(1, 0).rotate(-self.rot)
+				pos = self.pos + self.barrel_offset.rotate(-self.rot)
+				if self.rot <= -90 or self.rot >= 90:
+					dir = vec(dir.x * 1, dir.y * -1)
+					pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
+				Bullet(self.scene, pos, dir)
+				push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
+				self.scene.player.vel = vec(-self.kickback, 0).rotate(-push)
 
 
 class CrosshairGun(pg.sprite.Sprite):
