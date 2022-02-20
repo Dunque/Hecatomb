@@ -31,6 +31,7 @@ class Act1(Scene):
         self.cards = pg.sprite.Group()
         self.mouse = pg.sprite.Group()
         self.walls = pg.sprite.Group()
+        self.floor = pg.sprite.Group()
 
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):

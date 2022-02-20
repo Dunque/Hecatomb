@@ -18,11 +18,12 @@ class Level1(Scene):
         self.background_SG = pg.sprite.Group()
         self.walls_SG = pg.sprite.Group()
         self.mobs_SG = pg.sprite.Group()
+        self.bully_SG = pg.sprite.Group()
         self.player_SG = pg.sprite.Group()
         self.fireBalls_SG = pg.sprite.Group()
         self.bullets_SG = pg.sprite.Group()
         self.weapons_SG = pg.sprite.Group()
-
+        self.floor = pg.sprite.Group()
         self.menus = []
 
         self.player = None
@@ -55,7 +56,13 @@ class Level1(Scene):
             "./sprites/Fire_Ball/Move.png").convert_alpha()
         self.fire_ballExplosionSheet = pg.image.load(
             "./sprites/Fire_Ball/Explosion.png").convert_alpha()
-     
+
+        #BULLY DATA
+        self.BullyWalkSheet = pg.image.load("./sprites/Bully/moverDer.png").convert_alpha()
+        self.BullyIdleSheet = pg.image.load("./sprites/Bully/quieto.png").convert_alpha()
+        self.BullyDeathSheet = pg.image.load("./sprites/Bully/morir.png").convert_alpha()
+        self.BullyAttackSheet = pg.image.load("./sprites/Bully/atacarderecha.png").convert_alpha()
+
         #HUD
         self.radialMenuImg = pg.image.load(
             "./sprites/Hud/radial_menu.png").convert_alpha()
@@ -68,6 +75,7 @@ class Level1(Scene):
         self.all_sprites.update()
         self.camera.update(self.player)
         hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
+        hits = pg.sprite.spritecollide(self.player, self.bully_SG, False, collide_hit_rect)
         for hit in hits:
             hit.currentState = "ATTACK"
         for menu in self.menus:
