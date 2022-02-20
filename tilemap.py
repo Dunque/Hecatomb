@@ -3,6 +3,7 @@ import numpy as np
 from random import seed, randint, random, choice
 from sprites import *
 from settings import *
+from tileset import Tileset
 
 vec = pg.math.Vector2
 
@@ -25,6 +26,9 @@ class Map:
 
         #This boolean dictates if the map is active or not
         self.isPlaying = False
+
+        #Load the tileset
+        self.tileset = Tileset("./sprites/tilesetAshlands.png", (TILESIZE,TILESIZE), 0, 0)
 
         #The final mal will be a string matrix initialized to contain all empty strings
         #Later, it will be filled with each room's data
@@ -181,27 +185,25 @@ class Map:
             for row in range(room.limitY0,room.limitY+1):
                 for col in range(room.limitX0,room.limitX+1):
                     if self.finalMap[row][col] == '1':
-                        n_img=randint(1,6)
-                        if n_img==1:
-                            Wall(self.scene, col, row, ARBUSTO_IMAGE_1)
-                        if n_img == 2:
-                            Wall(self.scene, col, row, ARBUSTO_IMAGE_2)
-                        if n_img == 3:
-                            Wall(self.scene, col, row, ROCK_IMAGE_2)
-                        if n_img == 4:
-                            Wall(self.scene, col, row, ROCK_IMAGE_3)
-                        if n_img == 5:
-                            Wall(self.scene, col, row, ROCK_IMAGE_4)
-                        if n_img == 6:
-                            Wall(self.scene, col, row, ROCK_IMAGE_5)
+                        Wall(self.scene, col, row, self.tileset.tiles[25])
                     elif self.finalMap[row][col] == '2':
-                        Wall(self.scene, col, row, ARBOL_IMAGE1)
+                        Wall(self.scene, col, row, self.tileset.tiles[23])
                     elif self.finalMap[row][col] == '3':
-                        Wall(self.scene, col, row, ARBOL_IMAGE2)
-                    elif self.finalMap[row][col] == '4':
-                        Wall(self.scene, col, row, ARBOL_IMAGE3)
-                    elif self.finalMap[row][col] == '5':
-                        Wall(self.scene, col, row, ARBOL_IMAGE4)
+                        n_img=randint(1,7)
+                        if n_img==1:
+                            Wall(self.scene, col, row, self.tileset.tiles[15])
+                        elif n_img == 2:
+                            Wall(self.scene, col, row, self.tileset.tiles[30])
+                        elif n_img == 3:
+                            Wall(self.scene, col, row, self.tileset.tiles[45])
+                        elif n_img == 4:
+                            Wall(self.scene, col, row, self.tileset.tiles[60])
+                        elif n_img == 5:
+                            Wall(self.scene, col, row, self.tileset.tiles[75])
+                        elif n_img == 6:
+                            Wall(self.scene, col, row, self.tileset.tiles[90])
+                        elif n_img == 7:
+                            Wall(self.scene, col, row, self.tileset.tiles[105])
                     elif self.finalMap[row][col] == 'P':
                         self.scene.player = Player(self.scene, col, row)
                     elif self.finalMap[row][col] == 'W':
