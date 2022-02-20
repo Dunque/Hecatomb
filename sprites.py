@@ -437,6 +437,7 @@ class Sword(Weapon, pg.sprite.Sprite):
 		self.attack_movement()
 		if self.attacking:
 			collision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
+			collision.extend(pg.sprite.spritecollide(self, self.scene.bully_SG, False))
 			for enemies in collision:
 				enemies.take_hit(self.damage)
 
@@ -655,6 +656,7 @@ class Bullet(pg.sprite.Sprite):
 		self.pos += self.vel * self.scene.dt
 		self.rect.center = self.pos
 		target = pg.sprite.spritecollideany(self, self.scene.mobs_SG)
+		targetBully = pg.sprite.spritecollideany(self, self.scene.bully_SG)
 		if pg.sprite.spritecollideany(self, self.scene.walls_SG):
 			self.scene.camera.cameraShake(self.damage, self.damage)
 			Explosion(self.scene, self.pos, self.explosionWalls)
@@ -662,6 +664,10 @@ class Bullet(pg.sprite.Sprite):
 		elif target:
 			Explosion(self.scene, self.pos, self.explosionWalls)
 			target.take_hit(self.get_damage())
+			self.kill()
+		elif targetBully:
+			Explosion(self.scene, self.pos, self.explosionWalls)
+			targetBully.take_hit(self.get_damage())
 			self.kill()
 		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
 			self.kill()
@@ -694,6 +700,7 @@ class ShotgunBullet(pg.sprite.Sprite):
 		self.pos += self.vel * self.scene.dt
 		self.rect.center = self.pos
 		target = pg.sprite.spritecollideany(self, self.scene.mobs_SG)
+		targetBully = pg.sprite.spritecollideany(self, self.scene.bully_SG)
 		if pg.sprite.spritecollideany(self, self.scene.walls_SG):
 			self.scene.camera.cameraShake(self.damage, self.damage)
 			Explosion(self.scene, self.pos, self.explosionWalls, scale=5, destroy=True)
@@ -701,6 +708,10 @@ class ShotgunBullet(pg.sprite.Sprite):
 		elif target:
 			Explosion(self.scene, self.pos, self.explosionWalls, scale=5)
 			target.take_hit(self.get_damage())
+			self.kill()
+		elif targetBully:
+			Explosion(self.scene, self.pos, self.explosionWalls, scale=5)
+			targetBully.take_hit(self.get_damage())
 			self.kill()
 		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
 			self.kill()
@@ -731,7 +742,11 @@ class Explosion(pg.sprite.Sprite):
 		if self.explosionAnim.current_frame == self.explosionAnim.max_frame - 1:
 			self.kill()
 		if self.destroy:
-			aa = pg.sprite.spritecollide(self, self.scene.walls_SG, True)
+			pg.sprite.spritecollide(self, self.scene.walls_SG, True)
+		enemycollision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
+		enemycollision.extend(pg.sprite.spritecollide(self, self.scene.bully_SG, False))
+		for enemies in enemycollision:
+			enemies.take_hit(10)
 
 
 class Mob(Character):
