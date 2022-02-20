@@ -749,7 +749,7 @@ class Explosion(pg.sprite.Sprite):
 			enemies.take_hit(10)
 
 
-class Worn(Character):
+class Worn(Character):#
 	def __init__(self, scene, x, y):
 		# Aniamtion stuff
 		self.idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
