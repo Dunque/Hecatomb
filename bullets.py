@@ -41,7 +41,7 @@ class Bullet:
 			self.kill()
 		elif target:
 			Explosion(self.scene, self.pos, self.explosionWalls, scale=self.scale_explosion)
-			target.take_hit(self.get_damage())
+			target.entityData.takeDamage(self.get_damage())
 			self.kill()
 		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
 			self.kill()
@@ -96,6 +96,5 @@ class Explosion(pg.sprite.Sprite):
 		if self.destroy:
 			pg.sprite.spritecollide(self, self.scene.walls_SG, True)
 		enemycollision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
-
 		for enemies in enemycollision:
-			enemies.take_hit(10)
+			enemies.entityData.takeDamage(10)

@@ -10,30 +10,24 @@ class Level1(Scene):
         #Initialize superclass
         Scene.__init__(self, sceneManager)
 
-        #Loads all sprite and sound data
-        self.load_data()
-
         #Initialize sprite groups
-        self.all_sprites = pg.sprite.Group()
-        self.background_SG = pg.sprite.Group()
-        self.walls_SG = pg.sprite.Group()
-        self.mobs_SG = pg.sprite.Group()
-        self.player_SG = pg.sprite.Group()
-        self.fireBalls_SG = pg.sprite.Group()
-        self.bullets_SG = pg.sprite.Group()
-        self.weapons_SG = pg.sprite.Group()
-        self.floor = pg.sprite.Group()
+        self.all_sprites = pg.sprite.LayeredUpdates()
+        self.background_SG = pg.sprite.LayeredUpdates()
+        self.walls_SG = pg.sprite.LayeredUpdates()
+        self.mobs_SG = pg.sprite.LayeredUpdates()
+        self.player_SG = pg.sprite.LayeredUpdates()
+        self.fireBalls_SG = pg.sprite.LayeredUpdates()
+        self.bullets_SG = pg.sprite.LayeredUpdates()
+        self.weapons_SG = pg.sprite.LayeredUpdates()
+        self.floors_SG = pg.sprite.LayeredUpdates()
         self.menus = []
 
         self.player = None
 
-        #Generate a map
-        self.map.generateMap()
+        #Loads all sprite and sound data
+        self.load_data()
 
     def load_data(self):
-        #MAP DATA
-        self.map = Map(self, './maps/map4.txt')
-
         #PLAYER DATA
         self.playerWalkSheet = pg.image.load("./sprites/Player/playerWalkSheet.png").convert_alpha()
         self.playerIdleSheet = pg.image.load("./sprites/Player/playerIdleSheet.png").convert_alpha()
@@ -43,24 +37,12 @@ class Level1(Scene):
         self.playerShotgunImg = pg.image.load("./sprites/Weapons/shotgun.png").convert_alpha()
         self.playerSwordImg = pg.image.load("./sprites/Weapons/sword.png").convert_alpha()
 
-        # MOB DATA
-        self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
-        self.wormIdleSheet = pg.image.load("./sprites/Worm/Idle.png").convert_alpha()
-        self.wormHitSheet = pg.image.load("./sprites/Worm/GetHit.png").convert_alpha()
-        self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
-        self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
         #BULLETS/AMMUNITION DATA
         self.gunBulletImg = pg.image.load("./sprites/Fire_Ball/gun_bullet.png").convert_alpha()
         self.fire_ballMoveSheet = pg.image.load(
             "./sprites/Fire_Ball/Move.png").convert_alpha()
         self.fire_ballExplosionSheet = pg.image.load(
             "./sprites/Fire_Ball/Explosion.png").convert_alpha()
-
-        #BULLY DATA
-        self.BullyWalkSheet = pg.image.load("./sprites/Bully/moverDer.png").convert_alpha()
-        self.BullyIdleSheet = pg.image.load("./sprites/Bully/quieto.png").convert_alpha()
-        self.BullyDeathSheet = pg.image.load("./sprites/Bully/morir.png").convert_alpha()
-        self.BullyAttackSheet = pg.image.load("./sprites/Bully/atacarderecha.png").convert_alpha()
 
         #HUD
         self.radialMenuImg = pg.image.load(
@@ -69,6 +51,28 @@ class Level1(Scene):
             "./sprites/Hud/gun_crosshair.png").convert_alpha()
         self.shotgunCrosshairImg = pg.image.load(
             "./sprites/Hud/shotgun_crosshair.png").convert_alpha()
+
+        # MOB DATA
+        self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
+        self.wormIdleSheet = pg.image.load("./sprites/Worm/Idle.png").convert_alpha()
+        self.wormHitSheet = pg.image.load("./sprites/Worm/GetHit.png").convert_alpha()
+        self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
+        self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
+        
+        #BULLY DATA
+        self.BullyWalkSheet = pg.image.load("./sprites/Bully/moverDer.png").convert_alpha()
+        self.BullyIdleSheet = pg.image.load("./sprites/Bully/quieto.png").convert_alpha()
+        self.BullyDeathSheet = pg.image.load("./sprites/Bully/morir.png").convert_alpha()
+        self.BullyAttackSheet = pg.image.load("./sprites/Bully/atacarderecha.png").convert_alpha()
+
+        #MAP BACKGROUNDS
+        self.background1 = pg.image.load("./sprites/background1.png").convert_alpha()
+        self.background2 = pg.image.load("./sprites/background2.png").convert_alpha()
+        self.background3 = pg.image.load("./sprites/background3.png").convert_alpha()
+        self.background4 = pg.image.load("./sprites/background4.png").convert_alpha()
+        
+        #Map generation
+        self.map = Map(self, './maps/rooms.txt')
 
     def update(self, time):
         self.dt = time
