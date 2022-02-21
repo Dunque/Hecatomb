@@ -41,23 +41,16 @@ KICKBACK = 200
 FIRE_BALL_SPREAD = 5
 
 #ANIMATION STUFF
+#player sprite size
 SPRITESIZE = 96
 
-ARBOL_IMAGE=pg.image.load("./sprites/arbol_rosa.png")
-ARBOL_IMAGE1=pg.image.load("./sprites/arbol_rosa_1.png")
-ARBOL_IMAGE2=pg.image.load("./sprites/arbol_rosa_2.png")
-ARBOL_IMAGE3=pg.image.load("./sprites/arbol_rosa_3.png")
-ARBOL_IMAGE4=pg.image.load("./sprites/arbol_rosa_4.png")
-BOX_IMAGE= pg.image.load("./sprites/Box.png")
-FENCE_IMAGE= pg.image.load("./sprites/fence.png")
+#SPRITE LAYERS top > bottom
+HUD_LAYER = 9
+WEAPON_LAYER = 8
+CHARACTER_LAYER = 7
+WALL_LAYER = 1
+FLOOR_LAYER = 0
+
+#TODO borrar esta trapallada
+
 ROCK_IMAGE= pg.image.load("./sprites/RockPile.png")
-GROUND_IMAGE= pg.image.load("./sprites/hierba.png")
-ARBUSTO_IMAGE_1=pg.image.load("./sprites/sheet_040.png")
-ARBUSTO_IMAGE_2=pg.image.load("./sprites/sheet_041.png")
-ROCK_IMAGE_2=pg.image.load("./sprites/sheet_042.png")
-ROCK_IMAGE_3=pg.image.load("./sprites/sheet_043.png")
-ROCK_IMAGE_4=pg.image.load("./sprites/sheet_045.png")
-ROCK_IMAGE_5=pg.image.load("./sprites/sheet_046.png")
-TRUNK_IMAGE1=pg.image.load("./sprites/tronco_1.png")
-TRUNK_IMAGE2=pg.image.load("./sprites/tronco_2.png")
-TRUNK_IMAGE3=pg.image.load("./sprites/tronco_3.png")

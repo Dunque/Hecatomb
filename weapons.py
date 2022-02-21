@@ -22,6 +22,7 @@ class SingletonMeta(type):
 
 class Weapon(metaclass=SingletonMeta):
 	def __init__(self, scene, x, y, image):
+		self._layer = WEAPON_LAYER
 		# Init sprite and groups
 		self.groups = scene.all_sprites
 		pg.sprite.Sprite.__init__(self, [])
@@ -131,9 +132,8 @@ class Sword(Weapon, pg.sprite.Sprite):
 		self.attack_movement()
 		if self.attacking:
 			collision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
-			collision.extend(pg.sprite.spritecollide(self, self.scene.bully_SG, False))
 			for enemies in collision:
-				enemies.take_hit(self.damage)
+				enemies.entityData.takeDamage(self.damage)
 
 	def attack_movement(self):
 		if self.reached == 0:
