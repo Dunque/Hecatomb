@@ -18,7 +18,6 @@ class Level1(Scene):
         self.background_SG = pg.sprite.Group()
         self.walls_SG = pg.sprite.Group()
         self.mobs_SG = pg.sprite.Group()
-        self.bully_SG = pg.sprite.Group()
         self.player_SG = pg.sprite.Group()
         self.fireBalls_SG = pg.sprite.Group()
         self.bullets_SG = pg.sprite.Group()
@@ -77,7 +76,6 @@ class Level1(Scene):
         self.all_sprites.update()
         self.camera.update(self.player)
         hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
-        hits = pg.sprite.spritecollide(self.player, self.bully_SG, False, collide_hit_rect)
         for hit in hits:
             hit.currentState = "ATTACK"
         for menu in self.menus:

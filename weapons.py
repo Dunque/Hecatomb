@@ -131,7 +131,6 @@ class Sword(Weapon, pg.sprite.Sprite):
 		self.attack_movement()
 		if self.attacking:
 			collision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
-			collision.extend(pg.sprite.spritecollide(self, self.scene.bully_SG, False))
 			for enemies in collision:
 				enemies.take_hit(self.damage)
 
