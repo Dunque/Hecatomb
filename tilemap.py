@@ -206,8 +206,10 @@ class Map:
                             Wall(self.scene, col, row, self.tileset.tiles[105])
                     elif self.finalMap[row][col] == 'P':
                         self.scene.player = Player(self.scene, col, row)
-                    elif self.finalMap[row][col] == 'B':
-                        room.addEnemy(Bully(self.scene, col, row))
+                    elif self.finalMap[row][col] == 'H':
+                        room.addEnemy(Herald(self.scene, col, row))    
+                    elif self.finalMap[row][col] == 'K':
+                        room.addEnemy(Khan(self.scene, col, row))
                     elif self.finalMap[row][col] == 'W':
                         room.addEnemy(Worm(self.scene, col, row))
                     elif self.finalMap[row][col] == '-':
