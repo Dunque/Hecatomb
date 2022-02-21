@@ -309,7 +309,7 @@ class Worm(Character):
 
 		super(Worm, self).__init__(scene, x, y, self.animList, (scene.all_sprites,scene.mobs_SG) , WormStats())
 
-		# self.groups = scene.all_sprites, scene.mobs_SG
+		self.groups = scene.all_sprites, scene.mobs_SG
 		# pg.sprite.Sprite.__init__(self, self.groups)
 
 		self.scene = scene
@@ -347,10 +347,10 @@ class Bully(Character):
 		self.attackAnim = Anim(scene.BullyAttackSheet, (59, 47), 7, 0, 6)
 		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
 
-		super(Bully, self).__init__(scene, x, y, self.animList, scene.all_sprites, BullyStats())
+		super(Bully, self).__init__(scene, x, y, self.animList, (scene.all_sprites,scene.mobs_SG), BullyStats())
 
 		self.groups = scene.all_sprites, scene.mobs_SG
-		pg.sprite.Sprite.__init__(self, self.groups)
+		#pg.sprite.Sprite.__init__(self, self.groups)
 
 		self.scene = scene
 		self.pos = vec(x, y) * TILESIZE
