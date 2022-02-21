@@ -60,10 +60,10 @@ class Level1(Scene):
         self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
 
         #BULLY DATA
-        self.BullyWalkSheet = pg.image.load("./sprites/Bully/moverDer.png").convert_alpha()
+        self.BullyWalkSheet = pg.image.load("./sprites/Bully/mover.png").convert_alpha()
         self.BullyIdleSheet = pg.image.load("./sprites/Bully/quieto.png").convert_alpha()
         self.BullyDeathSheet = pg.image.load("./sprites/Bully/morir.png").convert_alpha()
-        self.BullyAttackSheet = pg.image.load("./sprites/Bully/atacarderecha.png").convert_alpha()
+        self.BullyAttackSheet = pg.image.load("./sprites/Bully/ataq.png").convert_alpha()
 
         #MAP BACKGROUNDS
         self.background1 = pg.image.load("./sprites/background1.png").convert_alpha()

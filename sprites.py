@@ -341,10 +341,10 @@ class Worm(Character):
 class Bully(Character):
 	def __init__(self, scene, x, y):
 		# Aniamtion stuff
-		self.idleAnim = Anim(scene.BullyIdleSheet, (52, 47), 7, 0, 3)
-		self.walkAnim = Anim(scene.BullyWalkSheet, (60, 47), 15, 0, 9)
-		self.deathAnim = Anim(scene.BullyDeathSheet, (40, 47), 13, 0, 5)
-		self.attackAnim = Anim(scene.BullyAttackSheet, (59, 47), 7, 0, 6)
+		self.idleAnim = Anim(scene.BullyIdleSheet, (110, 98), 7, 0, 3)
+		self.walkAnim = Anim(scene.BullyWalkSheet, (124, 98), 15, 0, 9)
+		self.deathAnim = Anim(scene.BullyDeathSheet, (124, 98), 13, 0, 5)
+		self.attackAnim = Anim(scene.BullyAttackSheet, (125, 98), 7, 0, 6)
 		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
 
 		super(Bully, self).__init__(scene, x, y, self.animList, (scene.all_sprites,scene.mobs_SG), BullyStats())
