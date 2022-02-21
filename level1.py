@@ -58,7 +58,7 @@ class Level1(Scene):
         self.wormHitSheet = pg.image.load("./sprites/Worm/GetHit.png").convert_alpha()
         self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
         self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
-        
+
         #BULLY DATA
         self.BullyWalkSheet = pg.image.load("./sprites/Bully/moverDer.png").convert_alpha()
         self.BullyIdleSheet = pg.image.load("./sprites/Bully/quieto.png").convert_alpha()
@@ -70,7 +70,7 @@ class Level1(Scene):
         self.background2 = pg.image.load("./sprites/background2.png").convert_alpha()
         self.background3 = pg.image.load("./sprites/background3.png").convert_alpha()
         self.background4 = pg.image.load("./sprites/background4.png").convert_alpha()
-        
+
         #Map generation
         self.map = Map(self, './maps/rooms.txt')
 

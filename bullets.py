@@ -96,5 +96,6 @@ class Explosion(pg.sprite.Sprite):
 		if self.destroy:
 			pg.sprite.spritecollide(self, self.scene.walls_SG, True)
 		enemycollision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
+
 		for enemies in enemycollision:
 			enemies.entityData.takeDamage(10)
