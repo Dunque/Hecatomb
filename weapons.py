@@ -3,7 +3,7 @@ from random import uniform
 from settings import *
 from anim import *
 import math
-from hud import CrosshairGun
+from hud import CrosshairGun, CrosshairShotGun
 from bullets import GunBullet, ShotgunBullet
 import copy
 
@@ -276,7 +276,7 @@ class Shotgun(FireWeapon, pg.sprite.Sprite):
 		self.damage = 800
 		self.kickback = 1000
 		self.spread = 5
-		self.crosshair = CrosshairGun(self.scene)
+		self.crosshair = CrosshairShotGun(self.scene)
 
 	def get_damage(self):
 		return self.damage

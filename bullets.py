@@ -22,8 +22,34 @@ class Bullet:
 		self.vel = dir.rotate(uniform(-spread_val, spread_val)) * 1000
 		self.spawn_time = pg.time.get_ticks()
 
+		self.scale_explosion = 1
+		self.destroy_scene = False
+
 	def get_damage(self):
 		return self.damage * self.scene.player.weapon.get_damage()
+
+	def update(self):
+		self.pos += self.vel * self.scene.dt
+		self.rect.center = self.pos
+		self.check_collision()
+
+	def check_collision(self):
+		target = pg.sprite.spritecollideany(self, self.scene.mobs_SG)
+		targetBully = pg.sprite.spritecollideany(self, self.scene.bully_SG)
+		if pg.sprite.spritecollideany(self, self.scene.walls_SG):
+			self.scene.camera.cameraShake(self.damage, self.damage)
+			Explosion(self.scene, self.pos, self.explosionWalls, scale=self.scale_explosion, destroy=self.destroy_scene)
+			self.kill()
+		elif target:
+			Explosion(self.scene, self.pos, self.explosionWalls, scale=self.scale_explosion)
+			target.take_hit(self.get_damage())
+			self.kill()
+		elif targetBully:
+			Explosion(self.scene, self.pos, self.explosionWalls, scale=self.scale_explosion)
+			targetBully.take_hit(self.get_damage())
+			self.kill()
+		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
+			self.kill()
 
 
 class GunBullet(Bullet,pg.sprite.Sprite):
@@ -35,26 +61,6 @@ class GunBullet(Bullet,pg.sprite.Sprite):
 		self.lifetime = 1000
 		self.damage = 5
 
-	def update(self):
-		self.pos += self.vel * self.scene.dt
-		self.rect.center = self.pos
-		target = pg.sprite.spritecollideany(self, self.scene.mobs_SG)
-		targetBully = pg.sprite.spritecollideany(self, self.scene.bully_SG)
-		if pg.sprite.spritecollideany(self, self.scene.walls_SG):
-			self.scene.camera.cameraShake(self.damage, self.damage)
-			Explosion(self.scene, self.pos, self.explosionWalls)
-			self.kill()
-		elif target:
-			Explosion(self.scene, self.pos, self.explosionWalls)
-			target.take_hit(self.get_damage())
-			self.kill()
-		elif targetBully:
-			Explosion(self.scene, self.pos, self.explosionWalls)
-			targetBully.take_hit(self.get_damage())
-			self.kill()
-		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
-			self.kill()
-
 
 class ShotgunBullet(Bullet, pg.sprite.Sprite):
 	def __init__(self, scene, pos, dir):
@@ -64,26 +70,8 @@ class ShotgunBullet(Bullet, pg.sprite.Sprite):
 
 		self.lifetime = 1000
 		self.damage = 5
-
-	def update(self):
-		self.pos += self.vel * self.scene.dt
-		self.rect.center = self.pos
-		target = pg.sprite.spritecollideany(self, self.scene.mobs_SG)
-		targetBully = pg.sprite.spritecollideany(self, self.scene.bully_SG)
-		if pg.sprite.spritecollideany(self, self.scene.walls_SG):
-			self.scene.camera.cameraShake(self.damage, self.damage)
-			Explosion(self.scene, self.pos, self.explosionWalls, scale=2, destroy=True)
-			self.kill()
-		elif target:
-			Explosion(self.scene, self.pos, self.explosionWalls, scale=2)
-			target.take_hit(self.get_damage())
-			self.kill()
-		elif targetBully:
-			Explosion(self.scene, self.pos, self.explosionWalls, scale=2)
-			targetBully.take_hit(self.get_damage())
-			self.kill()
-		if pg.time.get_ticks() - self.spawn_time > self.lifetime:
-			self.kill()
+		self.scale_explosion = 2
+		self.destroy_scene = True
 
 
 class Explosion(pg.sprite.Sprite):

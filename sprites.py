@@ -297,7 +297,7 @@ class Player(Character):
 				self.weapon.deactivate()
 			self.weapon = Shotgun(self.scene, self.pos.x -
 								self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
-			pg.mouse.set_visible(True)
+			pg.mouse.set_visible(False)
 			self.weapon.activate()
 			self.weapon_slot = slot
 

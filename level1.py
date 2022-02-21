@@ -68,6 +68,8 @@ class Level1(Scene):
             "./sprites/Hud/radial_menu.png").convert_alpha()
         self.gunCrosshairImg = pg.image.load(
             "./sprites/Hud/gun_crosshair.png").convert_alpha()
+        self.shotgunCrosshairImg = pg.image.load(
+            "./sprites/Hud/shotgun_crosshair.png").convert_alpha()
 
     def update(self, time):
         self.dt = time

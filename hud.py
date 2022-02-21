@@ -1,12 +1,12 @@
 import pygame as pg
 
 
-class CrosshairGun(pg.sprite.Sprite):
-	def __init__(self, scene):
+class CrossHair:
+	def __init__(self, scene, image):
 		self.scene = scene
 		self.groups = scene.all_sprites
 		pg.sprite.Sprite.__init__(self, self.groups)
-		self.image = scene.gunCrosshairImg
+		self.image = image
 		self.rect = self.image.get_rect()
 		self.rect.center = pg.mouse.get_pos()
 
@@ -21,3 +21,14 @@ class CrosshairGun(pg.sprite.Sprite):
 
 	def activate(self):
 		self.add(self.scene.all_sprites)
+
+
+class CrosshairGun(CrossHair, pg.sprite.Sprite):
+	def __init__(self, scene):
+		super().__init__(scene, scene.gunCrosshairImg)
+
+
+class CrosshairShotGun(CrossHair, pg.sprite.Sprite):
+	def __init__(self, scene):
+		super().__init__(scene, scene.shotgunCrosshairImg)
+
