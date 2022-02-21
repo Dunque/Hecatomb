@@ -8,7 +8,7 @@ from weapons import Sword, Gun, Shotgun
 
 import math
 from random import uniform
-
+from bullets import GunBullet, ShotgunBullet,EnemyGunBullet
 vec = pg.math.Vector2
 
 
@@ -125,13 +125,14 @@ class Character(pg.sprite.Sprite):
 			return
 
 		if (self.currentState == "ATTACK"):
+
 			self.currentAnim = self.attackAnim
 			self.aim()
 			if (self.entityData.currentAttackTimer <= self.entityData.AttackTimer):
 				self.entityData.currentAttackTimer += 1
 				self.vel = self.AttackDir
 			else:
-				self.currentState = "GROUNDED"
+				self.currentState = "FIRE"
 				self.entityData.currentAttackTimer = 0
 			return
 
@@ -164,10 +165,8 @@ class Character(pg.sprite.Sprite):
 
 		self.hit_rect.centerx = self.pos.x
 		self.collide_with_walls('x')
-
 		self.hit_rect.centery = self.pos.y
 		self.collide_with_walls('y')
-
 		self.rect.center = self.hit_rect.center
 
 		# ANIMATION
@@ -304,7 +303,7 @@ class Worm(Character):
 		self.idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
 		self.walkAnim = Anim(scene.wormWalkSheet, (90, 90), 7, 0, 9)
 		self.deathAnim = Anim(scene.wormDeathSheet, (90, 90), 5, 0, 8)
-		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 7, 0, 16)
+		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 7.5, 0, 16)
 		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
 
 		super(Worm, self).__init__(scene, x, y, self.animList, (scene.all_sprites,scene.mobs_SG) , WormStats())
@@ -318,6 +317,12 @@ class Worm(Character):
 		self.acc = vec(0, 0)
 		self.rect.center = self.pos
 		self.rot = 0
+		self.barrel_offset = vec(55, -10)
+		self.bullet_rate = 300
+		self.damage = 100
+		self.current_cd = 0
+		self.can_shoot = True
+		self.last_shot = 0
 
 		self.health = WormStats().maxHP
 
@@ -333,9 +338,24 @@ class Worm(Character):
 		self.vel = self.acc * self.scene.dt * 15
 		self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
 
+	def attack(self):
+		now = pg.time.get_ticks()
+		if now - self.last_shot > self.bullet_rate or self.last_shot == 0:
+			self.last_shot = now
+			dir = vec(1, 0).rotate(-self.rot)
+			pos = self.pos + self.barrel_offset.rotate(-self.rot)
+			if self.rot <= -90 or self.rot >= 90:
+				dir = vec(dir.x * 1, dir.y * -1)
+				pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
+			EnemyGunBullet(self.scene, pos, dir)
+
+
 
 	def update(self):
 		self.stateUpdate()
+		if (self.currentState == "FIRE"):
+			self.attack()
+			self.currentState = "GROUNDED"
 		super(Worm, self).update()
 
 class Bully(Character):

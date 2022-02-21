@@ -18,6 +18,7 @@ class Level1(Scene):
         self.player_SG = pg.sprite.LayeredUpdates()
         self.fireBalls_SG = pg.sprite.LayeredUpdates()
         self.bullets_SG = pg.sprite.LayeredUpdates()
+        self.enemy_bullets_SG = pg.sprite.LayeredUpdates()
         self.weapons_SG = pg.sprite.LayeredUpdates()
         self.floors_SG = pg.sprite.LayeredUpdates()
         self.menus = []
