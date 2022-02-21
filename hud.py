@@ -1,8 +1,10 @@
 import pygame as pg
+from settings import *
 
 
 class CrossHair:
 	def __init__(self, scene, image):
+		self._layer = HUD_LAYER
 		self.scene = scene
 		self.groups = scene.all_sprites
 		pg.sprite.Sprite.__init__(self, self.groups)

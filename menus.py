@@ -102,6 +102,7 @@ class WeaponMenu(MenuManager):
 
 class WeaponMenuElement(pg.sprite.Sprite, Observer):
 	def __init__(self, scene, pos):
+		self._layer = HUD_LAYER
 		self.scene = scene
 		pg.sprite.Sprite.__init__(self, [])
 
