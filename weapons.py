@@ -4,7 +4,8 @@ from settings import *
 from anim import *
 import math
 from hud import CrosshairGun
-from bullets import Bullet, ShotgunBullet
+from bullets import GunBullet, ShotgunBullet
+import copy
 
 vec = pg.math.Vector2
 
@@ -258,7 +259,7 @@ class Gun(FireWeapon, pg.sprite.Sprite):
 				if self.rot <= -90 or self.rot >= 90:
 					dir = vec(dir.x * 1, dir.y * -1)
 					pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
-				Bullet(self.scene, pos, dir)
+				GunBullet(self.scene, pos, dir)
 				push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
 				self.scene.player.vel = vec(-self.kickback, 0).rotate(-push)
 
@@ -274,7 +275,7 @@ class Shotgun(FireWeapon, pg.sprite.Sprite):
 		self.bullet_rate = 1000
 		self.damage = 800
 		self.kickback = 1000
-		self.spread = 10
+		self.spread = 5
 		self.crosshair = CrosshairGun(self.scene)
 
 	def get_damage(self):
@@ -292,9 +293,13 @@ class Shotgun(FireWeapon, pg.sprite.Sprite):
 				self.last_shot = now
 				dir = vec(1, 0).rotate(-self.rot)
 				pos = self.pos + self.barrel_offset.rotate(-self.rot)
+				direction_disperse = 0.2
 				if self.rot <= -90 or self.rot >= 90:
 					dir = vec(dir.x * 1, dir.y * -1)
 					pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
+					direction_disperse = -0.2
 				ShotgunBullet(self.scene, pos, dir)
+				ShotgunBullet(self.scene, (pos.x + dir.y * 10, pos.y + dir.x * 10), vec(dir.x+direction_disperse,dir.y+direction_disperse))
+				ShotgunBullet(self.scene, (pos.x - dir.y * 10, pos.y - dir.x * 10), vec(dir.x-direction_disperse,dir.y-direction_disperse))
 				push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
 				self.scene.player.vel = vec(-self.kickback, 0).rotate(-push)
