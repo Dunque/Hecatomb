@@ -16,7 +16,6 @@ class Level1(Scene):
         self.walls_SG = pg.sprite.LayeredUpdates()
         self.mobs_SG = pg.sprite.LayeredUpdates()
         self.player_SG = pg.sprite.LayeredUpdates()
-        self.fireBalls_SG = pg.sprite.LayeredUpdates()
         self.bullets_SG = pg.sprite.LayeredUpdates()
         self.enemy_bullets_SG = pg.sprite.LayeredUpdates()
         self.weapons_SG = pg.sprite.LayeredUpdates()
@@ -53,18 +52,20 @@ class Level1(Scene):
         self.shotgunCrosshairImg = pg.image.load(
             "./sprites/Hud/shotgun_crosshair.png").convert_alpha()
 
-        # MOB DATA
+        # WORM DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
         self.wormIdleSheet = pg.image.load("./sprites/Worm/Idle.png").convert_alpha()
         self.wormHitSheet = pg.image.load("./sprites/Worm/GetHit.png").convert_alpha()
         self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
         self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
 
-        #BULLY DATA
-        self.BullyWalkSheet = pg.image.load("./sprites/Bully/mover.png").convert_alpha()
-        self.BullyIdleSheet = pg.image.load("./sprites/Bully/quieto.png").convert_alpha()
-        self.BullyDeathSheet = pg.image.load("./sprites/Bully/morir.png").convert_alpha()
-        self.BullyAttackSheet = pg.image.load("./sprites/Bully/ataq.png").convert_alpha()
+        #Khan DATA
+        self.khanWalkSheet = pg.image.load("./sprites/Khan/khanWalkSheet.png").convert_alpha()
+        self.khanDeathSheet = pg.image.load("./sprites/Khan/khanDeathSheet.png").convert_alpha()
+
+        #HERALD DATA
+        self.heraldWalkSheet = pg.image.load("./sprites/Herald/heraldWalkSheet.png").convert_alpha()
+        self.heraldDeathSheet = pg.image.load("./sprites/Herald/heraldDeathSheet.png").convert_alpha()
 
         #MAP BACKGROUNDS
         self.background1 = pg.image.load("./sprites/background1.png").convert_alpha()
@@ -87,6 +88,8 @@ class Level1(Scene):
             menu.update()
 
         self.map.update()
+
+        #print(self.player.entityData.actualHP)
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
