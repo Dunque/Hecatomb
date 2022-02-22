@@ -4,6 +4,7 @@ from scene import *
 from settings import *
 from sprites import *
 from tilemap import *
+from hud import Hud
 
 class Level1(Scene):
     def __init__(self, sceneManager):
@@ -76,6 +77,8 @@ class Level1(Scene):
         #Map generation
         self.map = Map(self, './maps/rooms.txt')
 
+        self.hud = Hud(self)
+
     def update(self, time):
         self.dt = time
         # update portion of the game loop
@@ -88,7 +91,6 @@ class Level1(Scene):
             menu.update()
 
         self.map.update()
-
         #print(self.player.entityData.actualHP)
 
     def draw_grid(self):
@@ -103,6 +105,7 @@ class Level1(Scene):
         #self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
+        self.hud.draw_health(screen)
 
     def events(self, eventList):
         # catch all events here

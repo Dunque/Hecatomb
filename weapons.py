@@ -4,7 +4,7 @@ from settings import *
 from anim import *
 import math
 from hud import CrosshairGun, CrosshairShotGun
-from bullets import GunBullet, ShotgunBullet
+from bullets import GunBullet, ShotgunBullet, Explosion
 
 vec = pg.math.Vector2
 
@@ -125,12 +125,16 @@ class Sword(Weapon, pg.sprite.Sprite):
 		self.down_limit_swing = 100
 		self.attacking = False
 
+		self.explosionWalls = Anim(scene.fire_ballExplosionSheet, (46, 46), 10, 0, 7)
+		self.scale_explosion = 3
+
 	def attack(self):
 		self.attack_movement()
 		if self.attacking:
 			self.scene.camera.cameraShake(1,3)
 			collision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
 			for enemies in collision:
+				Explosion(self.scene, enemies.pos, self.explosionWalls, self.scene.mobs_SG, scale=self.scale_explosion,)
 				enemies.takeDamage(self.damage)
 
 	def attack_movement(self):

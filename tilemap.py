@@ -279,29 +279,19 @@ class Room():
         for enemy in self.enemies:
             enemy.isActive = True
                 
-        # and move to state to playing
-        #self.map.current_room = self
         self.state = "PLAYING"
     
     def switch_state(self):
-        # If the room is uncleared...
         if self.state == "UNCLEARED":
             pass
-        
-        # If we are playing...
         if self.state == "PLAYING":
-            # ...and we kill all enemies...
             if self.enemies == []:
                 self.state = "CLEARED"
-                
-                # we open the doors...
                 self.openAllDoors()
-
         if self.state == "CLEARED":
             pass
     
     def update(self):
-        
         for enemy in self.enemies:
             if not enemy.entityData.isAlive:
                 self.enemies.remove(enemy)

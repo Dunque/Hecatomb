@@ -250,6 +250,11 @@ class Player(Character):
 		else:
 			self.show_menu = False
 
+	def die(self):
+		if self.weapon:
+			self.weapon.kill()
+		super(Player,self).die()
+
 	def aim(self):
 		cam_moved = self.scene.camera.get_moved()
 
