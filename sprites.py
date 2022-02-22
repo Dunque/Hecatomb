@@ -3,7 +3,7 @@ from settings import *
 from anim import *
 from entitydata import *
 from menus import WeaponMenu
-from weapons import Sword, Gun, Shotgun
+from weapons import *
 from enemyweapons import *
 from bullets import *
 
@@ -137,7 +137,7 @@ class Character(pg.sprite.Sprite):
 					self.entityData.currentAttackTimer += 1
 					self.vel = self.AttackDir
 				else:
-					self.currentState = "FIRE"
+					self.currentState="GROUNDED"
 					self.entityData.currentAttackTimer = 0
 				return
 
@@ -412,9 +412,9 @@ class Worm(Character):
 		self.idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
 		self.walkAnim = Anim(scene.wormWalkSheet, (90, 90), 7, 0, 9)
 		self.deathAnim = Anim(scene.wormDeathSheet, (90, 90), 5, 0, 8)
-		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 7, 0, 16)
+		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 3, 0, 16)
 		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
-
+		self.explosionWalls = Anim(scene.fire_ballExplosionSheet, (46, 46), 10, 0, 7)
 		super(Worm, self).__init__(scene, x, y, self.animList, (scene.all_sprites,scene.mobs_SG) , WormStats())
 
 		self.groups = scene.all_sprites, scene.mobs_SG
@@ -444,6 +444,11 @@ class Worm(Character):
 
 	def update(self):
 		self.stateUpdate()
+		if self.currentState=="ATTACK":
+			explosion_pos=self.scene.player.pos
+			Explosion(self.scene, explosion_pos, self.explosionWalls, self.scene.player_SG,1, )
+			self.scene.player.takeDamage(2)
+
 		super(Worm, self).update()
 
 

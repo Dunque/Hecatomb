@@ -27,7 +27,7 @@ class CharacterStats:
         #Substracting damage received to actual health
         self.actualHP = self.actualHP - dmg
         self.vulnerable = False
-        
+
         #Die
         if (self.actualHP <= 0):
             self.isAlive = False
@@ -78,7 +78,7 @@ class WormStats(CharacterStats):
         #Movement
         self.speed = 200
         self.Attackspeed = 2 #It's a multiplier
-        self.AttackTimer = 225
+        self.AttackTimer = 55
 
 class KhanStats(CharacterStats):
     def __init__(self):
