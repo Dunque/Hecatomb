@@ -7,7 +7,7 @@ class Tileset:
         self.size = size
         self.margin = margin
         self.spacing = spacing
-        self.image = pg.image.load(file)
+        self.image = pg.image.load(file).convert_alpha()
         self.rect = self.image.get_rect()
         self.tiles = []
         self.load()

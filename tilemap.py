@@ -96,7 +96,7 @@ class Map:
         self.insertRoomInMap(roomMatrix, x*ROOMWIDTH, y*ROOMHEIGHT)
 
         #Store the room in a list, including it's coordinates in the final map
-        self.rooms.append(Room(roomMatrix, x*ROOMWIDTH, y*ROOMHEIGHT))
+        self.rooms.append(Room(self.scene, roomMatrix, x*ROOMWIDTH, y*ROOMHEIGHT))
 
         # Now we continue with the rest of the rooms
         # We repeat this loop until we have chosen a position for each room in the avaliableRooms list
@@ -116,7 +116,7 @@ class Map:
             #Get the room out of the room list and instert it in the global map
             roomMatrix = avaliableRooms.pop(0)
             self.insertRoomInMap(roomMatrix, pos[0], pos[1])
-            self.rooms.append(Room(roomMatrix, pos[0], pos[1]))
+            self.rooms.append(Room(self.scene, roomMatrix, pos[0], pos[1]))
 
     def checkAdyacentSpaces(self,room):
         avaliablePositions = []
@@ -221,12 +221,13 @@ class Map:
                 room.update()
 
 class Room():
-    def __init__(self, matrix, limitX, limitY):
+    def __init__(self, scene, matrix, limitX, limitY):
         # Class that defines a room
         # It contains references to the ENEMIES and the DOOR
         # the ENTER DOOR will close once the player enters the room and wont open until he finishes it
         # the EXIT DOOR will open once all enemies are defeated
         self.matrix = matrix
+        self.scene = scene
 
         # Set the room boundaries in x axis
         self.limitX0 = limitX
@@ -267,6 +268,7 @@ class Room():
                 
         # acivate the enemies
         for enemy in self.enemies:
+            self.scene.all_sprites.add(enemy)
             enemy.isActive = True
                 
         self.state = "PLAYING"
@@ -291,14 +293,12 @@ class Room():
 
 class Camera:
     def __init__(self, width, height):
-        self.camera = pg.Rect(0, 0, width, height)
+        self.rect = pg.Rect(0, 0, width, height)
         self.width = width
         self.height = height
 
         self.width_height = vec(width, height)
         self.halfs = vec(int(WIDTH / 2), int(HEIGHT / 2))
-        self.def_cords = vec(CAMERA_X, CAMERA_Y)
-
         self.def_cords = vec(CAMERA_X, CAMERA_Y)
 
         self.x = 0
@@ -311,7 +311,7 @@ class Camera:
         self.shakeAmount = 0
 
     def apply(self, entity):
-        return entity.rect.move(self.camera.topleft)
+        return entity.rect.move(self.rect.topleft)
 
     def get_moved(self):
         return self.x, self.y
@@ -340,7 +340,7 @@ class Camera:
                 self.shakeTimer = 0
                 self.shakeAmount = 0
 
-        self.camera = pg.Rect(self.x, self.y, self.width, self.height)
+        self.rect = pg.Rect(self.x, self.y, self.width, self.height)
 
     def cameraShake(self, amount, time):
         self.doShake = True

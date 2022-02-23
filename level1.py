@@ -18,7 +18,6 @@ class Level1(Scene):
         self.mobs_SG = pg.sprite.LayeredUpdates()
         self.player_SG = pg.sprite.LayeredUpdates()
         self.bullets_SG = pg.sprite.LayeredUpdates()
-        self.enemy_bullets_SG = pg.sprite.LayeredUpdates()
         self.weapons_SG = pg.sprite.LayeredUpdates()
         self.floors_SG = pg.sprite.LayeredUpdates()
         self.chest_SG = pg.sprite.LayeredUpdates()
@@ -90,12 +89,12 @@ class Level1(Scene):
         self.camera.update(self.player)
         hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
         for hit in hits:
-            hit.currentState = "ATTACK"
+            hit.currentState = "ATTACKING"
         for menu in self.menus:
             menu.update()
 
         self.map.update()
-        #print(self.player.entityData.actualHP)
+        pg.display.set_caption(str(time))
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):

@@ -9,18 +9,15 @@ class CharacterStats:
 
         #Movement and actions (dodge, charge, etc)
         self.moveSpeed = 100
-        self.dodgeSpeed = 2 #It's a multiplier
-        self.dodgeTimer = 35
-        self.currentDodgeTimer = 0
-        self.currentAttackTimer = 0
+
         #Stablishing invencibility frames in order to not be able
         #to be damaged several times in the span of miliseconds
         self.vulnerable = True
-        self.iframes = 5
+        self.iframes = 60
         self.currentIframe = 0
 
         #Death animation timers
-        self.deathAnimTimer = 69
+        self.deathAnimTimer = 100
         self.currentDeathAnimTimer = 0
 
     def takeDamage(self, dmg):
@@ -56,6 +53,15 @@ class PlayerStats(CharacterStats):
         self.dodgeSpeed = 2 #It's a multiplier
         self.dodgeTimer = 35
 
+        #Dodge
+        self.dodgeSpeed = 2 #It's a multiplier
+        self.dodgeTimer = 35
+        self.currentDodgeTimer = 0
+
+        self.iframes = 20
+
+        self.deathAnimTimer = 69
+
 class HeraldStats(CharacterStats):
     def __init__(self):
         super(HeraldStats, self).__init__()
@@ -63,11 +69,12 @@ class HeraldStats(CharacterStats):
         self.maxHP = 100
         self.actualHP = self.maxHP
 
-        #Movement
-        self.speed = 200
-        self.Attackspeed = 2 #It's a multiplier
-        self.AttackTimer = 225
+        self.speed = 150
+        self.AttackTimer = 60
+        self.currentAttackTimer = 0
 
+        self.deathAnimTimer = 49
+        
 class WormStats(CharacterStats):
     def __init__(self):
         super(WormStats, self).__init__()
@@ -76,9 +83,11 @@ class WormStats(CharacterStats):
         self.actualHP = self.maxHP
 
         #Movement
-        self.speed = 200
-        self.Attackspeed = 2 #It's a multiplier
-        self.AttackTimer = 55
+        self.speed = 150
+        self.AttackTimer = 10
+        self.currentAttackTimer = 0
+
+        self.deathAnimTimer = 63
 
 class KhanStats(CharacterStats):
     def __init__(self):
@@ -87,8 +96,9 @@ class KhanStats(CharacterStats):
         self.maxHP = 100
         self.actualHP = self.maxHP
 
-        #Movement
-        self.speed = 200
-        self.Attackspeed = 2 #It's a multiplier
-        self.AttackTimer = 225
+        self.speed = 150
+        self.AttackTimer = 60
+        self.currentAttackTimer = 0
+
+        self.deathAnimTimer = 59
   
