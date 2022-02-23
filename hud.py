@@ -2,6 +2,16 @@ import pygame as pg
 from settings import *
 
 
+class Interaccion(pg.sprite.Sprite):
+	def __init__(self, scene, pos, image):
+		self._layer = HUD_LAYER
+		self.scene = scene
+		self.groups = self.scene.all_sprites
+		pg.sprite.Sprite.__init__(self, self.groups)
+		self.image = image
+		self.rect = self.image.get_rect()
+		self.rect.center = pos
+
 class CrossHair:
 	def __init__(self, scene, image):
 		self._layer = HUD_LAYER

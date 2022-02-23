@@ -20,6 +20,7 @@ class Level1(Scene):
         self.bullets_SG = pg.sprite.LayeredUpdates()
         self.weapons_SG = pg.sprite.LayeredUpdates()
         self.floors_SG = pg.sprite.LayeredUpdates()
+        self.chest_SG = pg.sprite.LayeredUpdates()
         self.menus = []
 
         self.player = None
@@ -36,6 +37,7 @@ class Level1(Scene):
         self.playerGunImg = pg.image.load("./sprites/Weapons/gun.png").convert_alpha()
         self.playerShotgunImg = pg.image.load("./sprites/Weapons/shotgun.png").convert_alpha()
         self.playerSwordImg = pg.image.load("./sprites/Weapons/sword.png").convert_alpha()
+        self.chestImg = pg.image.load("./sprites/Objects/chest.png").convert_alpha()
 
         #BULLETS/AMMUNITION DATA
         self.gunBulletImg = pg.image.load("./sprites/Fire_Ball/gun_bullet.png").convert_alpha()
@@ -47,6 +49,8 @@ class Level1(Scene):
         #HUD
         self.radialMenuImg = pg.image.load(
             "./sprites/Hud/radial_menu.png").convert_alpha()
+        self.abrirImg = pg.image.load(
+            "./sprites/Hud/abrir.png").convert_alpha()
         self.gunCrosshairImg = pg.image.load(
             "./sprites/Hud/gun_crosshair.png").convert_alpha()
         self.shotgunCrosshairImg = pg.image.load(

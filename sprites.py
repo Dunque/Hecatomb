@@ -402,6 +402,7 @@ class Fireball(pg.sprite.Sprite):
 		if pg.time.get_ticks() - self.spawn_time > FIRE_BALL_LIFETIME:
 			self.kill()
 
+
 class Wall(pg.sprite.Sprite):
     def __init__(self, scene, x, y, tileset):
         self._layer = WALL_LAYER

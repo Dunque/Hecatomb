@@ -1,10 +1,11 @@
-from matplotlib.style import available
+#from matplotlib.style import available
 import pygame as pg
 import numpy as np
 from random import seed, randint, random, choice
 from sprites import *
 from settings import *
 from tileset import Tileset
+from objects import Chest
 
 vec = pg.math.Vector2
 
@@ -189,21 +190,7 @@ class Map:
                     elif self.finalMap[row][col] == '2':
                         Wall(self.scene, col, row, self.tileset.tiles[23])
                     elif self.finalMap[row][col] == '3':
-                        n_img=randint(1,7)
-                        if n_img==1:
-                            Wall(self.scene, col, row, self.tileset.tiles[15])
-                        elif n_img == 2:
-                            Wall(self.scene, col, row, self.tileset.tiles[30])
-                        elif n_img == 3:
-                            Wall(self.scene, col, row, self.tileset.tiles[45])
-                        elif n_img == 4:
-                            Wall(self.scene, col, row, self.tileset.tiles[60])
-                        elif n_img == 5:
-                            Wall(self.scene, col, row, self.tileset.tiles[75])
-                        elif n_img == 6:
-                            Wall(self.scene, col, row, self.tileset.tiles[90])
-                        elif n_img == 7:
-                            Wall(self.scene, col, row, self.tileset.tiles[105])
+                        Wall(self.scene, col, row, self.tileset.tiles[15 * randint(1,7)])
                     elif self.finalMap[row][col] == 'P':
                         self.scene.player = Player(self.scene, col, row)
                     elif self.finalMap[row][col] == 'B':
@@ -212,6 +199,9 @@ class Map:
                         room.addEnemy(Worm(self.scene, col, row))
                     elif self.finalMap[row][col] == '-':
                         self.removeUnusedDoors(room,'-', row, col)
+                    elif self.finalMap[row][col] == 'C':
+                        Chest(self.scene, col, row)
+                        pass
             #We initialize the room doors to be open, until the player wanders in
             room.openAllDoors()
 
