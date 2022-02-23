@@ -3,8 +3,9 @@ from settings import *
 from anim import *
 from entitydata import *
 from menus import WeaponMenu
-import time
-from weapons import Sword, Gun, Shotgun
+from weapons import *
+from enemyweapons import *
+from bullets import *
 
 import math
 from random import uniform
@@ -66,6 +67,9 @@ class Character(pg.sprite.Sprite):
 		# "GROUNDED", "DODGING", "DYING"
 		self.currentState = "GROUNDED"
 
+		#This boolean dictates if the character can move, aim, take damage, etc
+		self.isActive = False
+
 
 	# Handles movement logic
 	def move(self):
@@ -102,49 +106,51 @@ class Character(pg.sprite.Sprite):
 				self.hit_rect.centery = self.pos.y
 
 	def takeDamage(self, dmg):
-		if self.entityData.vulnerable and (self.currentState != "DODGING"):
-			self.entityData.takeDamage(dmg)
+		if self.isActive:
+			if self.entityData.vulnerable and (self.currentState != "DODGING"):
+				self.entityData.takeDamage(dmg)
 
 	def stateUpdate(self):
-		if (self.currentState == "GROUNDED"):
-			# Not moving -> idle animation
-			if self.vel == vec(0, 0):
-				self.currentAnim = self.idleAnim
-			else:
-				self.currentAnim = self.walkAnim
+		if self.isActive:
+			if (self.currentState == "GROUNDED"):
+				# Not moving -> idle animation
+				if self.vel == vec(0, 0):
+					self.currentAnim = self.idleAnim
+				else:
+					self.currentAnim = self.walkAnim
 
-			# Movement and aiming
-			self.move()
-			self.aim()
-			return
+				# Movement and aiming
+				self.move()
+				self.aim()
+				return
 
-		if (self.currentState == "DYING"):
-			self.vel = vec(0, 0)
-			self.currentAnim = self.deathAnim
-			self.die()
-			return
+			if (self.currentState == "DYING"):
+				self.vel = vec(0, 0)
+				self.currentAnim = self.deathAnim
+				self.die()
+				return
 
-		if (self.currentState == "ATTACK"):
-			self.currentAnim = self.attackAnim
-			self.aim()
-			if (self.entityData.currentAttackTimer <= self.entityData.AttackTimer):
-				self.entityData.currentAttackTimer += 1
-				self.vel = self.AttackDir
-			else:
-				self.currentState = "GROUNDED"
-				self.entityData.currentAttackTimer = 0
-			return
+			if (self.currentState == "ATTACK"):
+				self.currentAnim = self.attackAnim
+				self.aim()
+				if (self.entityData.currentAttackTimer <= self.entityData.AttackTimer):
+					self.entityData.currentAttackTimer += 1
+					self.vel = self.AttackDir
+				else:
+					self.currentState="GROUNDED"
+					self.entityData.currentAttackTimer = 0
+				return
 
-		if (self.currentState == "DODGING"):
-			self.currentAnim = self.dodgeAnim
-			if (self.entityData.currentDodgeTimer <= self.entityData.dodgeTimer):
-				self.entityData.currentDodgeTimer += 1
-				self.vel = self.dodgeDir
+			if (self.currentState == "DODGING"):
+				self.currentAnim = self.dodgeAnim
+				if (self.entityData.currentDodgeTimer <= self.entityData.dodgeTimer):
+					self.entityData.currentDodgeTimer += 1
+					self.vel = self.dodgeDir
 
-			else:
-				self.currentState = "GROUNDED"
-				self.entityData.currentDodgeTimer = 0
-			return
+				else:
+					self.currentState = "GROUNDED"
+					self.entityData.currentDodgeTimer = 0
+				return
 
 	def update(self):
 		# Check if the character should die
@@ -203,6 +209,9 @@ class Player(Character):
 		self.weapon_menu = WeaponMenu(self.scene)
 		self.scene.menus.append(self.weapon_menu)
 
+		#Player should be active by default
+		self.isActive = True
+
 	def move(self):
 		# We are able to move freely
 		self.vel = vec(0, 0)
@@ -221,7 +230,6 @@ class Player(Character):
 		mouse = pg.mouse.get_pressed()
 		# Left click
 		if mouse[0]:
-			self.scene.camera.cameraShake(2, 6)
 			if self.weapon:
 				self.weapon.attack()
 		elif not mouse[0]:
@@ -234,12 +242,18 @@ class Player(Character):
 
 		##DEBUG KEY TO KILL YOURSELF
 		if keys[pg.K_0]:
-			self.takeDamage(100)
+			self.entityData.takeDamage(9999)
 
+		#Weapon wheel
 		if keys[pg.K_TAB]:
 			self.show_menu = True
 		else:
 			self.show_menu = False
+
+	def die(self):
+		if self.weapon:
+			self.weapon.kill()
+		super(Player,self).die()
 
 	def aim(self):
 		cam_moved = self.scene.camera.get_moved()
@@ -298,18 +312,112 @@ class Player(Character):
 			self.weapon.activate()
 			self.weapon_slot = slot
 
+class Herald(Character):
+	def __init__(self, scene, x, y):
+		# Aniamtion stuff
+		self.walkAnim = Anim(scene.heraldWalkSheet, (SPRITESIZE, SPRITESIZE), 7, 0, 6)
+		self.deathAnim = Anim(scene.heraldDeathSheet, (SPRITESIZE, SPRITESIZE), 5, 0, 5)
+		self.animList = [self.walkAnim,self.walkAnim, self.deathAnim,self.walkAnim,self.walkAnim]
+
+		super(Herald, self).__init__(scene, x, y, self.animList, (scene.all_sprites,scene.mobs_SG) , HeraldStats())
+
+		self.scene = scene
+		self.pos = vec(x, y) * TILESIZE
+		self.vel = vec(0, 0)
+		self.acc = vec(0, 0)
+		self.rect.center = self.pos
+		self.rot = 0
+
+		self.time_hit = None
+		self.delta_time_hit = 0.3
+
+		self.weaponOffsetX = -20
+		self.weaponOffsetY = -10
+
+		self.weapon = EnemyGun(self.scene, self, self.rect.centerx - self.weaponOffsetX, self.rect.centery - self.weaponOffsetY)
+
+	def aim(self):
+		self.rot = (self.scene.player.pos - self.pos).angle_to(vec(1, 0))
+		if 90 < self.rot + 180 < 270:
+			self.weaponOffsetX = -20
+		else:
+			self.weaponOffsetX = 20
+
+
+	def move(self):
+		self.acc = vec(150).rotate(-self.rot)
+		self.vel = self.acc * self.scene.dt * 15
+		self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
+
+
+	def update(self):
+		self.stateUpdate()
+		self.weapon.updatePos( self.rect.centerx - self.weaponOffsetX, self.rect.centery - self.weaponOffsetY, self.rect)
+		self.weapon.attack()
+		super(Herald, self).update()
+
+	def die(self):
+		self.weapon.kill()
+		super(Herald,self).die()
+
+class Khan(Character):
+	def __init__(self, scene, x, y):
+		# Aniamtion stuff
+		self.walkAnim = Anim(scene.khanWalkSheet, (SPRITESIZE, SPRITESIZE), 7, 0, 6)
+		self.deathAnim = Anim(scene.khanDeathSheet, (SPRITESIZE, SPRITESIZE), 5, 0, 5)
+		self.animList = [self.walkAnim,self.walkAnim, self.deathAnim,self.walkAnim,self.walkAnim]
+
+		super(Khan, self).__init__(scene, x, y, self.animList, (scene.all_sprites,scene.mobs_SG) , KhanStats())
+
+		self.scene = scene
+		self.pos = vec(x, y) * TILESIZE
+		self.vel = vec(0, 0)
+		self.acc = vec(0, 0)
+		self.rect.center = self.pos
+		self.rot = 0
+
+		self.time_hit = None
+		self.delta_time_hit = 0.3
+
+		self.weaponOffsetX = -20
+		self.weaponOffsetY = -10
+
+		self.weapon = EnemyShotgun(self.scene, self, self.rect.centerx - self.weaponOffsetX, self.rect.centery - self.weaponOffsetY)
+
+	def aim(self):
+		self.rot = (self.scene.player.pos - self.pos).angle_to(vec(1, 0))
+		if 90 < self.rot + 180 < 270:
+			self.weaponOffsetX = -20
+		else:
+			self.weaponOffsetX = 20
+
+	def move(self):
+		self.acc = vec(150).rotate(-self.rot)
+		self.vel = self.acc * self.scene.dt * 15
+		self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
+
+	def update(self):
+		self.stateUpdate()
+		self.weapon.updatePos( self.rect.centerx - self.weaponOffsetX, self.rect.centery - self.weaponOffsetY, self.rect)
+		self.weapon.attack()
+		super(Khan, self).update()
+
+	def die(self):
+		self.weapon.kill()
+		super(Khan,self).die()
+
 class Worm(Character):
 	def __init__(self, scene, x, y):
 		# Aniamtion stuff
 		self.idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
 		self.walkAnim = Anim(scene.wormWalkSheet, (90, 90), 7, 0, 9)
 		self.deathAnim = Anim(scene.wormDeathSheet, (90, 90), 5, 0, 8)
-		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 7, 0, 16)
+		self.attackAnim = Anim(scene.wormAttackSheet, (90, 90), 3, 0, 16)
 		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
-
+		self.explosionWalls = Anim(scene.fire_ballExplosionSheet, (46, 46), 10, 0, 7)
 		super(Worm, self).__init__(scene, x, y, self.animList, (scene.all_sprites,scene.mobs_SG) , WormStats())
 
-		# self.groups = scene.all_sprites, scene.mobs_SG
+		self.groups = scene.all_sprites, scene.mobs_SG
 		# pg.sprite.Sprite.__init__(self, self.groups)
 
 		self.scene = scene
@@ -336,71 +444,13 @@ class Worm(Character):
 
 	def update(self):
 		self.stateUpdate()
+		if self.currentState=="ATTACK":
+			explosion_pos=self.scene.player.pos
+			Explosion(self.scene, explosion_pos, self.explosionWalls, self.scene.player_SG,1, )
+			self.scene.player.takeDamage(2)
+
 		super(Worm, self).update()
 
-class Bully(Character):
-	def __init__(self, scene, x, y):
-		# Aniamtion stuff
-		self.idleAnim = Anim(scene.BullyIdleSheet, (52, 47), 7, 0, 3)
-		self.walkAnim = Anim(scene.BullyWalkSheet, (60, 47), 15, 0, 9)
-		self.deathAnim = Anim(scene.BullyDeathSheet, (40, 47), 13, 0, 5)
-		self.attackAnim = Anim(scene.BullyAttackSheet, (59, 47), 7, 0, 6)
-		self.animList = [self.idleAnim, self.walkAnim, self.deathAnim, self.attackAnim, self.attackAnim]
-
-		super(Bully, self).__init__(scene, x, y, self.animList, scene.all_sprites, BullyStats())
-
-		self.groups = scene.all_sprites, scene.mobs_SG
-		pg.sprite.Sprite.__init__(self, self.groups)
-
-		self.scene = scene
-		self.pos = vec(x, y) * TILESIZE
-		self.vel = vec(0, 0)
-		self.acc = vec(0, 0)
-		self.rect.center = self.pos
-		self.rot = 0
-
-		self.health = BullyStats().maxHP
-
-		self.time_hit = None
-		self.delta_time_hit = 0.3
-
-	def aim(self):
-		self.rot = (self.scene.player.pos - self.pos).angle_to(vec(1, 0))
-
-
-	def move(self):
-		self.acc = vec(150).rotate(-self.rot)
-		self.vel = self.acc * self.scene.dt * 15
-		self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
-
-	def update(self):
-		self.stateUpdate()
-		super(Bully, self).update()
-
-class Fireball(pg.sprite.Sprite):
-	def __init__(self, scene, x, y):
-		self.groups = scene.all_sprites, scene.fireBalls_SG
-		pg.sprite.Sprite.__init__(self, self.groups)
-		self.scene = scene
-		self.image = scene.fire_ballMoveSheet
-		self.rect = self.image.get_rect()
-		pg.sprite.Sprite.__init__(self, self.groups)
-		self.pos = vec(x, y) * TILESIZE
-		self.rect.center = self.pos
-		spread = uniform(-FIRE_BALL_SPREAD, FIRE_BALL_SPREAD)
-		self.vel = FIRE_BALL_SPEED
-		self.spawn_time = pg.time.get_ticks()
-		self.rot = 0
-
-	def update(self):
-		self.acc = vec(150).rotate(-self.rot)
-		self.vel = self.acc * self.scene.dt * 15
-		self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
-		self.rect.center = self.pos
-		if pg.sprite.spritecollideany(self, self.scene.walls_SG):
-			self.kill()
-		if pg.time.get_ticks() - self.spawn_time > FIRE_BALL_LIFETIME:
-			self.kill()
 
 
 class Wall(pg.sprite.Sprite):
@@ -410,9 +460,7 @@ class Wall(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
 
         self.scene = scene
-        self.image = tileset 
-        # pg.Surface((TILESIZE, TILESIZE))
-        # self.image.fill(GREEN)
+        self.image = tileset
         self.rect = self.image.get_rect()
         self.pos = vec(x, y)
 
@@ -432,8 +480,6 @@ class Floor(pg.sprite.Sprite):
 
         self.scene = scene
         self.image = tileset 
-        # pg.Surface((TILESIZE, TILESIZE))
-        # self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.pos = vec(x, y)
 
@@ -447,24 +493,8 @@ class Floor(pg.sprite.Sprite):
 
 class Door(Wall):
     def __init__(self, scene, x, y, tileset):
-        # Assing the groups and init sprite
-        self.groups = scene.all_sprites, scene.walls_SG
-        pg.sprite.Sprite.__init__(self, self.groups)
-        self.scene = scene
         self.origImage = tileset
-        self.image = tileset 
-        # pg.Surface((TILESIZE, TILESIZE))
-        # self.image.fill(GREEN)
-        self.rect = self.image.get_rect()
-        self.pos = vec(x, y)
-
-        #tilemap position
-        self.x = x
-        self.y = y
-
-        #Global position
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+        super(Door,self).__init__(scene,x,y,tileset)
 
     def open(self):
         # In order to open the door we remove the image and

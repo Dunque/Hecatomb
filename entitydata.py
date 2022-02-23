@@ -16,7 +16,7 @@ class CharacterStats:
         #Stablishing invencibility frames in order to not be able
         #to be damaged several times in the span of miliseconds
         self.vulnerable = True
-        self.iframes = 25
+        self.iframes = 5
         self.currentIframe = 0
 
         #Death animation timers
@@ -27,7 +27,7 @@ class CharacterStats:
         #Substracting damage received to actual health
         self.actualHP = self.actualHP - dmg
         self.vulnerable = False
-        
+
         #Die
         if (self.actualHP <= 0):
             self.isAlive = False
@@ -56,27 +56,39 @@ class PlayerStats(CharacterStats):
         self.dodgeSpeed = 2 #It's a multiplier
         self.dodgeTimer = 35
 
+class HeraldStats(CharacterStats):
+    def __init__(self):
+        super(HeraldStats, self).__init__()
+        #Health
+        self.maxHP = 100
+        self.actualHP = self.maxHP
+
+        #Movement
+        self.speed = 200
+        self.Attackspeed = 2 #It's a multiplier
+        self.AttackTimer = 225
+
 class WormStats(CharacterStats):
     def __init__(self):
         super(WormStats, self).__init__()
         #Health
-        self.maxHP = 100
+        self.maxHP = 50
         self.actualHP = self.maxHP
 
         #Movement
-        self.speed = 300
+        self.speed = 200
         self.Attackspeed = 2 #It's a multiplier
-        self.AttackTimer = 225
+        self.AttackTimer = 55
 
-class BullyStats(CharacterStats):
+class KhanStats(CharacterStats):
     def __init__(self):
-        super(BullyStats, self).__init__()
+        super(KhanStats, self).__init__()
         #Health
         self.maxHP = 100
         self.actualHP = self.maxHP
 
         #Movement
-        self.speed = 300
+        self.speed = 200
         self.Attackspeed = 2 #It's a multiplier
         self.AttackTimer = 225
   
