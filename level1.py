@@ -87,6 +87,11 @@ class Level1(Scene):
         # update portion of the game loop
         self.all_sprites.update()
         self.camera.update(self.player)
+
+        if not self.player_SG.has(self.player):
+            scene1 = Level1(self.sceneManager)
+            self.sceneManager.changeScene(scene1)
+            
         hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
         for hit in hits:
             hit.currentState = "ATTACKING"

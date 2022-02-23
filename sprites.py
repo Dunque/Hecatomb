@@ -312,6 +312,12 @@ class Player(Character):
 			self.weapon.activate()
 			self.weapon_slot = slot
 
+	def die(self):
+		self.entityData.currentDeathAnimTimer += 1
+		if (self.entityData.currentDeathAnimTimer >= self.entityData.deathAnimTimer):
+			self.scene.player_SG.remove(self)
+			self.kill()
+
 
 class Herald(Character):
 	def __init__(self, scene, x, y):
