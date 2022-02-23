@@ -30,7 +30,7 @@ class SceneManager():
         while not self.exit_scene:
 
             # Sincronizar el juego a 60 fps
-            elapsed_time = self.clock.tick(60) / 1000
+            elapsed_time = self.clock.tick(FPS) / 1000
 
             # Pasamos los events a la scene
             scene.events(pg.event.get())

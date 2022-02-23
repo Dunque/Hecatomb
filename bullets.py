@@ -3,6 +3,8 @@ from anim import *
 import math
 from random import uniform
 
+from settings import PICKUP_LAYER, WEAPON_LAYER
+
 vec = pg.math.Vector2
 
 #Bullets have a targetGroup that dictates the sprite group that will colide with them
@@ -71,12 +73,14 @@ class ShotgunBullet(Bullet, pg.sprite.Sprite):
 
 
 class Explosion(pg.sprite.Sprite):
-	def __init__(self, scene, pos, anim, targetGroup, scale = 1, destroy = False):
+	def __init__(self, scene, pos, anim, targetGroup, scale = 1, destroy = False, dealsDamage = False, damage = 0):
+		self._layer = PICKUP_LAYER
 		self.groups = scene.all_sprites, scene.bullets_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
 		self.scene = scene
 		self.targetGroup = targetGroup
-
+		self.dealsDamage = dealsDamage
+		self.damage = damage
 		self.explosionAnim = anim
 		orig_size = vec(self.explosionAnim.get_frame().get_rect()[2], self.explosionAnim.get_frame().get_rect()[3])
 		self.new_size = orig_size * scale
@@ -98,6 +102,6 @@ class Explosion(pg.sprite.Sprite):
 		if self.destroy:
 			pg.sprite.spritecollide(self, self.scene.walls_SG, True)
 		enemycollision = pg.sprite.spritecollide(self, self.targetGroup, False)
-
-		# for enemies in enemycollision:
-		# 	enemies.takeDamage(10)
+		if self.dealsDamage:
+			for enemies in enemycollision:
+				enemies.entityData.takeDamage(self.damage)
