@@ -19,15 +19,28 @@ class Hud:
 		self.draw_health_bar(surf, (20,20), (300,50),
 				(0, 0, 0), (0, 0, 0), (200, 50, 50), self.player.entityData.actualHP/self.player.entityData.maxHP)
 
+
 class Interaccion(pg.sprite.Sprite):
 	def __init__(self, scene, pos, image):
 		self._layer = HUD_LAYER
 		self.scene = scene
-		self.groups = self.scene.all_sprites
-		pg.sprite.Sprite.__init__(self, self.groups)
+		pg.sprite.Sprite.__init__(self, [])
 		self.image = image
 		self.rect = self.image.get_rect()
 		self.rect.center = pos
+
+		self.visible = False
+
+	def activate(self):
+		if not self.visible:
+			self.visible = True
+			self.add(self.scene.all_sprites)
+
+	def deactivate(self):
+		if self.visible:
+			self.visible = False
+			self.remove(self.scene.all_sprites)
+
 
 class CrossHair:
 	def __init__(self, scene, image):

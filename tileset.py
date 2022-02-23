@@ -1,5 +1,6 @@
 import pygame as pg
 
+
 class Tileset:
     def __init__(self, file, size=(48,48), margin=1, spacing=1):
         self.file = file

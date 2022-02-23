@@ -185,6 +185,7 @@ class Character(pg.sprite.Sprite):
 		if self.entityData.actualHP <= 0:
 			self.entityData.isAlive = False
 
+
 class Player(Character):
 	def __init__(self, scene, x, y):
 
@@ -211,6 +212,8 @@ class Player(Character):
 
 		#Player should be active by default
 		self.isActive = True
+
+		self.interact = False
 
 	def move(self):
 		# We are able to move freely
@@ -249,6 +252,11 @@ class Player(Character):
 			self.show_menu = True
 		else:
 			self.show_menu = False
+
+		if keys[pg.K_e]:
+			self.interact = True
+		else:
+			self.interact = False
 
 	def die(self):
 		if self.weapon:
@@ -312,6 +320,7 @@ class Player(Character):
 			self.weapon.activate()
 			self.weapon_slot = slot
 
+
 class Herald(Character):
 	def __init__(self, scene, x, y):
 		# Aniamtion stuff
@@ -360,6 +369,7 @@ class Herald(Character):
 		self.weapon.kill()
 		super(Herald,self).die()
 
+
 class Khan(Character):
 	def __init__(self, scene, x, y):
 		# Aniamtion stuff
@@ -405,6 +415,7 @@ class Khan(Character):
 	def die(self):
 		self.weapon.kill()
 		super(Khan,self).die()
+
 
 class Worm(Character):
 	def __init__(self, scene, x, y):
@@ -452,7 +463,6 @@ class Worm(Character):
 		super(Worm, self).update()
 
 
-
 class Wall(pg.sprite.Sprite):
     def __init__(self, scene, x, y, tileset):
         self._layer = WALL_LAYER
@@ -472,6 +482,7 @@ class Wall(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
+
 class Floor(pg.sprite.Sprite):
     def __init__(self, scene, x, y, tileset):
         self._layer = FLOOR_LAYER
@@ -490,6 +501,7 @@ class Floor(pg.sprite.Sprite):
         #Global position
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
 
 class Door(Wall):
     def __init__(self, scene, x, y, tileset):
