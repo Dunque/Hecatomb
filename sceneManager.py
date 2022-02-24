@@ -1,5 +1,4 @@
 import pygame as pg
-import sys
 from settings import *
 from scene import *
 from pygame.locals import *

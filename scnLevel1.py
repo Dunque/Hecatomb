@@ -5,6 +5,8 @@ from settings import *
 from sprites import *
 from tilemap import *
 from hud import Hud
+from scnCutscene2 import *
+
 
 class Level1(Scene):
     def __init__(self, sceneManager):
@@ -118,3 +120,13 @@ class Level1(Scene):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.sceneManager.exitScene()
+                elif event.key == K_n:          # Tecla N, siguiente escena (solo para debug)
+                    self.nextScene()
+
+
+    #--------------------------------------
+    # Metodos propios
+
+    def nextScene(self):
+        scene = Cutscene2(self.sceneManager)
+        self.sceneManager.changeScene(scene)

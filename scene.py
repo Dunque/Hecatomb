@@ -7,7 +7,7 @@ class Scene:
         raise NotImplemented("Tiene que implementar el metodo update.")
 
     def events(self, *args):
-        raise NotImplemented("Tiene que implementar el metodo eventos.")
+        raise NotImplemented("Tiene que implementar el metodo events.")
 
     def draw(self, screen):
-        raise NotImplemented("Tiene que implementar el metodo dibujar.")
+        raise NotImplemented("Tiene que implementar el metodo draw.")

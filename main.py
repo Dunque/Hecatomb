@@ -1,6 +1,6 @@
 import pygame as pg
-from scenemanager import *
-from level1 import *
+from sceneManager import *
+from scnIntro import *
 
 if __name__ == '__main__':
 
@@ -9,9 +9,9 @@ if __name__ == '__main__':
     # Creamos el director
     sm = SceneManager()
     # Creamos la escena con la pantalla inicial
-    scene1 = Level1(sm)
+    scene = Intro(sm)
     # Le decimos al director que apile esta escena
-    sm.stackScene(scene1)
+    sm.stackScene(scene)
     # Y ejecutamos el juego
     sm.execute()
     # Cuando se termine la ejecución, finaliza la librería
