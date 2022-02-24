@@ -1,4 +1,4 @@
-from settings import *
+from src.settings.settings import *
 
 class CharacterStats:
     def __init__(self):

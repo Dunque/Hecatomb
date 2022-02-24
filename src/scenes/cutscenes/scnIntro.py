@@ -1,45 +1,51 @@
 import pygame as pg
-from resourceManager import *
-from scene import *
-from settings import *
-from scnSurvivalEnd import *
+from src.scenes.resourceManager import *
+from src.scenes.scene import *
+from src.settings.settings import *
+from src.scenes.scnMenu import *
 
 
-class Survival(Scene):
+class Intro(Scene):
 
     def __init__(self, sceneManager):
         # Llamamos al constructor de la clase padre
         Scene.__init__(self, sceneManager);
         # Creamos la imagen de fondo
-        # self.image = ResourceManager.LoadImage('resources/images/intro.png')
+        self.image = ResourceManager.LoadImage('resources/images/intro.png')
 
     def update(self, *args):
         return
 
     def events(self, eventList):
-        # Se mira si se quiere hacer algo
+        # Se mira si se quiere: salir, continuar
         for event in eventList:
             # En ese caso, se le indica al sceneManager
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:   # Tecla Esc, salir
                     self.exitProgram()
-                elif event.key == K_n:      # Tecla N, siguiente escena (solo para debug)
+                else:                       # Cualquier otra tecla, continuar
                     self.nextScene()
-
+            elif event.type == pg.MOUSEBUTTONDOWN:  # Click ratón, continuar
+                self.nextScene()
             elif event.type == pg.QUIT:
                 self.sceneManager.exitProgram()
 
     def draw(self, screen):
         # Dibujamos imagen de fondo
-        # screen.blit(self.image, self.image.get_rect())
-        screen.fill(RED)
+        screen.blit(self.image, self.image.get_rect())
 
-        # Dibujamos nombre de escena (para debug)
+        # Dibujamos título del juego y mensaje
         fontName = 'resources/fonts/hanshand.ttf'
 
         font = pg.font.Font(fontName, 192)
-        text = font.render('Survival', True, BLACK)
+        text = font.render('HECATOMB', True, DARK_RED)
+        text.set_alpha(192)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
+        screen.blit(text, textRect)
+
+        font = pg.font.Font(fontName, 48)
+        text = font.render('Pulse cualquier tecla para continuar', True, BLACK)
+        textRect = text.get_rect(center=(WIDTH/2, HEIGHT/3*2))
         screen.blit(text, textRect)
 
 
@@ -50,5 +56,5 @@ class Survival(Scene):
         self.sceneManager.exitProgram()
 
     def nextScene(self):
-        scene = SurvivalEnd(self.sceneManager)
+        scene = Menu(self.sceneManager)
         self.sceneManager.changeScene(scene)

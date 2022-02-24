@@ -1,11 +1,11 @@
 import pygame as pg
 import sys
-from scene import *
-from settings import *
-from sprites import *
-from tilemap import *
-from hud import Hud
-from scnCutscene2 import *
+from src.scenes.scene import *
+from src.settings.settings import *
+from src.entities.character import *
+from src.map.tilemap import *
+from src.hud.hud import Hud
+from src.scenes.cutscenes.scnCutscene2 import *
 
 
 class Level1(Scene):

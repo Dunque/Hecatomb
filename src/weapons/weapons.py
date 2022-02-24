@@ -1,10 +1,10 @@
 import pygame as pg
 from random import uniform
-from settings import *
-from anim import *
+from src.settings.settings import *
+from src.sprites.anim import *
 import math
-from hud import CrosshairGun, CrosshairShotGun
-from bullets import GunBullet, ShotgunBullet, Explosion
+from src.hud.hud import CrosshairGun, CrosshairShotGun
+from src.weapons.bullets import GunBullet, ShotgunBullet, Explosion
 
 vec = pg.math.Vector2
 

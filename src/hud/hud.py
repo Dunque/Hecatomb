@@ -1,5 +1,5 @@
 import pygame as pg
-from settings import *
+from src.settings.settings import *
 
 
 class Hud:

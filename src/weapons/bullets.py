@@ -1,9 +1,9 @@
 import pygame as pg
-from anim import *
+from src.sprites.anim import *
 import math
 from random import uniform
 
-from settings import PICKUP_LAYER, WEAPON_LAYER
+from src.settings.settings import PICKUP_LAYER, WEAPON_LAYER
 
 vec = pg.math.Vector2
 

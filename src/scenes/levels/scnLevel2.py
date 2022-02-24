@@ -1,11 +1,11 @@
 import pygame as pg
-from resourceManager import *
-from scene import *
-from settings import *
-from scnLevel2 import *
+from src.scenes.resourceManager import *
+from src.scenes.scene import *
+from src.settings.settings import *
+from src.scenes.cutscenes.scnCutscene3 import *
 
 
-class Cutscene2(Scene):
+class Level2(Scene):
 
     def __init__(self, sceneManager):
         # Llamamos al constructor de la clase padre
@@ -32,13 +32,13 @@ class Cutscene2(Scene):
     def draw(self, screen):
         # Dibujamos imagen de fondo
         # screen.blit(self.image, self.image.get_rect())
-        screen.fill(BLUE)
+        screen.fill(RED)
 
         # Dibujamos nombre de escena (para debug)
         fontName = 'resources/fonts/hanshand.ttf'
 
         font = pg.font.Font(fontName, 192)
-        text = font.render('Cutscene2', True, WHITE)
+        text = font.render('Level2', True, BLACK)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)
 
@@ -50,5 +50,5 @@ class Cutscene2(Scene):
         self.sceneManager.exitProgram()
 
     def nextScene(self):
-        scene = Level2(self.sceneManager)
+        scene = Cutscene3(self.sceneManager)
         self.sceneManager.changeScene(scene)

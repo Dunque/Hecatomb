@@ -1,9 +1,9 @@
 import pygame as pg
 from random import uniform
-from settings import *
-from anim import *
+from src.settings.settings import *
+from src.sprites.anim import *
 import math
-from bullets import GunBullet, ShotgunBullet
+from src.weapons.bullets import GunBullet, ShotgunBullet
 
 vec = pg.math.Vector2
 

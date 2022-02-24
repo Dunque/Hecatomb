@@ -1,10 +1,10 @@
 import pygame
 from pygame.locals import *
-from scene import *
-from resourceManager import *
-from settings import *
-from scnCutscene1 import *
-from scnSurvival import *
+from src.scenes.scene import *
+from src.scenes.resourceManager import *
+from src.settings.settings import *
+from src.scenes.cutscenes.scnCutscene1 import *
+from src.scenes.survival.scnSurvival import *
 
 # -------------------------------------------------
 # Clase abstracta ElementGUI

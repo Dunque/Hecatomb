@@ -1,10 +1,10 @@
 import pygame as pg
-from resourceManager import *
-from scene import *
-from settings import *
+from src.scenes.resourceManager import *
+from src.scenes.scene import *
+from src.settings.settings import *
 
 
-class SurvivalEnd(Scene):
+class Cutscene4(Scene):
 
     def __init__(self, sceneManager):
         # Llamamos al constructor de la clase padre
@@ -37,7 +37,7 @@ class SurvivalEnd(Scene):
         fontName = 'resources/fonts/hanshand.ttf'
 
         font = pg.font.Font(fontName, 192)
-        text = font.render('SurvivalEnd', True, WHITE)
+        text = font.render('Cutscene4', True, WHITE)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)
 

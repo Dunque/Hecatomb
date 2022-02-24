@@ -2,10 +2,12 @@
 import pygame as pg
 import numpy as np
 from random import seed, randint, random, choice
-from sprites import *
-from settings import *
-from tileset import Tileset
-from objects import Chest
+from src.entities.player import *
+from src.entities.enemies import *
+from src.settings.settings import *
+from src.sprites.tileset import Tileset
+from src.entities.objects import Chest
+from src.entities.ground import *
 
 vec = pg.math.Vector2
 

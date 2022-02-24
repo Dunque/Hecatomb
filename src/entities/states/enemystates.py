@@ -1,6 +1,6 @@
 import pygame as pg
 from math import pi, atan2
-from state import State
+from src.entities.states.state import State
 
 vec = pg.math.Vector2
 

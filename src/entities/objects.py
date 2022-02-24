@@ -1,7 +1,7 @@
 import pygame as pg
-from settings import *
-from anim import Anim
-from hud import Interaccion
+from src.settings.settings import *
+from src.sprites.anim import Anim
+from src.hud.hud import Interaccion
 
 vec = pg.math.Vector2
 

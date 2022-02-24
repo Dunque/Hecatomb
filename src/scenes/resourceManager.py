@@ -1,4 +1,4 @@
-import pygame, sys, os
+import pygame, os
 from pygame.locals import *
 
 

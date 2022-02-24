@@ -1,6 +1,6 @@
 import pygame as pg
-from settings import *
-from scene import *
+from src.settings.settings import *
+from src.scenes.scene import *
 from pygame.locals import *
 
 
