@@ -31,7 +31,7 @@ class Cutscene4(Scene):
     def draw(self, screen):
         # Dibujamos imagen de fondo
         # screen.blit(self.image, self.image.get_rect())
-        screen.fill(RED)
+        screen.fill(GREEN)
 
         # Dibujamos nombre de escena (para debug)
         fontName = 'resources/fonts/hanshand.ttf'

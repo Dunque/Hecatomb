@@ -4,6 +4,7 @@ from scene import *
 from resourceManager import *
 from settings import *
 from scnCutscene1 import *
+from scnSurvival import *
 
 # -------------------------------------------------
 # Clase abstracta ElementGUI
@@ -38,7 +39,7 @@ class ButtonGUI(ElementGUI):
     def __init__(self, screen, imageName, position):
         # Se carga la image del boton
         self.image = ResourceManager.LoadImage(imageName,-1)
-        self.image = pygame.transform.scale(self.image, (20, 20))
+        self.image = pygame.transform.scale(self.image, (331, 75))
         # Se llama al método de la clase padre con el rectángulo que ocupa el botón
         ElementGUI.__init__(self, screen, self.image.get_rect())
         # Se coloca el rectangle en su position
@@ -46,15 +47,77 @@ class ButtonGUI(ElementGUI):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-class ButtonPlay(ButtonGUI):
-    def __init__(self, screen):
-        ButtonGUI.__init__(self, screen, 'resources/images/boton_verde.png', (WIDTH/2-30, HEIGHT/2-50))
-    def action(self):
-        self.screen.menu.nextScene()
+class ButtonGUI(ElementGUI):
+    def __init__(self, screen, imageName, position):
+        # Se carga la image del boton
+        self.image = ResourceManager.LoadImage(imageName,-1)
+        self.image = pygame.transform.scale(self.image, (332, 75))
+        # Se llama al método de la clase padre con el rectángulo que ocupa el botón
+        ElementGUI.__init__(self, screen, self.image.get_rect())
+        # Se coloca el rectangle en su position
+        self.setPosition(position)
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 
-class ButtonExit(ButtonGUI):
+class ButtonMenu(ElementGUI):
+    def __init__(self, screen, n, text):
+        # Se carga la image del boton
+        imageName = 'resources/images/gold_button.png'
+        self.image = ResourceManager.LoadImage(imageName,-1)
+        self.image = pygame.transform.scale(self.image, (332, 75))
+        # Se llama al método de la clase padre con el rectángulo que ocupa el button
+        center = (WIDTH/2, HEIGHT/3 + n * 102)
+        imageRect = self.image.get_rect(center=center)
+        ElementGUI.__init__(self, screen, imageRect)
+        # Se coloca el rectangle en su position
+        self.setPosition(imageRect.bottomleft)
+
+        # Se carga el texto del button (TODO: arreglar esto, muy mejorable)
+        fontName = 'resources/fonts/hanshand.ttf'
+        font = pg.font.Font(fontName, 42)
+        self.text = font.render(text, True, BLACK)
+        self.textRect = self.text.get_rect(center=center)
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+        screen.blit(self.text, self.textRect)
+
+class ButtonAdventure(ButtonMenu):
     def __init__(self, screen):
-        ButtonGUI.__init__(self, screen, 'resources/images/boton_rojo.png', (WIDTH/2-30, HEIGHT/2+50))
+        ButtonMenu.__init__(self, screen, 0, 'Adventure')
+    def action(self):
+        self.screen.menu.playAdventure()
+
+class ButtonSurvival(ButtonMenu):
+    def __init__(self, screen):
+        ButtonMenu.__init__(self, screen, 1, 'Survival')
+    def action(self):
+        self.screen.menu.playSurvival()
+
+class ButtonRecords(ButtonMenu):
+    def __init__(self, screen):
+        ButtonMenu.__init__(self, screen, 2, 'Records')
+    def action(self):
+        # self.screen.menu.exitProgram()
+        None
+
+class ButtonCredits(ButtonMenu):
+    def __init__(self, screen):
+        ButtonMenu.__init__(self, screen, 3, 'Credits')
+    def action(self):
+        # self.screen.menu.exitProgram()
+        None
+
+class ButtonOptions(ButtonMenu):
+    def __init__(self, screen):
+        ButtonMenu.__init__(self, screen, 4, 'Options')
+    def action(self):
+        # self.screen.menu.exitProgram()
+        None
+
+class ButtonExit(ButtonMenu):
+    def __init__(self, screen):
+        ButtonMenu.__init__(self, screen, 5, 'Exit')
     def action(self):
         self.screen.menu.exitProgram()
 
@@ -122,17 +185,25 @@ class ScreenGUI:
 
 class InitialScreenGUI(ScreenGUI):
     def __init__(self, menu):
-        ScreenGUI.__init__(self, menu, 'sprites/background4.png')   # TODO: cambiar imagen
+        ScreenGUI.__init__(self, menu, 'resources/images/menu_image.png')
         # Creamos los botones y los metemos en la lista
-        buttonPlay = ButtonPlay(self)
+        buttonAdventure = ButtonAdventure(self)
+        buttonSurvival = ButtonSurvival(self)
+        buttonRecords = ButtonRecords(self)
+        buttonCredits = ButtonCredits(self)
+        buttonOptions = ButtonOptions(self)
         buttonExit = ButtonExit(self)
-        self.elementsGUI.append(buttonPlay)
+        self.elementsGUI.append(buttonAdventure)
+        self.elementsGUI.append(buttonSurvival)
+        self.elementsGUI.append(buttonRecords)
+        self.elementsGUI.append(buttonCredits)
+        self.elementsGUI.append(buttonOptions)
         self.elementsGUI.append(buttonExit)
         # Creamos el text y lo metemos en la lista
-        textPlay = TextPlay(self)
-        textExit = TextExit(self)
-        self.elementsGUI.append(textPlay)
-        self.elementsGUI.append(textExit)
+        # textPlay = TextPlay(self)
+        # textExit = TextExit(self)
+        # self.elementsGUI.append(textPlay)
+        # self.elementsGUI.append(textExit)
 
 # -------------------------------------------------
 # Clase Menu, la escena en sí
@@ -168,7 +239,7 @@ class Menu(Scene):
 
     def draw(self, screen):
         self.screenList[self.currentScreen].draw(screen)
-        
+
 
     #--------------------------------------
     # Metodos propios del menu
@@ -176,8 +247,12 @@ class Menu(Scene):
     def exitProgram(self):
         self.sceneManager.exitProgram()
 
-    def nextScene(self):
+    def playAdventure(self):
         scene = Cutscene1(self.sceneManager)
+        self.sceneManager.stackScene(scene)
+
+    def playSurvival(self):
+        scene = Survival(self.sceneManager)
         self.sceneManager.stackScene(scene)
 
     def showInitialScreen(self):
