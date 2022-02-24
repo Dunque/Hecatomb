@@ -5,6 +5,8 @@ from settings import *
 from sprites import *
 from tilemap import *
 from hud import Hud
+from scnCutscene2 import *
+
 
 class Level1(Scene):
     def __init__(self, sceneManager):
@@ -92,6 +94,11 @@ class Level1(Scene):
         # update portion of the game loop
         self.all_sprites.update()
         self.camera.update(self.player)
+
+        if not self.player_SG.has(self.player):
+            scene1 = Level1(self.sceneManager)
+            self.sceneManager.changeScene(scene1)
+            
         hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
         for hit in hits:
             hit.currentState = "ATTACKING"
@@ -123,3 +130,13 @@ class Level1(Scene):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.sceneManager.exitScene()
+                elif event.key == K_n:          # Tecla N, siguiente escena (solo para debug)
+                    self.nextScene()
+
+
+    #--------------------------------------
+    # Metodos propios
+
+    def nextScene(self):
+        scene = Cutscene2(self.sceneManager)
+        self.sceneManager.changeScene(scene)
