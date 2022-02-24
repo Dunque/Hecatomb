@@ -23,6 +23,8 @@ class Level1(Scene):
         self.chest_SG = pg.sprite.LayeredUpdates()
         self.menus = []
 
+        self.screen = None
+
         self.player = None
 
         #Loads all sprite and sound data
@@ -55,6 +57,9 @@ class Level1(Scene):
             "./sprites/Hud/gun_crosshair.png").convert_alpha()
         self.shotgunCrosshairImg = pg.image.load(
             "./sprites/Hud/shotgun_crosshair.png").convert_alpha()
+        self.dialogueInGameImg = pg.image.load(
+            "./sprites/Hud/dialogueingame.png").convert_alpha()
+        self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
 
         # WORM DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()

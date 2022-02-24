@@ -22,7 +22,7 @@ class CharacterStats:
 
     def takeDamage(self, dmg):
         #Substracting damage received to actual health
-        self.actualHP = self.actualHP - dmg
+        #self.actualHP = self.actualHP - dmg
         self.vulnerable = False
 
         #Die
@@ -40,6 +40,7 @@ class CharacterStats:
         #If the character is vulnerable again, we reset the timer
         else:
             self.currentIframe = 0
+
 
 class PlayerStats(CharacterStats):
     def __init__(self):

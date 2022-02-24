@@ -74,3 +74,25 @@ class CrosshairShotGun(CrossHair, pg.sprite.Sprite):
 	def __init__(self, scene):
 		super().__init__(scene, scene.shotgunCrosshairImg)
 
+
+class DialogoInGame(pg.sprite.Sprite):
+	def __init__(self, scene, text):
+		self._layer = HUD_LAYER
+		self.scene = scene
+		pg.sprite.Sprite.__init__(self, scene.all_sprites)
+		self.image = self.scene.dialogueInGameImg
+		self.rect = self.image.get_rect()
+		self.rect.center = HEIGHT - 300, 200
+
+		self.visible = False
+
+	def update(self):
+		cam_moved = self.scene.camera.get_moved()
+		y_offset = 300
+		pos_x = (WIDTH / 2) - cam_moved[0]
+		pos_y = (HEIGHT / 2) - cam_moved[1] + y_offset
+		self.rect.center = pos_x, pos_y
+		text_surface, rect = self.scene.game_font.render("Hello World!", (255, 255, 255))
+		if self.scene.screen:
+			self.scene.screen.blit(text_surface, (WIDTH / 2, (HEIGHT / 2) + y_offset))
+			pg.display.flip()

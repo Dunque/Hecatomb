@@ -6,6 +6,7 @@ from menus import WeaponMenu
 from weapons import *
 from enemyweapons import *
 from bullets import *
+from hud import DialogoInGame
 
 import math
 from random import uniform
@@ -172,6 +173,7 @@ class Player(Character):
 		self.isActive = True
 
 		self.interact = False
+		DialogoInGame(scene, 'dialogo')
 
 	def move(self):
 		# We are able to move freely
