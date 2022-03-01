@@ -1,6 +1,6 @@
 import pygame as pg
 from src.scenes.sceneManager import *
-from src.scenes.cutscenes.scnIntro import *
+from src.scenes.scnIntro import *
 
 from src.scenes.scnMenu import *
 from src.scenes.levels.scnLevel1 import *

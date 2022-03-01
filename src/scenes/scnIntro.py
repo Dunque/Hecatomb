@@ -11,7 +11,7 @@ class Intro(Scene):
         # Llamamos al constructor de la clase padre
         Scene.__init__(self, sceneManager);
         # Creamos la imagen de fondo
-        self.image = ResourceManager.LoadImage('resources/images/intro.png')
+        self.image = ResourceManager.LoadImage('resources/images/intro_image.png')
 
     def update(self, *args):
         return

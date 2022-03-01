@@ -39,18 +39,6 @@ class ButtonGUI(ElementGUI):
     def __init__(self, screen, imageName, position):
         # Se carga la image del boton
         self.image = ResourceManager.LoadImage(imageName,-1)
-        self.image = pygame.transform.scale(self.image, (331, 75))
-        # Se llama al método de la clase padre con el rectángulo que ocupa el botón
-        ElementGUI.__init__(self, screen, self.image.get_rect())
-        # Se coloca el rectangle en su position
-        self.setPosition(position)
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
-class ButtonGUI(ElementGUI):
-    def __init__(self, screen, imageName, position):
-        # Se carga la image del boton
-        self.image = ResourceManager.LoadImage(imageName,-1)
         self.image = pygame.transform.scale(self.image, (332, 75))
         # Se llama al método de la clase padre con el rectángulo que ocupa el botón
         ElementGUI.__init__(self, screen, self.image.get_rect())
