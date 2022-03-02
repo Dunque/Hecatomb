@@ -9,9 +9,7 @@ class EnemyState(State):
         super(EnemyState, self).__init__(character,name)
     
     def toState(self, targetState):
-        self.character.state.onExitState()
         self.character.state = targetState
-        self.character.state.onEnterState()
 
 
 class EnemyGroundedState(EnemyState):

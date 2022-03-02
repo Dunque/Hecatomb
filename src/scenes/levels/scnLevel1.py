@@ -94,9 +94,9 @@ class Level1(Scene):
             scene1 = Level1(self.sceneManager)
             self.sceneManager.changeScene(scene1)
             
-        hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
-        for hit in hits:
-            hit.currentState = "ATTACKING"
+        # hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
+        # for hit in hits:
+        #     hit.currentState = "ATTACKING"
         for menu in self.menus:
             menu.update()
 
@@ -121,9 +121,11 @@ class Level1(Scene):
         # catch all events here
         for event in eventList:
             if event.type == pg.QUIT:
+                pg.mouse.set_visible(True)
                 self.sceneManager.exitScene()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
+                    pg.mouse.set_visible(True)
                     self.sceneManager.exitScene()
                 elif event.key == K_n:          # Tecla N, siguiente escena (solo para debug)
                     self.nextScene()

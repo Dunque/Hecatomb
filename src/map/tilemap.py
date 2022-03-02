@@ -8,8 +8,17 @@ from src.settings.settings import *
 from src.sprites.tileset import Tileset
 from src.entities.objects import Chest
 from src.entities.ground import *
+from src.map.camera import *
+from src.map.room import Room
+from abc import ABC, abstractmethod
 
 vec = pg.math.Vector2
+
+class Notifier(ABC):
+
+    @abstractmethod
+    def notify(self):
+        pass
 
 #el generador de mapas furrula asi:
 #tu pones unas salas en el txt, una de ellas tiene que tener
@@ -19,7 +28,7 @@ vec = pg.math.Vector2
 #una vez cada una. Es decir, si queremos tener 8 salas,
 #ponemos 8 salas en el txt, y si queremos tener 2 veces la
 #misma sala, la duplicamos en el txt.
-class Map:
+class Map(Notifier):
     def __init__(self, scene, roomsfile):
         self.scene = scene
         
@@ -148,7 +157,6 @@ class Map:
             pass
         return avaliablePositions
 
-
     def removeUnusedDoors(self, room, wallChar, row, col):
         nearbyDoorCounter = 0
         try:
@@ -209,6 +217,10 @@ class Map:
             #We initialize the room doors to be open, until the player wanders in
             room.openAllDoors()
 
+    def notify(self, room, notification):
+        if notification == "start":
+            room.startRoom()
+                
     def update(self):
         # If the floor is still generating, wait
         if self.isPlaying == False:
@@ -218,133 +230,6 @@ class Map:
             for room in self.rooms:
                 # Check if the player is in a given room by comparing their limits
                 if self.scene.player.hit_rect.x in range((room.limitX0+1)*TILESIZE, (room.limitX-1)*TILESIZE) and self.scene.player.hit_rect.y in range((room.limitY0+1)*TILESIZE, (room.limitY-1)*TILESIZE):
-                    if room.state == "UNCLEARED":
-                        room.start_room()
+                    self.notify(room, "start")
+
                 room.update()
-
-class Room():
-    def __init__(self, scene, matrix, limitX, limitY):
-        # Class that defines a room
-        # It contains references to the ENEMIES and the DOOR
-        # the ENTER DOOR will close once the player enters the room and wont open until he finishes it
-        # the EXIT DOOR will open once all enemies are defeated
-        self.matrix = matrix
-        self.scene = scene
-
-        # Set the room boundaries in x axis
-        self.limitX0 = limitX
-        self.limitX = limitX + ROOMWIDTH - 1
-        self.limitY0 = limitY
-        self.limitY = limitY + ROOMHEIGHT - 1
-
-        # State of the room can be UNCLEARED, PLAYING or CLEARED
-        self.state = "UNCLEARED"
-
-        #Entities present in the room
-        self.enemies = []
-        self.objects = []
-        self.doors = []
-
-    def addDoor(self, door):
-        self.doors.append(door)
-
-    def addObject(self, obj):
-        self.objects.append(obj)
-
-    def addEnemy(self, enemy):
-        self.enemies.append(enemy)
-
-    def closeAllDoors(self):
-        for door in self.doors:
-            door.close()
-    
-    def openAllDoors(self):
-        for door in self.doors:
-            door.open()
-
-    def start_room(self):
-        print(self.doors)
-        print(self.enemies)
-        # close the doors
-        self.closeAllDoors()
-                
-        # acivate the enemies
-        for enemy in self.enemies:
-            self.scene.all_sprites.add(enemy)
-            enemy.isActive = True
-                
-        self.state = "PLAYING"
-    
-    def switch_state(self):
-        if self.state == "UNCLEARED":
-            pass
-        if self.state == "PLAYING":
-            if self.enemies == []:
-                self.state = "CLEARED"
-                self.openAllDoors()
-        if self.state == "CLEARED":
-            pass
-    
-    def update(self):
-        for enemy in self.enemies:
-            if not enemy.entityData.isAlive:
-                self.enemies.remove(enemy)
-                
-        self.switch_state()
-
-
-class Camera:
-    def __init__(self, width, height):
-        self.rect = pg.Rect(0, 0, width, height)
-        self.width = width
-        self.height = height
-
-        self.width_height = vec(width, height)
-        self.halfs = vec(int(WIDTH / 2), int(HEIGHT / 2))
-        self.def_cords = vec(CAMERA_X, CAMERA_Y)
-
-        self.x = 0
-        self.y = 0
-
-        #Camera shake
-        self.doShake = False
-        self.shakeMaxTime = 0
-        self.shakeTimer = 0
-        self.shakeAmount = 0
-
-    def apply(self, entity):
-        return entity.rect.move(self.rect.topleft)
-
-    def get_moved(self):
-        return self.x, self.y
-
-    def update(self, target):
-        self.x = -target.rect.centerx + int(WIDTH / 2)
-        self.y = -target.rect.centery + int(HEIGHT / 2)
-
-        # limit scrolling to map size
-        self.x = min(0, self.x)  # left
-        self.y = min(0, self.y)  # top
-        self.x = max(-(self.width - WIDTH), self.x)  # right
-        self.y = max(-(self.height - HEIGHT), self.y)  # bottom
-
-        # Shake logic
-        if self.doShake:
-            if (self.shakeTimer <= self.shakeMaxTime):
-                self.shakeTimer += 1
-                self.x += randint(0, self.shakeAmount) - \
-                    self.shakeAmount // 2
-                self.y += randint(0, self.shakeAmount) - \
-                    self.shakeAmount // 2
-            else:
-                self.doShake = False
-                self.shakeMaxTime = 0
-                self.shakeTimer = 0
-                self.shakeAmount = 0
-
-        self.rect = pg.Rect(self.x, self.y, self.width, self.height)
-
-    def cameraShake(self, amount, time):
-        self.doShake = True
-        self.shakeAmount = amount
-        self.shakeMaxTime = time

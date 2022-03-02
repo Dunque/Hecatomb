@@ -5,7 +5,7 @@ from src.settings.entitydata import *
 from src.hud.menus import WeaponMenu
 from src.weapons.weapons import *
 from src.weapons.bullets import *
-from src.entities.states.state import *
+from src.entities.states.playerstates import *
 from src.entities.character import *
 
 vec = pg.math.Vector2
