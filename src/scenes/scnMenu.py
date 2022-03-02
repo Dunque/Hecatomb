@@ -52,18 +52,35 @@ class ButtonMenu(ElementGUI):
         # Se carga la image del boton
         imageName = 'resources/images/gold_button.png'
         self.image = ResourceManager.LoadImage(imageName,-1)
-        self.image = pygame.transform.scale(self.image, (332, 75))
-        # Se llama al método de la clase padre con el rectángulo que ocupa el button
-        center = (WIDTH/2, HEIGHT/3 + n * 102)
+
+        # Se calcula la posicion del boton
+        b_width = 352
+        b_height = 80
+        self.image = pygame.transform.scale(self.image, (b_width, b_height))
+
+        x0 = 600
+        y0 = 450
+        dx = b_width + 70
+        dy = b_height + 44
+        nx = n // 3
+        ny = n % 3
+
+        center_x = x0 + (nx * dx)
+        center_y = y0 + (ny * dy)
+        center = (center_x, center_y)
+
         imageRect = self.image.get_rect(center=center)
+
+        # Se llama al método de la clase padre con el rectángulo que ocupa el button
         ElementGUI.__init__(self, screen, imageRect)
+
         # Se coloca el rectangle en su position
         self.setPosition(imageRect.bottomleft)
 
-        # Se carga el texto del button (TODO: arreglar esto, muy mejorable)
+        # Se carga el texto del button (TODO: mejorar esto?)
         fontName = 'resources/fonts/hanshand.ttf'
         font = pg.font.Font(fontName, 42)
-        self.text = font.render(text, True, BLACK)
+        self.text = font.render(text, True, BROWN)
         self.textRect = self.text.get_rect(center=center)
 
     def draw(self, screen):

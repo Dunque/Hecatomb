@@ -9,7 +9,9 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
-DARK_RED = (128, 0, 0)
+
+MAROON = (128, 0, 0)
+BROWN = (104, 30, 0)
 
 # game settings
 WIDTH = 1600  # 16 * 64 or 32 * 32 or 64 * 16

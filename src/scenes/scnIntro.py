@@ -38,7 +38,7 @@ class Intro(Scene):
         fontName = 'resources/fonts/hanshand.ttf'
 
         font = pg.font.Font(fontName, 192)
-        text = font.render('HECATOMB', True, DARK_RED)
+        text = font.render('HECATOMB', True, MAROON)
         text.set_alpha(192)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)
