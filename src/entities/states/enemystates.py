@@ -1,6 +1,7 @@
 import pygame as pg
 from math import pi, atan2
 from src.entities.states.state import State
+from src.settings.settings import *
 
 vec = pg.math.Vector2
 
@@ -52,6 +53,7 @@ class EnemyDyingState(EnemyState):
         if self.character.weapon:
             self.character.weapon.kill()
         self.character.die()
+
 
     def handleInput(self):
         pass

@@ -1,5 +1,5 @@
 import pygame as pg
-
+pg.init()
 # define some colors (R, G, B)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -47,6 +47,12 @@ CHARACTER_LAYER = 6
 WALL_LAYER = 1
 FLOOR_LAYER = 0
 
+FIRE_BULLET_SOUND =pg.mixer.Sound("./sounds/Fire_4.wav")
+DEATH_SOUND =pg.mixer.Sound("./sounds/Game_Over.wav")
+CHANGE_SOUND =pg.mixer.Sound("./sounds/recharge.wav")
+ENEMY_DEATH_SOUND= pg.mixer.Sound("./sounds/Hit_1.wav")
+SWORD_SOUND=pg.mixer.Sound("./sounds/sword.wav")
+music =pg.mixer.music.load("./sounds/level_music.mp3")
 #TODO borrar esta trapallada
 
 ROCK_IMAGE= pg.image.load("./sprites/RockPile.png")

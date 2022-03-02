@@ -9,6 +9,7 @@ from src.scenes.cutscenes.scnCutscene2 import *
 
 
 class Level1(Scene):
+    pg.mixer.music.play(-1)
     def __init__(self, sceneManager):
         #Initialize superclass
         Scene.__init__(self, sceneManager)

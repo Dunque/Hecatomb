@@ -66,6 +66,7 @@ class Character(pg.sprite.Sprite):
     def die(self):
         self.entityData.currentDeathAnimTimer += 1
         if (self.entityData.currentDeathAnimTimer >= self.entityData.deathAnimTimer):
+            ENEMY_DEATH_SOUND.play()
             self.kill()
 
     def collide_with_walls(self, dir):

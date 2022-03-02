@@ -46,6 +46,7 @@ class Player(Character):
         self.entityData.currentDeathAnimTimer += 1
         if (self.entityData.currentDeathAnimTimer >= self.entityData.deathAnimTimer):
             self.scene.player_SG.remove(self)
+            DEATH_SOUND.play()
             self.kill()
 
     def update(self):
@@ -61,6 +62,7 @@ class Player(Character):
         if self.weapon_slot != slot and slot == "top":
             if self.weapon is not None:
                 self.weapon.deactivate()
+            CHANGE_SOUND.play()
             self.weapon = Gun(self.scene, self.pos.x - self.weaponOffsetX,
                               self.pos.y - self.weaponOffsetY)
             pg.mouse.set_visible(False)
@@ -82,6 +84,7 @@ class Player(Character):
         elif self.weapon_slot != slot and slot == "left":
             if self.weapon is not None:
                 self.weapon.deactivate()
+            CHANGE_SOUND.play()
             self.weapon = Shotgun(self.scene, self.pos.x -
                                   self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
             pg.mouse.set_visible(False)

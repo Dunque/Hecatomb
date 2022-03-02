@@ -96,6 +96,7 @@ class Worm(Character):
         if (self.currentState == "DYING"):
             self.vel = vec(0, 0)
             self.currentAnim = self.deathAnim
+
             self.die()
             return
 
