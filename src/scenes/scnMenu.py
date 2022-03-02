@@ -89,40 +89,40 @@ class ButtonMenu(ElementGUI):
 
 class ButtonAdventure(ButtonMenu):
     def __init__(self, screen):
-        ButtonMenu.__init__(self, screen, 0, 'Adventure')
+        ButtonMenu.__init__(self, screen, 0, 'Aventura')
     def action(self):
         self.screen.menu.playAdventure()
 
 class ButtonSurvival(ButtonMenu):
     def __init__(self, screen):
-        ButtonMenu.__init__(self, screen, 1, 'Survival')
+        ButtonMenu.__init__(self, screen, 1, 'Supervivencia')
     def action(self):
         self.screen.menu.playSurvival()
 
 class ButtonRecords(ButtonMenu):
     def __init__(self, screen):
-        ButtonMenu.__init__(self, screen, 2, 'Records')
-    def action(self):
-        # self.screen.menu.exitProgram()
-        None
-
-class ButtonCredits(ButtonMenu):
-    def __init__(self, screen):
-        ButtonMenu.__init__(self, screen, 3, 'Credits')
+        ButtonMenu.__init__(self, screen, 2, 'Récords')
     def action(self):
         # self.screen.menu.exitProgram()
         None
 
 class ButtonOptions(ButtonMenu):
     def __init__(self, screen):
-        ButtonMenu.__init__(self, screen, 4, 'Options')
+        ButtonMenu.__init__(self, screen, 3, 'Opciones')
+    def action(self):
+        # self.screen.menu.exitProgram()
+        None
+
+class ButtonCredits(ButtonMenu):
+    def __init__(self, screen):
+        ButtonMenu.__init__(self, screen, 4, 'Créditos')
     def action(self):
         # self.screen.menu.exitProgram()
         None
 
 class ButtonExit(ButtonMenu):
     def __init__(self, screen):
-        ButtonMenu.__init__(self, screen, 5, 'Exit')
+        ButtonMenu.__init__(self, screen, 5, 'Salir')
     def action(self):
         self.screen.menu.exitProgram()
 
@@ -195,20 +195,16 @@ class InitialScreenGUI(ScreenGUI):
         buttonAdventure = ButtonAdventure(self)
         buttonSurvival = ButtonSurvival(self)
         buttonRecords = ButtonRecords(self)
-        buttonCredits = ButtonCredits(self)
         buttonOptions = ButtonOptions(self)
+        buttonCredits = ButtonCredits(self)
         buttonExit = ButtonExit(self)
         self.elementsGUI.append(buttonAdventure)
         self.elementsGUI.append(buttonSurvival)
         self.elementsGUI.append(buttonRecords)
-        self.elementsGUI.append(buttonCredits)
         self.elementsGUI.append(buttonOptions)
+        self.elementsGUI.append(buttonCredits)
         self.elementsGUI.append(buttonExit)
-        # Creamos el text y lo metemos en la lista
-        # textPlay = TextPlay(self)
-        # textExit = TextExit(self)
-        # self.elementsGUI.append(textPlay)
-        # self.elementsGUI.append(textExit)
+
 
 # -------------------------------------------------
 # Clase Menu, la escena en sí
