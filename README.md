@@ -1,2 +1,3 @@
 # Hecatomb
-Tactical RPG done in Pygame
+
+2D action procedural roguelike game done in PyGame
