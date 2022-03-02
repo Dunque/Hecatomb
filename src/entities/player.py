@@ -76,6 +76,7 @@ class Player(Character):
         elif self.weapon_slot != slot and slot == "right":
             if self.weapon is not None:
                 self.weapon.deactivate()
+            SWORD_SOUND.play()
             self.weapon = Sword(self.scene, self.pos.x -
                                 self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
             pg.mouse.set_visible(True)
