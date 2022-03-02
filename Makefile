@@ -8,6 +8,9 @@ run:
 run2:
 	python3 $(FILE) &
 
+0:
+	python3 $(FILE) $@
+
 1:
 	python3 $(FILE) $@
 
