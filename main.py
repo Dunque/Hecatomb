@@ -1,11 +1,11 @@
 import pygame as pg
-from sceneManager import *
-from scnIntro import *
+from src.scenes.sceneManager import *
+from src.scenes.cutscenes.scnIntro import *
 
-from scnMenu import *
-from scnLevel1 import *
-from scnLevel2 import *
-from scnLevel3 import *
+from src.scenes.scnMenu import *
+from src.scenes.levels.scnLevel1 import *
+from src.scenes.levels.scnLevel2 import *
+from src.scenes.levels.scnLevel3 import *
 
 
 if __name__ == '__main__':
