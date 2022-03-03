@@ -42,9 +42,8 @@ class Player(Character):
 
     def die(self):
         if self.weapon:
-            self.weapon.kill()
-        self.entityData.currentDeathAnimTimer += 1
-        if (self.entityData.currentDeathAnimTimer >= self.entityData.deathAnimTimer):
+            self.weapon.deactivate()
+        if self.deathAnim.current_frame == self.deathAnim.max_frame - 1:
             self.scene.player_SG.remove(self)
             DEATH_SOUND.play()
             self.kill()

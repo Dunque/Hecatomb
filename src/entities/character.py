@@ -64,8 +64,7 @@ class Character(pg.sprite.Sprite):
 
     # Plays the death animation and destroys the entity
     def die(self):
-        self.entityData.currentDeathAnimTimer += 1
-        if (self.entityData.currentDeathAnimTimer >= self.entityData.deathAnimTimer):
+        if self.deathAnim.current_frame == self.deathAnim.max_frame - 1:
             ENEMY_DEATH_SOUND.play()
             self.kill()
 

@@ -1,9 +1,10 @@
 import pygame as pg
 import sys
+from src.map.staticmap import StaticMap
 from src.scenes.scene import *
 from src.settings.settings import *
 from src.entities.character import *
-from src.map.tilemap import *
+from src.map.randmap import *
 from src.hud.hud import Hud
 from src.scenes.cutscenes.scnCutscene2 import *
 
@@ -81,7 +82,8 @@ class Level1(Scene):
         self.background4 = pg.image.load("./sprites/background4.png").convert_alpha()
 
         #Map generation
-        self.map = Map(self, './maps/rooms.txt')
+        self.map = StaticMap(self, './maps/map1.txt')
+        #self.map = RandMap(self, './maps/rooms.txt')
 
         self.hud = Hud(self)
 
@@ -94,10 +96,7 @@ class Level1(Scene):
         if not self.player_SG.has(self.player):
             scene1 = Level1(self.sceneManager)
             self.sceneManager.changeScene(scene1)
-            
-        # hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
-        # for hit in hits:
-        #     hit.currentState = "ATTACKING"
+
         for menu in self.menus:
             menu.update()
 

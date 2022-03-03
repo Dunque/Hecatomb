@@ -16,10 +16,6 @@ class CharacterStats:
         self.iframes = 60
         self.currentIframe = 0
 
-        #Death animation timers
-        self.deathAnimTimer = 100
-        self.currentDeathAnimTimer = 0
-
     def takeDamage(self, dmg):
         #Substracting damage received to actual health
         self.actualHP = self.actualHP - dmg
@@ -60,8 +56,6 @@ class PlayerStats(CharacterStats):
 
         self.iframes = 20
 
-        self.deathAnimTimer = 69
-
 class HeraldStats(CharacterStats):
     def __init__(self):
         super(HeraldStats, self).__init__()
@@ -72,8 +66,6 @@ class HeraldStats(CharacterStats):
         self.speed = 150
         self.AttackTimer = 60
         self.currentAttackTimer = 0
-
-        self.deathAnimTimer = 49
         
 class WormStats(CharacterStats):
     def __init__(self):
@@ -87,8 +79,6 @@ class WormStats(CharacterStats):
         self.AttackTimer = 10
         self.currentAttackTimer = 0
 
-        self.deathAnimTimer = 63
-
 class KhanStats(CharacterStats):
     def __init__(self):
         super(KhanStats, self).__init__()
@@ -99,6 +89,4 @@ class KhanStats(CharacterStats):
         self.speed = 150
         self.AttackTimer = 60
         self.currentAttackTimer = 0
-
-        self.deathAnimTimer = 59
   
