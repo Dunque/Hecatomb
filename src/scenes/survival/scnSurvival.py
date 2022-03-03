@@ -116,7 +116,7 @@ class Survival(Scene):
         self.camera.update(self.player)
 
         if not self.player_SG.has(self.player):
-            scene1 = Level1(self.sceneManager)
+            scene1 = Survival(self.sceneManager)
             self.sceneManager.changeScene(scene1)
 
         for menu in self.menus:
