@@ -90,6 +90,24 @@ class StaticMap(Notifier):
                         Wall(self.scene, col, row, self.tileset.tiles[25])
                     elif self.finalMap[row][col] == '2':
                         Wall(self.scene, col, row, self.tileset.tiles[23])
+                    elif self.finalMap[row][col] == 'E':
+                        Wall(self.scene, col, row, self.tileset.tiles[68])
+                    elif self.finalMap[row][col] == 'S':
+                        Wall(self.scene, col, row, self.tileset.tiles[69])
+                    elif self.finalMap[row][col] == 'c':
+                        Wall(self.scene, col, row, self.tileset.tiles[70])
+                    elif self.finalMap[row][col] == 'u':
+                        Wall(self.scene, col, row, self.tileset.tiles[27])
+                    elif self.finalMap[row][col] == 'v':
+                        Wall(self.scene, col, row, self.tileset.tiles[28])
+                    elif self.finalMap[row][col] == 'e':
+                        Wall(self.scene, col, row, self.tileset.tiles[42])
+                    elif self.finalMap[row][col] == 'a':
+                        Wall(self.scene, col, row, self.tileset.tiles[43])
+                    elif self.finalMap[row][col] == 'm':
+                        Wall(self.scene, col, row, self.tileset.tiles[57])
+                    elif self.finalMap[row][col] == 'o':
+                        Wall(self.scene, col, row, self.tileset.tiles[58])
                     elif self.finalMap[row][col] == '3':
                         Wall(self.scene, col, row,
                              self.tileset.tiles[15 * randint(1, 7)])
