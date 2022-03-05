@@ -34,10 +34,8 @@ class SurvivalEnd(Scene):
         screen.fill(GREEN)
 
         # Dibujamos nombre de escena (para debug)
-        fontName = 'resources/fonts/hanshand.ttf'
-
-        font = pg.font.Font(fontName, 192)
-        text = font.render('SurvivalEnd', True, WHITE)
+        font = pg.font.Font(HANSHAND_FONT, 192)
+        text = font.render('SurvivalEnd', True, BLACK)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)
 
