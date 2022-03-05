@@ -1,21 +1,31 @@
+PYTHON = python3
 FILE = main.py
 
 all: run
 
 run:
-	python3 $(FILE)
+	$(PYTHON) $(FILE)
 
 run2:
-	python3 $(FILE) &
+	$(PYTHON) $(FILE) &
 
+clean:
+	find . -name '__pycache__' -type d | xargs rm -fr
+
+#------------------------------------------------
+# Menu
 0:
-	python3 $(FILE) $@
+	$(PYTHON) $(FILE) $@
 
+# Level1
 1:
-	python3 $(FILE) $@
+	$(PYTHON) $(FILE) $@
 
+# Level2
 2:
-	python3 $(FILE) $@
+	$(PYTHON) $(FILE) $@
 
+# Level3
 3:
-	python3 $(FILE) $@
+	$(PYTHON) $(FILE) $@
+#------------------------------------------------

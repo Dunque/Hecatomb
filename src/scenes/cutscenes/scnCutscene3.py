@@ -35,10 +35,8 @@ class Cutscene3(Scene):
         screen.fill(BLUE)
 
         # Dibujamos nombre de escena (para debug)
-        fontName = 'resources/fonts/hanshand.ttf'
-
-        font = pg.font.Font(fontName, 192)
-        text = font.render('Cutscene3', True, WHITE)
+        font = pg.font.Font(HANSHAND_FONT, 192)
+        text = font.render('Cutscene3', True, BLACK)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)
 
