@@ -11,7 +11,7 @@ class Intro(Scene):
         # Llamamos al constructor de la clase padre
         Scene.__init__(self, sceneManager)
         # Se carga la imagen de fondo
-        self.image = ResourceManager.LoadImage('resources/images/intro_image.png')
+        self.image = ResourceManager.LoadImage('resources/images/intro.png')
         self.image = pg.transform.scale(self.image, (WIDTH, HEIGHT))
 
     def update(self, *args):
@@ -32,7 +32,7 @@ class Intro(Scene):
         screen.blit(self.image, self.image.get_rect())
 
         # Dibujamos título del juego
-        font = pg.font.Font(HANSHAND_FONT, 192)
+        font = pg.font.Font(HANSHAND_FONT, 224)
         text = font.render('HECATOMB', True, MAROON)
         text.set_alpha(192)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))

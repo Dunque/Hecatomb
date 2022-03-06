@@ -63,7 +63,7 @@ ROCK_IMAGE= pg.image.load("./sprites/RockPile.png")
 
 
 
-# -------------------------------------------------
+# ---------------------------------------------------------
 # GUI settings
 
 # Font settings
@@ -79,7 +79,7 @@ BUTTON_SIZE = (BUTTON_WIDTH, BUTTON_HEIGHT)
 BUTTON_SEP_X = 70
 BUTTON_SEP_Y = 44
 
-# Main menu layout
+# Menu layout
 TOP_MARGIN = HEIGHT/2
-MENU_SIZE = (2, 3)
+MENU_LAYOUT = (2, 3)
 
