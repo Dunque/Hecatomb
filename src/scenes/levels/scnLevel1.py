@@ -10,7 +10,7 @@ from src.scenes.cutscenes.scnCutscene2 import *
 
 
 class Level1(Scene):
-    pg.mixer.music.play(-1)
+
     def __init__(self, sceneManager):
         #Initialize superclass
         Scene.__init__(self, sceneManager)
@@ -123,6 +123,7 @@ class Level1(Scene):
             if event.type == pg.QUIT:
                 pg.mouse.set_visible(True)
                 self.sceneManager.exitScene()
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     pg.mouse.set_visible(True)

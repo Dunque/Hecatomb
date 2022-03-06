@@ -60,7 +60,7 @@ class HeraldStats(CharacterStats):
     def __init__(self):
         super(HeraldStats, self).__init__()
         #Health
-        self.maxHP = 100
+        self.maxHP = 50
         self.actualHP = self.maxHP
 
         self.speed = 150
@@ -83,7 +83,7 @@ class KhanStats(CharacterStats):
     def __init__(self):
         super(KhanStats, self).__init__()
         #Health
-        self.maxHP = 100
+        self.maxHP = 50
         self.actualHP = self.maxHP
 
         self.speed = 150

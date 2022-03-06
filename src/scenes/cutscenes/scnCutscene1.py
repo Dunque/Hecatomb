@@ -48,5 +48,8 @@ class Cutscene1(Scene):
         self.sceneManager.exitProgram()
 
     def nextScene(self):
+        pg.mixer.music.stop
+        pg.mixer.music.load("./sounds/level_music.mp3")
+        pg.mixer.music.play(-1)
         scene = Level1(self.sceneManager)
         self.sceneManager.changeScene(scene)

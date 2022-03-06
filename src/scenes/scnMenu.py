@@ -11,6 +11,7 @@ from src.settings.settings import *
 
 class ElementGUI:
 
+
     def __init__(self, screen, rectangle):
         self.screen = screen
         self.rect = rectangle
@@ -166,6 +167,7 @@ class TextExit(TextGUI):
 # Clase ScreenGUI y las distintas pantallas
 
 class ScreenGUI:
+
     def __init__(self, menu, imageName):
         self.menu = menu
         # Se carga la image de fondo
@@ -196,6 +198,7 @@ class ScreenGUI:
 
 class InitialScreenGUI(ScreenGUI):
     def __init__(self, menu):
+
         ScreenGUI.__init__(self, menu, 'resources/images/menu_image.png')
         # Creamos los botones y los metemos en la lista
         buttonAdventure = ButtonAdventure(self)
@@ -256,6 +259,9 @@ class Menu(Scene):
         self.sceneManager.stackScene(scene)
 
     def playSurvival(self):
+        pg.mixer.music.stop
+        pg.mixer.music.load("./sounds/level_music.mp3")
+        pg.mixer.music.play(-1)
         scene = Survival(self.sceneManager)
         self.sceneManager.stackScene(scene)
 

@@ -55,7 +55,7 @@ DEATH_SOUND =pg.mixer.Sound("./sounds/Game_Over.wav")
 CHANGE_SOUND =pg.mixer.Sound("./sounds/recharge.wav")
 ENEMY_DEATH_SOUND= pg.mixer.Sound("./sounds/Hit_1.wav")
 SWORD_SOUND=pg.mixer.Sound("./sounds/sword.wav")
-music =pg.mixer.music.load("./sounds/level_music.mp3")
+musica =pg.mixer.music.load("./sounds/menu_music.mp3")
 #TODO borrar esta trapallada
 
 ROCK_IMAGE= pg.image.load("./sprites/RockPile.png")
