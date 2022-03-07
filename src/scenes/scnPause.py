@@ -1,0 +1,138 @@
+import pygame as pg
+from src.scenes.guiElems import *
+from src.scenes.resourceManager import ResourceManager
+from src.scenes.scene import Scene
+from src.settings.settings import *
+
+
+# ---------------------------------------------------------
+# Botones
+
+class ButtonContinue(ButtonGUI):
+    def __init__(self, screen):
+        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 0)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Continuar')
+
+    def action(self):
+        self.screen.menu.continueGame()
+
+
+class ButtonOptions(ButtonGUI):
+    def __init__(self, screen):
+        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 1)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Opciones')
+
+    def action(self):
+        pass
+
+
+class ButtonRestart(ButtonGUI):
+    def __init__(self, screen):
+        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 2)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Reiniciar nivel')
+
+    def action(self):
+        pass
+
+
+class ButtonExitToMenu(ButtonGUI):
+    def __init__(self, screen):
+        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 3)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menú')
+
+    def action(self):
+        self.screen.menu.exitToMenu()
+
+class ButtonExitToDesktop(ButtonGUI):
+    def __init__(self, screen):
+        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 4)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al escritorio')
+
+    def action(self):
+        self.screen.menu.exitProgram()
+
+
+# ---------------------------------------------------------
+# Textos
+
+class TextPause(CenteredTextGUI):
+    def __init__(self, screen):
+        font = pg.font.Font(HANSHAND_FONT, 112)
+        pos = (WIDTH/2, HEIGHT/6)
+        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Pausa', pos)
+
+    def action(self):
+        pass
+
+
+# ---------------------------------------------------------
+# Pantallas
+
+class InitialScreenGUI(ScreenGUI):
+    def __init__(self, menu):
+        ScreenGUI.__init__(self, menu, 'resources/images/black.png')
+        # Creamos los elementos GUI
+        textTitle = TextPause(self)
+        buttonContinue = ButtonContinue(self)
+        buttonOptions = ButtonOptions(self)
+        buttonRestart = ButtonRestart(self)
+        buttonExitToMenu = ButtonExitToMenu(self)
+        buttonExitToDesktop = ButtonExitToDesktop(self)
+        # Y los metemos en la lista
+        self.elementsGUI.append(textTitle)
+        self.elementsGUI.append(buttonContinue)
+        self.elementsGUI.append(buttonOptions)
+        self.elementsGUI.append(buttonRestart)
+        self.elementsGUI.append(buttonExitToMenu)
+        self.elementsGUI.append(buttonExitToDesktop)
+
+
+# ---------------------------------------------------------
+# Clase PauseMenu, la escena en sí
+
+class PauseMenu(Scene):
+
+    def __init__(self, sceneManager):
+        # Llamamos al constructor de la clase padre
+        Scene.__init__(self, sceneManager)
+        # Creamos la lista de pantallas
+        self.screenList = []
+        # Creamos las pantallas que vamos a tener y las metemos en la lista
+        self.screenList.append(InitialScreenGUI(self))
+        # En que screen estamos actualmente
+        self.showInitialScreen()
+
+    def update(self, *args):
+        return
+
+    def events(self, eventList):
+        # Se mira la lista de eventos
+        for event in eventList:
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:    # Tecla Esc, continuar
+                    self.continueGame()
+            elif event.type == pg.QUIT:
+                self.sceneManager.exitProgram()
+
+        # Se pasa la lista de eventos a la pantalla actual
+        self.screenList[self.currentScreen].events(eventList)
+
+    def draw(self, screen):
+        self.screenList[self.currentScreen].draw(screen)
+
+
+    # -----------------------------------------------------
+    # Métodos propios de la escena
+
+    def showInitialScreen(self):
+        self.currentScreen = 0
+
+    def continueGame(self):
+        self.sceneManager.exitScene()
+
+    def exitToMenu(self):
+        self.sceneManager.exitScene()
+        self.sceneManager.exitScene()
+
+    def exitProgram(self):
+        self.sceneManager.exitProgram()

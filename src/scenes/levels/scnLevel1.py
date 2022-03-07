@@ -1,12 +1,12 @@
 import pygame as pg
-import sys
-from src.map.staticmap import StaticMap
-from src.scenes.scene import *
-from src.settings.settings import *
-from src.entities.character import *
-from src.map.randmap import *
+from src.entities.character import Character
 from src.hud.hud import Hud
-from src.scenes.cutscenes.scnCutscene2 import *
+from src.map.randmap import RandMap
+from src.map.staticmap import StaticMap
+from src.scenes.cutscenes.scnCutscene2 import Cutscene2
+from src.scenes.scene import Scene
+from src.scenes.scnPause import PauseMenu
+from src.settings.settings import *
 
 
 class Level1(Scene):
@@ -118,21 +118,23 @@ class Level1(Scene):
         self.hud.draw_health(screen)
 
     def events(self, eventList):
-        # catch all events here
+        # Se mira la lista de eventos
         for event in eventList:
-            if event.type == pg.QUIT:
-                pg.mouse.set_visible(True)
-                self.sceneManager.exitScene()
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
-                    pg.mouse.set_visible(True)
-                    self.sceneManager.exitScene()
-                elif event.key == K_n:          # Tecla N, siguiente escena (solo para debug)
+                if event.key == pg.K_ESCAPE:    # Tecla Esc, menú de pausa
+                    self.pauseScene()
+                elif event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
                     self.nextScene()
+            elif event.type == pg.QUIT:
+                self.sceneManager.exitProgram()
 
 
-    #--------------------------------------
-    # Metodos propios
+    # -----------------------------------------------------
+    # Métodos propios de la escena
+
+    def pauseScene(self):
+        scene = PauseMenu(self.sceneManager)
+        self.sceneManager.stackScene(scene)
 
     def nextScene(self):
         scene = Cutscene2(self.sceneManager)

@@ -1,8 +1,9 @@
 import pygame as pg
-from src.scenes.resourceManager import *
-from src.scenes.scene import *
+from src.scenes.levels.scnLevel3 import Level3
+from src.scenes.resourceManager import ResourceManager
+from src.scenes.scene import Scene
+from src.scenes.scnPause import PauseMenu
 from src.settings.settings import *
-from src.scenes.levels.scnLevel3 import *
 
 
 class Cutscene3(Scene):
@@ -17,15 +18,13 @@ class Cutscene3(Scene):
         return
 
     def events(self, eventList):
-        # Se mira si se quiere hacer algo
+        # Se mira la lista de eventos
         for event in eventList:
-            # En ese caso, se le indica al sceneManager
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:   # Tecla Esc, salir
-                    self.exitProgram()
-                elif event.key == K_n:      # Tecla N, siguiente escena (solo para debug)
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:    # Tecla Esc, menú de pausa
+                    self.pauseScene()
+                elif event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
                     self.nextScene()
-
             elif event.type == pg.QUIT:
                 self.sceneManager.exitProgram()
 
@@ -41,11 +40,12 @@ class Cutscene3(Scene):
         screen.blit(text, textRect)
 
 
-    #--------------------------------------
-    # Metodos propios del menu
+    # -----------------------------------------------------
+    # Métodos propios de la escena
 
-    def exitProgram(self):
-        self.sceneManager.exitProgram()
+    def pauseScene(self):
+        scene = PauseMenu(self.sceneManager)
+        self.sceneManager.stackScene(scene)
 
     def nextScene(self):
         scene = Level3(self.sceneManager)

@@ -1,12 +1,12 @@
 import pygame as pg
-import sys
-from src.map.staticmap import StaticMap
-from src.scenes.scene import *
-from src.settings.settings import *
-from src.entities.character import *
-from src.map.randmap import *
+from src.entities.character import Character
 from src.hud.hud import Hud
-from src.scenes.survival.scnSurvivalEnd import *
+from src.map.randmap import RandMap
+from src.map.staticmap import StaticMap
+from src.scenes.scene import Scene
+from src.scenes.scnPause import PauseMenu
+from src.scenes.survival.scnSurvivalEnd import SurvivalEnd
+from src.settings.settings import *
 
 
 class Survival(Scene):
@@ -134,24 +134,23 @@ class Survival(Scene):
         self.hud.draw_health(screen)
 
     def events(self, eventList):
-        # catch all events here
+        # Se mira la lista de eventos
         for event in eventList:
-            if event.type == pg.QUIT:
-                pg.mouse.set_visible(True)
-                self.sceneManager.exitScene()
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
-                    pg.mouse.set_visible(True)
-                    self.sceneManager.exitScene()
-                # Tecla N, siguiente escena (solo para debug)
-                elif event.key == K_n:
+                if event.key == pg.K_ESCAPE:    # Tecla Esc, menú de pausa
+                    self.pauseScene()
+                elif event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
                     self.nextScene()
+            elif event.type == pg.QUIT:
+                self.sceneManager.exitProgram()
 
-    #--------------------------------------
-    # Metodos propios del menu
 
-    def exitProgram(self):
-        self.sceneManager.exitProgram()
+    # -----------------------------------------------------
+    # Métodos propios de la escena
+
+    def pauseScene(self):
+        scene = PauseMenu(self.sceneManager)
+        self.sceneManager.stackScene(scene)
 
     def nextScene(self):
         scene = SurvivalEnd(self.sceneManager)

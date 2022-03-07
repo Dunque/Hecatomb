@@ -20,9 +20,9 @@ class Intro(Scene):
     def events(self, eventList):
         # Se mira la lista de eventos
         for event in eventList:
-            if event.type == pg.KEYDOWN:
+            if event.type == pg.KEYDOWN:            # Cualquier tecla, menú principal
                 self.nextScene()
-            elif event.type == pg.MOUSEBUTTONDOWN:
+            elif event.type == pg.MOUSEBUTTONDOWN:  # Cualquier botón del ratón, menú principal
                 self.nextScene()
             elif event.type == pg.QUIT:
                 self.sceneManager.exitProgram()
@@ -45,7 +45,7 @@ class Intro(Scene):
         screen.blit(text, textRect)
 
 
-    # --------------------------------------
+    # -----------------------------------------------------
     # Métodos propios de la escena
 
     def nextScene(self):
