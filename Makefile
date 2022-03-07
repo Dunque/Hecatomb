@@ -14,18 +14,23 @@ clean:
 
 #------------------------------------------------
 # Menu
-0:
+menu:
 	$(PYTHON) $(FILE) $@
 
 # Level1
-1:
+l1:
 	$(PYTHON) $(FILE) $@
 
 # Level2
-2:
+l2:
 	$(PYTHON) $(FILE) $@
 
 # Level3
-3:
+l3:
 	$(PYTHON) $(FILE) $@
+
+# Pause (sobre Cutscene1)
+pause:
+	$(PYTHON) $(FILE) $@
+
 #------------------------------------------------
