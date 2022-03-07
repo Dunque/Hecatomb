@@ -62,7 +62,7 @@ class Worm(Character):
         idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
         walkAnim = Anim(scene.wormWalkSheet, (90, 90), 7, 0, 9)
         deathAnim = Anim(scene.wormDeathSheet, (90, 90), 4, 0, 8)
-        attackAnim = Anim(scene.wormAttackSheet, (90, 90), 3, 0, 16)
+        attackAnim = Anim(scene.wormAttackSheet, (90, 90), 2, 0, 16)
         animList = [idleAnim, walkAnim, deathAnim, attackAnim, attackAnim]
 
         super(Worm, self).__init__(scene, x, y,
@@ -70,56 +70,10 @@ class Worm(Character):
 
         self.acc = vec(0, 0)
         self.rect.center = self.pos
-        self.rot = 0
 
         self.hasAttacked = False
         self.attackOffset = vec(30, 30)
         self.explosionWalls = Anim(
             scene.fire_ballExplosionSheet, (46, 46), 10, 0, 7)
 
-    def aim(self):
-        self.rot = (self.scene.player.pos - self.pos).angle_to(vec(1, 0))
-
-    def move(self):
-        self.acc = vec(self.entityData.speed).rotate(-self.rot)
-        self.vel = self.acc * self.scene.dt * 15
-        self.pos += self.vel * self.scene.dt + 0.5 * self.acc * self.scene.dt ** 2
-
-    def stateUpdate(self):
-        if (self.currentState == "GROUNDED"):
-            self.currentAnim = self.walkAnim
-            # Movement and aiming
-            self.move()
-            self.aim()
-            return
-
-        if (self.currentState == "DYING"):
-            self.vel = vec(0, 0)
-            self.currentAnim = self.deathAnim
-
-            self.die()
-            return
-
-        if (self.currentState == "ATTACKING"):
-            self.currentAnim = self.attackAnim
-            if not self.hasAttacked and (self.entityData.currentAttackTimer >= self.entityData.AttackTimer):
-                self.entityData.currentAttackTimer += 1
-                dir = vec(1, 0).rotate(-self.rot)
-                pos = self.pos + self.attackOffset.rotate(-self.rot)
-                if self.rot <= -90 or self.rot >= 90:
-                    dir = vec(dir.x * 1, dir.y * -1)
-                    pos = self.pos + \
-                        vec(self.attackOffset.x,
-                            self.attackOffset.y * -1).rotate(self.rot)
-                explosion_pos = self.pos + (self.scene.player.pos - self.pos)
-                Explosion(self.scene, pos, self.explosionWalls,
-                          self.scene.player_SG, scale=3, dealsDamage=True, damage=1)
-                self.hasAttacked = True
-            elif (self.entityData.currentAttackTimer <= self.entityData.AttackTimer):
-                self.entityData.currentAttackTimer += 1
-                self.vel = vec(0, 0)
-            else:
-                self.currentState = "GROUNDED"
-                self.entityData.currentAttackTimer = 0
-                self.hasAttacked = False
-            return
+        self.state = EnemyGroundedState(self, "GROUNDED")

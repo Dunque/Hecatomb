@@ -104,4 +104,4 @@ class Explosion(pg.sprite.Sprite):
 		enemycollision = pg.sprite.spritecollide(self, self.targetGroup, False)
 		if self.dealsDamage:
 			for enemies in enemycollision:
-				enemies.entityData.takeDamage(self.damage)
+				enemies.takeDamage(self.damage)

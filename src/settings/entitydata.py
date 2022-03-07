@@ -13,7 +13,7 @@ class CharacterStats:
         #Stablishing invencibility frames in order to not be able
         #to be damaged several times in the span of miliseconds
         self.vulnerable = True
-        self.iframes = 60
+        self.iframes = 15
         self.currentIframe = 0
 
     def takeDamage(self, dmg):
@@ -51,7 +51,7 @@ class PlayerStats(CharacterStats):
 
         #Dodge
         self.dodgeSpeed = 2 #It's a multiplier
-        self.dodgeTimer = 35
+        self.dodgeTimer = 60
         self.currentDodgeTimer = 0
 
         self.iframes = 20
@@ -76,7 +76,7 @@ class WormStats(CharacterStats):
 
         #Movement
         self.speed = 150
-        self.AttackTimer = 10
+        self.AttackTimer = 100
         self.currentAttackTimer = 0
 
 class KhanStats(CharacterStats):
