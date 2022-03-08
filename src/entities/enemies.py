@@ -96,8 +96,8 @@ class Eye(Character):
         self.hasAttacked = False
         self.attackOffset = vec(30, 30)
         self.explosionWalls = Anim(
-            scene.fire_ballExplosionSheet, (46, 46), 10, 0, 7)
+            scene.fire_ballExplosionSheet, (46, 46), 20, 0, 7)
 
 
-        self.state = EnemyGroundedKamikazeState(self, "GROUNDED")
+        self.state = KamikazeGroundedState(self, "GROUNDED")
 
