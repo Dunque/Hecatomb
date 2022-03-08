@@ -1,5 +1,5 @@
 import pygame as pg
-from src.scenes.sceneManager import SceneManager
+from src.scenes.director import Director
 from src.scenes.scnIntro import Intro
 
 
@@ -8,11 +8,11 @@ if __name__ == '__main__':
     # Inicializamos la librería de pygame
     pg.init()
     # Creamos el director
-    sm = SceneManager()
+    director = Director()
     # Creamos la escena con la pantalla inicial
-    scene = Intro(sm)
+    scene = Intro(director)
     # Le decimos al director que apile esta escena
-    sm.stackScene(scene)
+    director.stackScene(scene)
 
     #--------------------------------------------------------------------------
     # TODO: ignorar esto, solo para faciliar pruebas (borrar al final)
@@ -30,25 +30,25 @@ if __name__ == '__main__':
     elif len(sys.argv) == 1:
         pass
     elif len(sys.argv) == 2:
-        sm.changeScene(Menu(sm))
+        director.changeScene(Menu(director))
         
         if sys.argv[1] == 'menu':
             pass
         elif sys.argv[1] == 'l1':
-            sm.stackScene(Level1(sm))
+            director.stackScene(Level1(director))
         elif sys.argv[1] == 'l2':
-            sm.stackScene(Level2(sm))
+            director.stackScene(Level2(director))
         elif sys.argv[1] == 'l3':
-            sm.stackScene(Level3(sm))
+            director.stackScene(Level3(director))
         elif sys.argv[1] == 'pause':
-            sm.stackScene(Cutscene1(sm))
-            sm.stackScene(PauseMenu(sm))
+            director.stackScene(Cutscene1(director))
+            director.stackScene(PauseMenu(director))
 
         else:
             sys.exit("error: posibles valores de arg: {menu, l1, l2, l3, pause}")
     #--------------------------------------------------------------------------
 
     # Ejecutamos el juego
-    sm.execute()
+    director.execute()
     # Cuando se termine la ejecución, finaliza la librería
     pg.quit()

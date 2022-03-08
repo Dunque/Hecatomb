@@ -12,9 +12,9 @@ from src.settings.settings import *
 class Survival(Scene):
     pg.mixer.music.play(-1)
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         #Initialize superclass
-        Scene.__init__(self, sceneManager)
+        Scene.__init__(self, director)
 
         #Initialize sprite groups
         self.all_sprites = pg.sprite.LayeredUpdates()
@@ -34,7 +34,7 @@ class Survival(Scene):
         self.load_data()
     
     def reset(self):
-        self.__init__(self.sceneManager)
+        self.__init__(self.director)
 
     def load_data(self):
         #PLAYER DATA
@@ -119,8 +119,8 @@ class Survival(Scene):
         self.camera.update(self.player)
 
         if not self.player_SG.has(self.player):
-            scene1 = Survival(self.sceneManager)
-            self.sceneManager.changeScene(scene1)
+            scene1 = Survival(self.director)
+            self.director.changeScene(scene1)
 
         for menu in self.menus:
             menu.update()
@@ -145,16 +145,16 @@ class Survival(Scene):
                 elif event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
                     self.nextScene()
             elif event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+                self.director.exitProgram()
 
 
     # -----------------------------------------------------
     # Métodos propios de la escena
 
     def pauseScene(self):
-        scene = PauseMenu(self.sceneManager)
-        self.sceneManager.stackScene(scene)
+        scene = PauseMenu(self.director)
+        self.director.stackScene(scene)
 
     def nextScene(self):
-        scene = SurvivalEnd(self.sceneManager)
-        self.sceneManager.changeScene(scene)
+        scene = SurvivalEnd(self.director)
+        self.director.changeScene(scene)

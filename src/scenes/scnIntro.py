@@ -7,9 +7,9 @@ from src.settings.settings import *
 
 class Intro(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         # Llamamos al constructor de la clase padre
-        Scene.__init__(self, sceneManager)
+        Scene.__init__(self, director)
         # Se carga la imagen de fondo
         self.image = ResourceManager.LoadImage('resources/images/intro.png')
         self.image = pg.transform.scale(self.image, (WIDTH, HEIGHT))
@@ -25,7 +25,7 @@ class Intro(Scene):
             elif event.type == pg.MOUSEBUTTONDOWN:  # Cualquier botón del ratón, menú principal
                 self.nextScene()
             elif event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+                self.director.exitProgram()
 
     def draw(self, screen):
         # Dibujamos imagen de fondo
@@ -49,5 +49,5 @@ class Intro(Scene):
     # Métodos propios de la escena
 
     def nextScene(self):
-        scene = Menu(self.sceneManager)
-        self.sceneManager.changeScene(scene)
+        scene = Menu(self.director)
+        self.director.changeScene(scene)

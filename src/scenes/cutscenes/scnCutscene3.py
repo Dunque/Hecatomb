@@ -8,14 +8,14 @@ from src.settings.settings import *
 
 class Cutscene3(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         # Llamamos al constructor de la clase padre
-        Scene.__init__(self, sceneManager);
+        Scene.__init__(self, director);
         # Creamos la imagen de fondo
         # self.image = ResourceManager.LoadImage('resources/images/intro.png')
     
     def reset(self):
-        self.__init__(self.sceneManager)
+        self.__init__(self.director)
 
     def update(self, *args):
         return
@@ -29,7 +29,7 @@ class Cutscene3(Scene):
                 elif event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
                     self.nextScene()
             elif event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+                self.director.exitProgram()
 
     def draw(self, screen):
         # Dibujamos imagen de fondo
@@ -47,9 +47,9 @@ class Cutscene3(Scene):
     # Métodos propios de la escena
 
     def pauseScene(self):
-        scene = PauseMenu(self.sceneManager)
-        self.sceneManager.stackScene(scene)
+        scene = PauseMenu(self.director)
+        self.director.stackScene(scene)
 
     def nextScene(self):
-        scene = Level3(self.sceneManager)
-        self.sceneManager.changeScene(scene)
+        scene = Level3(self.director)
+        self.director.changeScene(scene)

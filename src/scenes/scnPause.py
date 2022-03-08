@@ -115,9 +115,9 @@ class OptionsScreenGUI(ScreenGUI):
 
 class PauseMenu(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         # Llamamos al constructor de la clase padre
-        Scene.__init__(self, sceneManager)
+        Scene.__init__(self, director)
         # Creamos la lista de pantallas
         self.screenList = []
         # Creamos las pantallas que vamos a tener y las metemos en la lista
@@ -136,7 +136,7 @@ class PauseMenu(Scene):
                 if event.key == pg.K_ESCAPE:    # Tecla Esc, continuar
                     self.continueGame()
             elif event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+                self.director.exitProgram()
 
         # Se pasa la lista de eventos a la pantalla actual
         self.screenList[self.currentScreen].events(eventList)
@@ -152,15 +152,15 @@ class PauseMenu(Scene):
         self.currentScreen = 0
 
     def continueGame(self):
-        self.sceneManager.exitScene()
+        self.director.exitScene()
     
     def showOptionsScreen(self):
         self.currentScreen = 1
     
     def restartScene(self):
-        self.sceneManager.exitScene()
-        self.sceneManager.resetTopScene()
+        self.director.exitScene()
+        self.director.resetTopScene()
 
     def exitToMenu(self):
-        self.sceneManager.exitScene()
-        self.sceneManager.exitScene()
+        self.director.exitScene()
+        self.director.exitScene()

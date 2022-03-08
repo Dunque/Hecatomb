@@ -133,9 +133,9 @@ class CreditsScreenGUI(ScreenGUI):
 
 class Menu(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         # Llamamos al constructor de la clase padre
-        Scene.__init__(self, sceneManager)
+        Scene.__init__(self, director)
         # Creamos la lista de pantallas
         self.screenList = []
         # Creamos las pantallas que vamos a tener y las metemos en la lista
@@ -153,7 +153,7 @@ class Menu(Scene):
         # Se mira la lista de eventos
         for event in eventList:
             if event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+                self.director.exitProgram()
 
         # Se pasa la lista de eventos a la pantalla actual
         self.screenList[self.currentScreen].events(eventList)
@@ -169,12 +169,12 @@ class Menu(Scene):
         self.currentScreen = 0
 
     def playAdventure(self):
-        scene = Cutscene1(self.sceneManager)
-        self.sceneManager.stackScene(scene)
+        scene = Cutscene1(self.director)
+        self.director.stackScene(scene)
 
     def playSurvival(self):
-        scene = Survival(self.sceneManager)
-        self.sceneManager.stackScene(scene)
+        scene = Survival(self.director)
+        self.director.stackScene(scene)
 
     def showRecordsScreen(self):
         self.currentScreen = 1
@@ -186,4 +186,4 @@ class Menu(Scene):
         self.currentScreen = 3
 
     def exitProgram(self):
-        self.sceneManager.exitProgram()
+        self.director.exitProgram()

@@ -6,9 +6,9 @@ from src.settings.settings import *
 
 class SurvivalEnd(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         # Llamamos al constructor de la clase padre
-        Scene.__init__(self, sceneManager);
+        Scene.__init__(self, director);
         # Creamos la imagen de fondo
         # self.image = ResourceManager.LoadImage('resources/images/intro.png')
 
@@ -22,7 +22,7 @@ class SurvivalEnd(Scene):
                 if event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
                     self.exitScene()
             elif event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+                self.director.exitProgram()
 
     def draw(self, screen):
         # Dibujamos imagen de fondo
@@ -40,4 +40,4 @@ class SurvivalEnd(Scene):
     # Métodos propios de la escena
 
     def exitScene(self):
-        self.sceneManager.exitScene()
+        self.director.exitScene()

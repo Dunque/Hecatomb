@@ -4,7 +4,7 @@ from src.scenes.scene import *
 from pygame.locals import *
 
 
-class SceneManager():
+class Director():
 
     def __init__(self):
         # Inicializamos la pantalla y el modo gráfico
