@@ -115,7 +115,7 @@ class Sword(Weapon, pg.sprite.Sprite):
 		self.image = self.scene.playerSwordImg
 		self.rect = self.image.get_rect()
 
-		self.damage = 30
+		self.damage = 50
 
 		self.rot_attack = 0
 		self.reached = 0
@@ -131,6 +131,7 @@ class Sword(Weapon, pg.sprite.Sprite):
 	def attack(self):
 		self.attack_movement()
 		if self.attacking:
+
 			self.scene.camera.cameraShake(1,3)
 			collision = pg.sprite.spritecollide(self, self.scene.mobs_SG, False)
 			for enemies in collision:
@@ -150,6 +151,7 @@ class Sword(Weapon, pg.sprite.Sprite):
 			else:
 				self.reached = 2
 				self.attacking = False
+				SWORD_SOUND.play()
 		elif self.reached == 2 and self.rot_attack > 0:
 			self.rot_attack -= self.sword_speed
 
@@ -238,7 +240,7 @@ class Gun(FireWeapon, pg.sprite.Sprite):
 
 		self.barrel_offset = vec(55, -10)
 		self.bullet_rate = 300
-		self.damage = 20
+		self.damage = 30
 		self.kickback = 200
 		self.spread = 5
 		self.crosshair = CrosshairGun(self.scene)
@@ -262,6 +264,7 @@ class Gun(FireWeapon, pg.sprite.Sprite):
 				if self.rot <= -90 or self.rot >= 90:
 					dir = vec(dir.x * 1, dir.y * -1)
 					pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
+				FIRE_BULLET_SOUND.play()
 				GunBullet(self.scene, self, pos, dir, self.scene.mobs_SG)
 				push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
 				self.scene.player.vel = vec(-self.kickback, 0).rotate(-push)
@@ -276,7 +279,7 @@ class Shotgun(FireWeapon, pg.sprite.Sprite):
 
 		self.barrel_offset = vec(55, -10)
 		self.bullet_rate = 1000
-		self.damage = 20
+		self.damage = 30
 		self.kickback = 1000
 		self.spread = 5
 		self.crosshair = CrosshairShotGun(self.scene)
@@ -302,6 +305,7 @@ class Shotgun(FireWeapon, pg.sprite.Sprite):
 					dir = vec(dir.x * 1, dir.y * -1)
 					pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
 					direction_disperse = -0.2
+				FIRE_BULLET_SOUND.play()
 				ShotgunBullet(self.scene, self, pos, dir, self.scene.mobs_SG)
 				ShotgunBullet(self.scene, self, (pos.x + dir.y * 10, pos.y + dir.x * 10), vec(dir.x+direction_disperse,dir.y+direction_disperse),self.scene.mobs_SG)
 				ShotgunBullet(self.scene, self, (pos.x - dir.y * 10, pos.y - dir.x * 10), vec(dir.x-direction_disperse,dir.y-direction_disperse),self.scene.mobs_SG)

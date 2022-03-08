@@ -94,6 +94,9 @@ class Explosion(pg.sprite.Sprite):
 		else:
 			self.rect.center = pos
 		self.destroy = destroy
+		#This list stores the entities that have already been hit by the explosion,
+		#in order to only deal damage once
+		self.hitEntities = []
 
 	def update(self):
 		self.image = pg.transform.scale(self.explosionAnim.get_frame(), self.new_size)
@@ -104,4 +107,8 @@ class Explosion(pg.sprite.Sprite):
 		enemycollision = pg.sprite.spritecollide(self, self.targetGroup, False)
 		if self.dealsDamage:
 			for enemies in enemycollision:
-				enemies.entityData.takeDamage(self.damage)
+				if self.hitEntities.__contains__(enemies):
+					pass
+				else:
+					enemies.takeDamage(self.damage)
+					self.hitEntities.append(enemies)

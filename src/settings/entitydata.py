@@ -13,12 +13,8 @@ class CharacterStats:
         #Stablishing invencibility frames in order to not be able
         #to be damaged several times in the span of miliseconds
         self.vulnerable = True
-        self.iframes = 60
+        self.iframes = 15
         self.currentIframe = 0
-
-        #Death animation timers
-        self.deathAnimTimer = 100
-        self.currentDeathAnimTimer = 0
 
     def takeDamage(self, dmg):
         #Substracting damage received to actual health
@@ -56,25 +52,21 @@ class PlayerStats(CharacterStats):
 
         #Dodge
         self.dodgeSpeed = 2 #It's a multiplier
-        self.dodgeTimer = 35
+        self.dodgeTimer = 60
         self.currentDodgeTimer = 0
 
         self.iframes = 20
-
-        self.deathAnimTimer = 69
 
 class HeraldStats(CharacterStats):
     def __init__(self):
         super(HeraldStats, self).__init__()
         #Health
-        self.maxHP = 100
+        self.maxHP = 50
         self.actualHP = self.maxHP
 
         self.speed = 150
         self.AttackTimer = 60
         self.currentAttackTimer = 0
-
-        self.deathAnimTimer = 49
         
 class WormStats(CharacterStats):
     def __init__(self):
@@ -85,21 +77,28 @@ class WormStats(CharacterStats):
 
         #Movement
         self.speed = 150
-        self.AttackTimer = 10
+        self.AttackTimer = 100
         self.currentAttackTimer = 0
-
-        self.deathAnimTimer = 63
 
 class KhanStats(CharacterStats):
     def __init__(self):
         super(KhanStats, self).__init__()
         #Health
-        self.maxHP = 100
+        self.maxHP = 50
         self.actualHP = self.maxHP
 
         self.speed = 150
         self.AttackTimer = 60
         self.currentAttackTimer = 0
 
-        self.deathAnimTimer = 59
-  
+class EyeStats(CharacterStats):
+    def __init__(self):
+        super(EyeStats, self).__init__()
+        #Health
+        self.maxHP = 25
+        self.actualHP = self.maxHP
+
+        #Movement
+        self.speed = 550
+        self.AttackTimer = 100
+        self.currentAttackTimer = 0

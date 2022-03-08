@@ -1,14 +1,18 @@
 import pygame as pg
 import sys
+from src.map.staticmap import StaticMap
 from src.scenes.scene import *
 from src.settings.settings import *
 from src.entities.character import *
+from src.map.randmap import *
+from src.hud.hud import Hud
 from src.map.tilemap import *
 from src.hud.hud import Hud, Line
 from src.scenes.cutscenes.scnCutscene2 import *
 
 
 class Level1(Scene):
+
     def __init__(self, sceneManager):
         #Initialize superclass
         Scene.__init__(self, sceneManager)
@@ -67,6 +71,9 @@ class Level1(Scene):
         #NPC
         self.npc1Profile = pg.image.load("./sprites/Player/profile1.png").convert_alpha()
 
+        # EYE DATA
+        self.eyeWalkSheet = pg.image.load("./sprites/Eye/eye_ball_4.png").convert_alpha()
+        self.eyeDeathSheet = pg.image.load("./sprites/Eye/eye_boom_4.png").convert_alpha()
         # WORM DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
         self.wormIdleSheet = pg.image.load("./sprites/Worm/Idle.png").convert_alpha()
@@ -91,7 +98,8 @@ class Level1(Scene):
         self.dialogues_src = "./resources/text/dialogues.txt"
 
         #Map generation
-        self.map = Map(self, './maps/rooms.txt')
+        self.map = StaticMap(self, './maps/map1.txt')
+        #self.map = RandMap(self, './maps/rooms.txt')
 
         self.hud = Hud(self)
 
@@ -120,10 +128,7 @@ class Level1(Scene):
         if not self.player_SG.has(self.player):
             scene1 = Level1(self.sceneManager)
             self.sceneManager.changeScene(scene1)
-            
-        # hits = pg.sprite.spritecollide(self.player, self.mobs_SG, False, collide_hit_rect)
-        # for hit in hits:
-        #     hit.currentState = "ATTACKING"
+
         for menu in self.menus:
             menu.update()
 
@@ -218,6 +223,7 @@ class Level1(Scene):
             if event.type == pg.QUIT:
                 pg.mouse.set_visible(True)
                 self.sceneManager.exitScene()
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     pg.mouse.set_visible(True)

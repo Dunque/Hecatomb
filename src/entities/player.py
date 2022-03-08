@@ -41,6 +41,13 @@ class Player(Character):
 		self.interact = False
 		self.state = PlayerGroundedState(self, "GROUNDED")
 
+    def die(self):
+        if self.weapon:
+            self.weapon.deactivate()
+        if self.deathAnim.current_frame == self.deathAnim.max_frame - 1:
+            self.scene.player_SG.remove(self)
+            DEATH_SOUND.play()
+            self.kill()
 	def allowMovement(self):
 		self.state.move = True
 
@@ -64,33 +71,36 @@ class Player(Character):
 			self.weapon.updatePos(self.pos.x - self.weaponOffsetX,
 								  self.pos.y - self.weaponOffsetY, self.rect)
 
-	def change_weapon(self, slot):
-		if self.weapon_slot != slot and slot == "top":
-			if self.weapon is not None:
-				self.weapon.deactivate()
-			self.weapon = Gun(self.scene, self.pos.x - self.weaponOffsetX,
-							  self.pos.y - self.weaponOffsetY)
-			pg.mouse.set_visible(False)
-			self.weapon.activate()
-			self.weapon_slot = slot
-		elif self.weapon_slot != slot and slot == "down":
-			if self.weapon is not None:
-				self.weapon.deactivate()
-				pg.mouse.set_visible(True)
-				self.weapon_slot = slot
-		elif self.weapon_slot != slot and slot == "right":
-			if self.weapon is not None:
-				self.weapon.deactivate()
-			self.weapon = Sword(self.scene, self.pos.x -
-								self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
-			pg.mouse.set_visible(True)
-			self.weapon.activate()
-			self.weapon_slot = slot
-		elif self.weapon_slot != slot and slot == "left":
-			if self.weapon is not None:
-				self.weapon.deactivate()
-			self.weapon = Shotgun(self.scene, self.pos.x -
-								  self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
-			pg.mouse.set_visible(False)
-			self.weapon.activate()
-			self.weapon_slot = slot
+    def change_weapon(self, slot):
+        if self.weapon_slot != slot and slot == "top":
+            if self.weapon is not None:
+                self.weapon.deactivate()
+            CHANGE_SOUND.play()
+            self.weapon = Gun(self.scene, self.pos.x - self.weaponOffsetX,
+                              self.pos.y - self.weaponOffsetY)
+            pg.mouse.set_visible(False)
+            self.weapon.activate()
+            self.weapon_slot = slot
+        elif self.weapon_slot != slot and slot == "down":
+            if self.weapon is not None:
+                self.weapon.deactivate()
+                pg.mouse.set_visible(True)
+                self.weapon_slot = slot
+        elif self.weapon_slot != slot and slot == "right":
+            if self.weapon is not None:
+                self.weapon.deactivate()
+            SWORD_SOUND.play()
+            self.weapon = Sword(self.scene, self.pos.x -
+                                self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+            pg.mouse.set_visible(True)
+            self.weapon.activate()
+            self.weapon_slot = slot
+        elif self.weapon_slot != slot and slot == "left":
+            if self.weapon is not None:
+                self.weapon.deactivate()
+            CHANGE_SOUND.play()
+            self.weapon = Shotgun(self.scene, self.pos.x -
+                                  self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
+            pg.mouse.set_visible(False)
+            self.weapon.activate()
+            self.weapon_slot = slot

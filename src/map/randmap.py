@@ -29,7 +29,7 @@ class Notifier(ABC):
 #una vez cada una. Es decir, si queremos tener 8 salas,
 #ponemos 8 salas en el txt, y si queremos tener 2 veces la
 #misma sala, la duplicamos en el txt.
-class Map(Notifier):
+class RandMap(Notifier):
     def __init__(self, scene, roomsfile):
         self.scene = scene
         
@@ -210,6 +210,8 @@ class Map(Notifier):
                         room.addEnemy(Khan(self.scene, col, row))
                     elif self.finalMap[row][col] == 'W':
                         room.addEnemy(Worm(self.scene, col, row))
+                    elif self.finalMap[row][col] == 'Y':
+                        room.addEnemy(Eye(self.scene, col, row))
                     elif self.finalMap[row][col] == '-':
                         self.removeUnusedDoors(room,'-', row, col)
                     elif self.finalMap[row][col] == 'C':

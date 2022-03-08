@@ -55,12 +55,13 @@ class PlayerGroundedState(PlayerState):
                     self.character.weapon.stop_attack()
 
             if keys[pg.K_SPACE]:
+                self.character.dodgeDir = self.character.vel * \
+                    self.character.entityData.dodgeSpeed
                 self.toState(PlayerDodgingState(self.character, "DODGING"))
-                self.character.dodgeDir = self.character.vel * self.character.entityData.dodgeSpeed
 
             ##DEBUG KEY TO KILL YOURSELF
             if keys[pg.K_0]:
-                self.character.entityData.takeDamage(9999)
+                self.character.takeDamage(9999)
 
             #Weapon wheel
             if keys[pg.K_TAB]:
@@ -100,11 +101,9 @@ class PlayerDodgingState(PlayerState):
         self.character.currentAnim = self.character.dodgeAnim
         if self.character.weapon is not None:
             self.character.weapon.deactivate()
-        if (self.character.entityData.currentDodgeTimer <= self.character.entityData.dodgeTimer):
-                self.character.entityData.currentDodgeTimer += 1
-                self.character.vel = self.character.dodgeDir
+        if self.character.currentAnim.current_frame != self.character.currentAnim.max_frame - 1:
+            self.character.vel = self.character.dodgeDir
         else:
-            self.character.entityData.currentDodgeTimer = 0
             if self.character.weapon is not None:
                 self.character.weapon.activate()
             self.toState(PlayerGroundedState(self.character, "GROUNDED"))

@@ -35,9 +35,7 @@ class Level2(Scene):
         screen.fill(RED)
 
         # Dibujamos nombre de escena (para debug)
-        fontName = 'resources/fonts/hanshand.ttf'
-
-        font = pg.font.Font(fontName, 192)
+        font = pg.font.Font(HANSHAND_FONT, 192)
         text = font.render('Level2', True, BLACK)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)

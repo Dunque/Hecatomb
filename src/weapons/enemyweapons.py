@@ -84,10 +84,10 @@ class EnemyGun(EnemyFireWeapon, pg.sprite.Sprite):
         super().__init__(self.scene, owner, x, y, self.image)
 
         self.barrel_offset = vec(55, -10)
-        self.bullet_rate = 1000
+        self.bullet_rate = 2000
         self.damage = 10
         self.kickback = 200
-        self.spread = 5
+        self.spread = 10
 
     def get_damage(self):
         return self.damage
@@ -103,6 +103,7 @@ class EnemyGun(EnemyFireWeapon, pg.sprite.Sprite):
                     dir = vec(dir.x * 1, dir.y * -1)
                     pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
                 self.scene.camera.cameraShake(1,3)
+                FIRE_BULLET_SOUND.play()
                 GunBullet(self.scene, self, pos, dir, self.scene.player_SG)
                 push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
                 self.owner.vel = vec(-self.kickback, 0).rotate(-push)
@@ -115,10 +116,10 @@ class EnemyShotgun(EnemyFireWeapon, pg.sprite.Sprite):
         super().__init__(self.scene, owner, x, y, self.image)
 
         self.barrel_offset = vec(55, -10)
-        self.bullet_rate = 2000
+        self.bullet_rate = 4000
         self.damage = 15
         self.kickback = 1000
-        self.spread = 5
+        self.spread = 10
 
     def get_damage(self):
         return self.damage
@@ -136,6 +137,7 @@ class EnemyShotgun(EnemyFireWeapon, pg.sprite.Sprite):
                     pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
                     direction_disperse = -0.2
                 self.scene.camera.cameraShake(2,3)
+                FIRE_BULLET_SOUND.play()
                 ShotgunBullet(self.scene, self, pos, dir, self.scene.player_SG)
                 ShotgunBullet(self.scene, self, (pos.x + dir.y * 10, pos.y + dir.x * 10), vec(dir.x+direction_disperse,dir.y+direction_disperse),self.scene.player_SG)
                 ShotgunBullet(self.scene, self, (pos.x - dir.y * 10, pos.y - dir.x * 10), vec(dir.x-direction_disperse,dir.y-direction_disperse),self.scene.player_SG)

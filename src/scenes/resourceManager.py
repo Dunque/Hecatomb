@@ -53,3 +53,4 @@ class ResourceManager(object):
             cls.resources[name] = data
             # Se devuelve
             return data
+

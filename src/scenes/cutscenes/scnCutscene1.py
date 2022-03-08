@@ -35,10 +35,8 @@ class Cutscene1(Scene):
         screen.fill(BLUE)
 
         # Dibujamos nombre de escena (para debug)
-        fontName = 'resources/fonts/hanshand.ttf'
-
-        font = pg.font.Font(fontName, 192)
-        text = font.render('Cutscene1', True, WHITE)
+        font = pg.font.Font(HANSHAND_FONT, 192)
+        text = font.render('Cutscene1', True, BLACK)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)
 
@@ -50,5 +48,8 @@ class Cutscene1(Scene):
         self.sceneManager.exitProgram()
 
     def nextScene(self):
+        pg.mixer.music.stop
+        pg.mixer.music.load("./sounds/level_music.mp3")
+        pg.mixer.music.play(-1)
         scene = Level1(self.sceneManager)
         self.sceneManager.changeScene(scene)
