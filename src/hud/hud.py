@@ -1,5 +1,6 @@
 import pygame as pg
 from src.settings.settings import *
+from src.sprites.anim import *
 
 
 class Hud:
@@ -75,24 +76,104 @@ class CrosshairShotGun(CrossHair, pg.sprite.Sprite):
 		super().__init__(scene, scene.shotgunCrosshairImg)
 
 
-class DialogoInGame(pg.sprite.Sprite):
-	def __init__(self, scene, text):
+class Line:
+	def __init__(self, text, line, last):
+		self.text = text
+		self.line = line
+		self.last = last
+
+
+class ProfileBoxDialogue(pg.sprite.Sprite):
+	def __init__(self, scene, profileImg):
 		self._layer = HUD_LAYER
 		self.scene = scene
-		pg.sprite.Sprite.__init__(self, scene.all_sprites)
-		self.image = self.scene.dialogueInGameImg
+		pg.sprite.Sprite.__init__(self, [])
+		self.anim = Anim(profileImg, (157, 155), 15, 0, 2)
+		self.image = self.anim.get_frame()
 		self.rect = self.image.get_rect()
-		self.rect.center = HEIGHT - 300, 200
-
-		self.visible = False
+		self.rect.center = HEIGHT - 300, -400
 
 	def update(self):
 		cam_moved = self.scene.camera.get_moved()
-		y_offset = 300
+		y_offset = 137
+		pos_x = (WIDTH / 2) - cam_moved[0] - 400
+		pos_y = (HEIGHT / 2) - cam_moved[1] + y_offset
+		self.rect.center = pos_x, pos_y
+
+		if self.scene.dialogue:
+			self.image = self.anim.get_frame()
+		else:
+			self.image = self.anim.frames[0]
+
+	def activate(self):
+		self.scene.all_sprites.add(self)
+
+	def deactivate(self):
+		self.scene.all_sprites.remove(self)
+
+
+class ContinuationDialogue(pg.sprite.Sprite):
+	def __init__(self, scene):
+		self._layer = HUD_LAYER
+		self.scene = scene
+		pg.sprite.Sprite.__init__(self, [])
+		self.image = self.scene.dialogueContinuation
+		self.rect = self.image.get_rect()
+		self.rect.center = HEIGHT + 390, 460
+
+	def update(self):
+		cam_moved = self.scene.camera.get_moved()
+		y_offset = 390
+		pos_x = (WIDTH / 2) - cam_moved[0] + 460
+		pos_y = (HEIGHT / 2) - cam_moved[1] + y_offset
+		self.rect.center = pos_x, pos_y
+
+	def activate(self):
+		self.scene.all_sprites.add(self)
+
+	def deactivate(self):
+		self.scene.all_sprites.remove(self)
+
+
+class DialogoInGame(pg.sprite.Sprite):
+	def __init__(self, scene, text, stopMove = False, profileImg = None):
+		self._layer = HUD_LAYER
+		self.scene = scene
+		pg.sprite.Sprite.__init__(self, [])
+		self.image = self.scene.dialogueBox
+		self.rect = self.image.get_rect()
+		self.rect.center = HEIGHT - 300, 200
+		self.text = text
+		self.stopMove = stopMove
+		self.continuation = ContinuationDialogue(scene)
+
+		self.profileBox = None
+		if profileImg:
+			self.profileBox = ProfileBoxDialogue(scene, profileImg)
+
+	def update(self):
+		cam_moved = self.scene.camera.get_moved()
+		y_offset = 315
 		pos_x = (WIDTH / 2) - cam_moved[0]
 		pos_y = (HEIGHT / 2) - cam_moved[1] + y_offset
 		self.rect.center = pos_x, pos_y
-		text_surface, rect = self.scene.game_font.render("Hello World!", (255, 255, 255))
-		if self.scene.screen:
-			self.scene.screen.blit(text_surface, (WIDTH / 2, (HEIGHT / 2) + y_offset))
-			pg.display.flip()
+
+		if self.scene.dialogue_continuation and len(self.scene.remainderBatch) > 0:
+			self.continuation.activate()
+		else:
+			self.continuation.deactivate()
+
+	def drawText(self):
+		self.scene.all_sprites.add(self)
+		if self.profileBox:
+			self.profileBox.activate()
+		self.scene.updateDialogue(self.text)
+
+	def stopText(self):
+		self.scene.stopText()
+
+	def end(self):
+		self.scene.all_sprites.remove(self)
+		if self.profileBox:
+			self.profileBox.deactivate()
+		self.continuation.deactivate()

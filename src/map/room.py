@@ -67,6 +67,7 @@ class Room(Observer):
 
         #Entities present in the room
         self.enemies = []
+        self.npc = []
         self.objects = []
         self.doors = []
 
@@ -78,6 +79,9 @@ class Room(Observer):
 
     def addEnemy(self, enemy):
         self.enemies.append(enemy)
+
+    def addNPC(self, npc):
+        self.npc.append(npc)
 
     def closeAllDoors(self):
         for door in self.doors:

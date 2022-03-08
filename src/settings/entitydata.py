@@ -22,7 +22,7 @@ class CharacterStats:
 
     def takeDamage(self, dmg):
         #Substracting damage received to actual health
-        self.actualHP = self.actualHP - dmg
+        #self.actualHP = self.actualHP - dmg
         self.vulnerable = False
 
         #Die

@@ -4,7 +4,7 @@ from src.scenes.scene import *
 from src.settings.settings import *
 from src.entities.character import *
 from src.map.tilemap import *
-from src.hud.hud import Hud
+from src.hud.hud import Hud, Line
 from src.scenes.cutscenes.scnCutscene2 import *
 
 
@@ -19,6 +19,7 @@ class Level1(Scene):
         self.walls_SG = pg.sprite.LayeredUpdates()
         self.mobs_SG = pg.sprite.LayeredUpdates()
         self.player_SG = pg.sprite.LayeredUpdates()
+        self.npc_SG = pg.sprite.LayeredUpdates()
         self.bullets_SG = pg.sprite.LayeredUpdates()
         self.weapons_SG = pg.sprite.LayeredUpdates()
         self.floors_SG = pg.sprite.LayeredUpdates()
@@ -53,15 +54,18 @@ class Level1(Scene):
         #HUD
         self.radialMenuImg = pg.image.load(
             "./sprites/Hud/radial_menu.png").convert_alpha()
-        self.abrirImg = pg.image.load(
-            "./sprites/Hud/abrir.png").convert_alpha()
+        self.abrirImg = pg.image.load("./sprites/Hud/abrir.png").convert_alpha()
+        self.hablarImg = pg.image.load("./sprites/Hud/hablar.png").convert_alpha()
         self.gunCrosshairImg = pg.image.load(
             "./sprites/Hud/gun_crosshair.png").convert_alpha()
         self.shotgunCrosshairImg = pg.image.load(
             "./sprites/Hud/shotgun_crosshair.png").convert_alpha()
-        self.dialogueInGameImg = pg.image.load(
-            "./sprites/Hud/dialogueingame.png").convert_alpha()
+        self.dialogueBox = pg.image.load("./sprites/Hud/dialoguebox.png").convert_alpha()
+        self.dialogueContinuation = pg.image.load("./sprites/Hud/continuation.png").convert_alpha()
         self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
+
+        #NPC
+        self.npc1Profile = pg.image.load("./sprites/Player/profile1.png").convert_alpha()
 
         # WORM DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
@@ -84,10 +88,28 @@ class Level1(Scene):
         self.background3 = pg.image.load("./sprites/background3.png").convert_alpha()
         self.background4 = pg.image.load("./sprites/background4.png").convert_alpha()
 
+        self.dialogues_src = "./resources/text/dialogues.txt"
+
         #Map generation
         self.map = Map(self, './maps/rooms.txt')
 
         self.hud = Hud(self)
+
+        self.dialogue = None
+        self.remainder_dialogue = None
+        self.active_dialogue = False
+        self.skip_dialogue = False
+        self.dialogue_cooldown = 0
+        self.prev_text = []
+        self.text_line0 = []
+        self.text_line1 = []
+        self.text_line2 = []
+        self.text_lines = [self.text_line0, self.text_line1, self.text_line2]
+        self.dialogue_length = 0
+        self.dialogue_line = 0
+        self.lines = 0
+        self.completly_finished = False
+        self.dialogue_continuation = False
 
     def update(self, time):
         self.dt = time
@@ -120,7 +142,75 @@ class Level1(Scene):
         #self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
+        self.drawDialogue()
         self.hud.draw_health(screen)
+
+    def drawDialogue(self):
+        if not self.dialogue_cooldown and self.dialogue:
+            letter = self.dialogue.pop(0)
+            self.dialogue_cooldown = 5
+            self.text_lines[self.dialogue_line].append(letter)
+        if self.dialogue_cooldown:
+            self.dialogue_cooldown -= 1
+
+        y_offset0 = 250
+        y_offset1 = 300
+        y_offset2 = 350
+
+        phrase0 = ''.join(self.text_lines[0])
+        phrase1 = ''.join(self.text_lines[1])
+        phrase2 = ''.join(self.text_lines[2])
+
+        text_surface0, rect0 = self.game_font.render(phrase0, (255, 255, 255))
+        text_surface1, rect1 = self.game_font.render(phrase1, (255, 255, 255))
+        text_surface2, rect2 = self.game_font.render(phrase2, (255, 255, 255))
+        self.screen.blit(text_surface0, (WIDTH / 2 - 500, (HEIGHT / 2) + y_offset0))
+        self.screen.blit(text_surface1, (WIDTH / 2 - 500, (HEIGHT / 2) + y_offset1))
+        self.screen.blit(text_surface2, (WIDTH / 2 - 500, (HEIGHT / 2) + y_offset2))
+
+        if self.active_dialogue and len(self.text_lines[self.dialogue_line]) >= self.dialogue_length:
+            if len(self.remainder_dialogue) > 0:
+                self.active_dialogue = False
+                self.dialogue_line += 1
+                self.updateDialogue(self.remainder_dialogue)
+            else:
+                self.dialogue_continuation = True
+
+    def updateDialogue(self, textLine):
+        self.dialogue_continuation = False
+        self.total_lines = len(textLine)
+        if not self.active_dialogue:
+            self.completly_finished = False
+            if self.dialogue_line == 0:
+                self.firstBatch=textLine[:3]
+                self.remainderBatch=textLine[3:]
+                self.total_lines_batch = len(self.firstBatch)
+                textLine = self.firstBatch
+
+            self.player.stopMovement()
+            self.active_dialogue = True
+            self.lines = len(textLine)
+            self.dialogue = list(textLine[0])
+            self.remainder_dialogue = textLine[1:]
+            self.dialogue_length = len(self.dialogue)
+        elif self.dialogue_line == self.total_lines_batch - 1 and len(self.text_lines[self.dialogue_line]) >= self.dialogue_length and not self.skip_dialogue:
+            self.active_dialogue = False
+            self.prev_text = []
+            self.text_lines[0] = []
+            self.text_lines[1] = []
+            self.text_lines[2] = []
+            self.dialogue_line = 0
+            self.player.allowMovement()
+            if len(self.remainderBatch) > 0:
+                self.updateDialogue(self.remainderBatch)
+            else:
+                self.completly_finished = True
+        elif len(self.text_lines[0]) >= 2:
+            self.skip_dialogue = True
+            self.dialogue_cooldown = 0
+
+    def stopText(self):
+        self.skip_dialogue = False
 
     def events(self, eventList):
         # catch all events here

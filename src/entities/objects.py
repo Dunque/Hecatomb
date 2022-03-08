@@ -41,3 +41,7 @@ class Chest(pg.sprite.Sprite):
 		self.interaccion.deactivate()
 		self.chestAnim.current_frame = 1
 		self.image = self.chestAnim.get_frame()
+
+	def kill(self):
+		super(Chest, self).kill()
+		self.interaccion.deactivate()
