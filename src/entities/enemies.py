@@ -60,7 +60,7 @@ class Worm(Character):
     def __init__(self, scene, x, y):
         # Aniamtion stuff
         idleAnim = Anim(scene.wormIdleSheet, (90, 90), 10, 0, 9)
-        walkAnim = Anim(scene.wormWalkSheet, (90, 90), 7, 0, 9)
+        walkAnim = Anim(scene.wormWalkSheet, (90,90 ), 7, 0, 9)
         deathAnim = Anim(scene.wormDeathSheet, (90, 90), 4, 0, 8)
         attackAnim = Anim(scene.wormAttackSheet, (90, 90), 2, 0, 16)
         animList = [idleAnim, walkAnim, deathAnim, attackAnim, attackAnim]
@@ -77,3 +77,27 @@ class Worm(Character):
             scene.fire_ballExplosionSheet, (46, 46), 10, 0, 7)
 
         self.state = EnemyGroundedState(self, "GROUNDED")
+
+class Eye(Character):
+    def __init__(self, scene, x, y):
+        # Aniamtion stuff
+
+        walkAnim = Anim(scene.eyeWalkSheet, (48,92 ), 7, 0, 7)
+        deathAnim = Anim(scene.eyeDeathSheet, (148, 92), 4, 0, 4)
+
+        animList = [walkAnim, walkAnim, deathAnim, walkAnim, walkAnim]
+
+        super(Eye, self).__init__(scene, x, y,
+                                   animList, (scene.mobs_SG), EyeStats())
+
+        self.acc = vec(0, 0)
+        self.rect.center = self.pos
+
+        self.hasAttacked = False
+        self.attackOffset = vec(30, 30)
+        self.explosionWalls = Anim(
+            scene.fire_ballExplosionSheet, (46, 46), 10, 0, 7)
+
+
+        self.state = EnemyGroundedKamikazeState(self, "GROUNDED")
+

@@ -89,4 +89,15 @@ class KhanStats(CharacterStats):
         self.speed = 150
         self.AttackTimer = 60
         self.currentAttackTimer = 0
-  
+
+class EyeStats(CharacterStats):
+    def __init__(self):
+        super(EyeStats, self).__init__()
+        #Health
+        self.maxHP = 25
+        self.actualHP = self.maxHP
+
+        #Movement
+        self.speed = 550
+        self.AttackTimer = 100
+        self.currentAttackTimer = 0

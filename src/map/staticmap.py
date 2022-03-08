@@ -119,6 +119,8 @@ class StaticMap(Notifier):
                         room.addEnemy(Khan(self.scene, col, row))
                     elif self.finalMap[row][col] == 'W':
                         room.addEnemy(Worm(self.scene, col, row))
+                    elif self.finalMap[row][col] == 'Y':
+                        room.addEnemy(Eye(self.scene, col, row))
                     elif self.finalMap[row][col] == '-':
                         room.addDoor(Door(self.scene, col, row, ROCK_IMAGE))
                     elif self.finalMap[row][col] == 'C':

@@ -209,6 +209,8 @@ class RandMap(Notifier):
                         room.addEnemy(Khan(self.scene, col, row))
                     elif self.finalMap[row][col] == 'W':
                         room.addEnemy(Worm(self.scene, col, row))
+                    elif self.finalMap[row][col] == 'Y':
+                        room.addEnemy(Eye(self.scene, col, row))
                     elif self.finalMap[row][col] == '-':
                         self.removeUnusedDoors(room,'-', row, col)
                     elif self.finalMap[row][col] == 'C':

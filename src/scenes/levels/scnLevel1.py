@@ -60,6 +60,9 @@ class Level1(Scene):
         self.shotgunCrosshairImg = pg.image.load(
             "./sprites/Hud/shotgun_crosshair.png").convert_alpha()
 
+        # EYE DATA
+        self.eyeWalkSheet = pg.image.load("./sprites/Eye/eye_ball_4.png").convert_alpha()
+        self.eyeDeathSheet = pg.image.load("./sprites/Eye/eye_boom_4.png").convert_alpha()
         # WORM DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
         self.wormIdleSheet = pg.image.load("./sprites/Worm/Idle.png").convert_alpha()
