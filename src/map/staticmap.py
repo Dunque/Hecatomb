@@ -10,6 +10,7 @@ from src.entities.ground import *
 from src.map.camera import *
 from src.map.room import Room
 from abc import ABC, abstractmethod
+from src.entities.npc import NPCBase
 
 vec = pg.math.Vector2
 
@@ -125,6 +126,14 @@ class StaticMap(Notifier):
                         room.addDoor(Door(self.scene, col, row, ROCK_IMAGE))
                     elif self.finalMap[row][col] == 'C':
                         Chest(self.scene, col, row)
+                    elif self.finalMap[row][col] == '4':
+                        room.addNPC(NPCBase(self.scene, col, row, textLines=1))
+                    elif self.finalMap[row][col] == '5':
+                        room.addNPC(NPCBase(self.scene, col, row, textLines=2))
+                    elif self.finalMap[row][col] == '6':
+                        room.addNPC(NPCBase(self.scene, col, row, textLines=3))
+                    elif self.finalMap[row][col] == '7':
+                        room.addNPC(NPCBase(self.scene, col, row, textLines=4))
                         pass
             #We initialize the room doors to be open, until the player wanders in
             room.openAllDoors()

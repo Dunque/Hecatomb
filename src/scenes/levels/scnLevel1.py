@@ -6,7 +6,6 @@ from src.settings.settings import *
 from src.entities.character import *
 from src.map.randmap import *
 from src.hud.hud import Hud
-from src.map.tilemap import *
 from src.hud.hud import Hud, Line
 from src.scenes.cutscenes.scnCutscene2 import *
 
