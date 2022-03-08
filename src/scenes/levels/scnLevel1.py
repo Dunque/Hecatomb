@@ -31,6 +31,9 @@ class Level1(Scene):
 
         #Loads all sprite and sound data
         self.load_data()
+    
+    def reset(self):
+        self.__init__(self.sceneManager)
 
     def load_data(self):
         #PLAYER DATA

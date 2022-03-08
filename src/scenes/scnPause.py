@@ -10,7 +10,7 @@ from src.settings.settings import *
 
 class ButtonContinue(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 0)
+        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, PAUSE_MENU_LAYOUT, 0)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Continuar')
 
     def action(self):
@@ -19,37 +19,41 @@ class ButtonContinue(ButtonGUI):
 
 class ButtonOptions(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 1)
+        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, PAUSE_MENU_LAYOUT, 1)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Opciones')
 
     def action(self):
-        pass
+        self.screen.menu.showOptionsScreen()
 
 
 class ButtonRestart(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 2)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Reiniciar nivel')
+        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, PAUSE_MENU_LAYOUT, 2)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Reiniciar')
 
     def action(self):
-        pass
+        self.screen.menu.restartScene()
 
 
 class ButtonExitToMenu(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 3)
+        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, PAUSE_MENU_LAYOUT, 3)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menú')
 
     def action(self):
         self.screen.menu.exitToMenu()
 
-class ButtonExitToDesktop(ButtonGUI):
+
+# ---------------------------------------------------------
+# Botones
+
+class ButtonBack(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(PAUSE_MENU_Y0, PAUSE_MENU_LAYOUT, 4)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al escritorio')
+        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, OPTIONS_MENU_LAYOUT, 0)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
 
     def action(self):
-        self.screen.menu.exitProgram()
+        self.screen.menu.showInitialScreen()
 
 
 # ---------------------------------------------------------
@@ -58,8 +62,18 @@ class ButtonExitToDesktop(ButtonGUI):
 class TextPause(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(HANSHAND_FONT, 112)
-        pos = (WIDTH/2, HEIGHT/6)
-        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Pausa', pos)
+        pos = (WIDTH/2, HEIGHT/5)
+        CenteredTextGUI.__init__(self, screen, font, MAROON, 'Pausa', pos)
+
+    def action(self):
+        pass
+
+
+class TextOptions(CenteredTextGUI):
+    def __init__(self, screen):
+        font = pg.font.Font(HANSHAND_FONT, 112)
+        pos = (WIDTH/2, HEIGHT/5)
+        CenteredTextGUI.__init__(self, screen, font, MAROON, 'Opciones', pos)
 
     def action(self):
         pass
@@ -70,21 +84,30 @@ class TextPause(CenteredTextGUI):
 
 class InitialScreenGUI(ScreenGUI):
     def __init__(self, menu):
-        ScreenGUI.__init__(self, menu, 'resources/images/black.png')
+        ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
         # Creamos los elementos GUI
         textTitle = TextPause(self)
         buttonContinue = ButtonContinue(self)
         buttonOptions = ButtonOptions(self)
         buttonRestart = ButtonRestart(self)
         buttonExitToMenu = ButtonExitToMenu(self)
-        buttonExitToDesktop = ButtonExitToDesktop(self)
         # Y los metemos en la lista
         self.elementsGUI.append(textTitle)
         self.elementsGUI.append(buttonContinue)
         self.elementsGUI.append(buttonOptions)
         self.elementsGUI.append(buttonRestart)
         self.elementsGUI.append(buttonExitToMenu)
-        self.elementsGUI.append(buttonExitToDesktop)
+
+
+class OptionsScreenGUI(ScreenGUI):
+    def __init__(self, menu):
+        ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
+        # Creamos los elementos GUI
+        textTitle = TextOptions(self)
+        buttonBack = ButtonBack(self)
+        # Y los metemos en la lista
+        self.elementsGUI.append(textTitle)
+        self.elementsGUI.append(buttonBack)
 
 
 # ---------------------------------------------------------
@@ -99,6 +122,7 @@ class PauseMenu(Scene):
         self.screenList = []
         # Creamos las pantallas que vamos a tener y las metemos en la lista
         self.screenList.append(InitialScreenGUI(self))
+        self.screenList.append(OptionsScreenGUI(self))
         # En que screen estamos actualmente
         self.showInitialScreen()
 
@@ -129,10 +153,14 @@ class PauseMenu(Scene):
 
     def continueGame(self):
         self.sceneManager.exitScene()
+    
+    def showOptionsScreen(self):
+        self.currentScreen = 1
+    
+    def restartScene(self):
+        self.sceneManager.exitScene()
+        self.sceneManager.resetTopScene()
 
     def exitToMenu(self):
         self.sceneManager.exitScene()
         self.sceneManager.exitScene()
-
-    def exitProgram(self):
-        self.sceneManager.exitProgram()

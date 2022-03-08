@@ -13,6 +13,9 @@ class Cutscene1(Scene):
         Scene.__init__(self, sceneManager);
         # Creamos la imagen de fondo
         # self.image = ResourceManager.LoadImage('resources/images/intro.png')
+    
+    def reset(self):
+        self.__init__(self.sceneManager)
 
     def update(self, *args):
         return
