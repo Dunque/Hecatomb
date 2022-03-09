@@ -18,17 +18,24 @@ class Survival(Scene):
 
         #Initialize sprite groups
         self.all_sprites = pg.sprite.LayeredUpdates()
+        self.all_hud = pg.sprite.LayeredUpdates()
         self.background_SG = pg.sprite.LayeredUpdates()
         self.walls_SG = pg.sprite.LayeredUpdates()
+        self.candelabros_SG = pg.sprite.LayeredUpdates()
         self.mobs_SG = pg.sprite.LayeredUpdates()
         self.player_SG = pg.sprite.LayeredUpdates()
+        self.npc_SG = pg.sprite.LayeredUpdates()
         self.bullets_SG = pg.sprite.LayeredUpdates()
+        self.explosions_SG = pg.sprite.LayeredUpdates()
         self.weapons_SG = pg.sprite.LayeredUpdates()
         self.floors_SG = pg.sprite.LayeredUpdates()
         self.chest_SG = pg.sprite.LayeredUpdates()
         self.menus = []
 
         self.player = None
+        self.iluminacion = True
+
+        self.fog = pg.Surface((WIDTH, HEIGHT))
 
         #Loads all sprite and sound data
         self.load_data()
@@ -46,6 +53,8 @@ class Survival(Scene):
             "./sprites/Player/playerDodgeSheet.png").convert_alpha()
         self.playerDeathSheet = pg.image.load(
             "./sprites/Player/playerDeathSheet.png").convert_alpha()
+        self.playerTalkingSheet = pg.image.load(
+            "./sprites/Player/playerTalkingSheet.png").convert_alpha()
         self.playerGunImg = pg.image.load(
             "./sprites/Weapons/gun.png").convert_alpha()
         self.playerShotgunImg = pg.image.load(
@@ -54,6 +63,9 @@ class Survival(Scene):
             "./sprites/Weapons/sword.png").convert_alpha()
         self.chestImg = pg.image.load(
             "./sprites/Objects/chest.png").convert_alpha()
+
+        # NPC
+        self.npc1Profile = pg.image.load("./sprites/Player/profile1.png").convert_alpha()
 
         #BULLETS/AMMUNITION DATA
         self.gunBulletImg = pg.image.load(
@@ -72,6 +84,14 @@ class Survival(Scene):
             "./sprites/Hud/gun_crosshair.png").convert_alpha()
         self.shotgunCrosshairImg = pg.image.load(
             "./sprites/Hud/shotgun_crosshair.png").convert_alpha()
+        self.hablarImg = pg.image.load("./sprites/Hud/hablar.png").convert_alpha()
+        self.dialogueBox = pg.image.load(
+            "./sprites/Hud/dialoguebox.png").convert_alpha()
+        self.dialogueContinuation = pg.image.load(
+            "./sprites/Hud/continuation.png").convert_alpha()
+        self.light_mask = pg.transform.scale(pg.image.load("./sprites/Hud/light_350_soft.png").convert_alpha(), (1000, 1000))
+
+        self.dialogues_src = "./resources/text/dialogues.txt"
 
         # WORM DATA
         self.wormWalkSheet = pg.image.load(
@@ -129,12 +149,36 @@ class Survival(Scene):
         pg.display.set_caption(str(time))
 
     def draw(self, screen):
+        # Background color
         self.screen = screen
         self.screen.fill(BGCOLOR)
 
+        # Sprites
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
+
+        # Fog
+        if self.iluminacion:
+            self.render_fog()
+            for sprite in list(self.candelabros_SG):
+                self.render_fog(sprite)
+            self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
+
+        # Hud
+        for hud in self.all_hud:
+            print(hud.rect)
+            self.screen.blit(hud.image, self.camera.apply(hud))
         self.hud.draw_health(screen)
+
+    def render_fog(self, sprite=None):
+        self.light_mask = pg.transform.scale(self.light_mask, (1000, 1000))
+        self.light_rect = self.light_mask.get_rect()
+        if not sprite:
+            self.fog.fill(LIGHTGREY)
+            self.light_rect.center = self.camera.apply(self.player).center
+        else:
+            self.light_rect.center = self.camera.apply(sprite).center
+        self.fog.blit(self.light_mask, self.light_rect)
 
     def events(self, eventList):
         # Se mira la lista de eventos

@@ -19,7 +19,7 @@ class SingletonMeta(type):
 		return cls._instances[cls]
 
 
-class Weapon(metaclass=SingletonMeta):
+class Weapon():
 	def __init__(self, scene, x, y, image):
 		self._layer = WEAPON_LAYER
 		# Init sprite and groups

@@ -37,7 +37,6 @@ class Cutscene1(Scene):
         self.iluminacion = True
 
         self.fog = pg.Surface((WIDTH, HEIGHT))
-        self.fog.fill(DARKGREY)
 
         #Exit condition: player must interact with an amount of npcs to exit the level
         self.talkedCount = 0
@@ -89,8 +88,7 @@ class Cutscene1(Scene):
         self.dialogueContinuation = pg.image.load(
             "./sprites/Hud/continuation.png").convert_alpha()
         self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
-        self.light_mask = pg.image.load(
-            "./sprites/Hud/light_700_soft.png").convert_alpha()
+        self.light_mask = pg.transform.scale(pg.image.load("./sprites/Hud/light_350_soft.png").convert_alpha(), (1000, 1000))
 
         #NPC
         self.npc1Profile = pg.image.load(

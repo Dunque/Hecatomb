@@ -136,7 +136,7 @@ class KamikazeDyingState(EnemyDyingState):
 
         Explosion(self.character.scene, self.character.pos, self.character.explosionWalls,
                   self.character.scene.player_SG, scale=6, dealsDamage=True, damage=40)
-        EXPLOSION_SOUND.play()
+        #EXPLOSION_SOUND.play()
         Explosion(self.character.scene, self.character.pos, self.character.explosionWalls,
                 self.character.scene.mobs_SG, scale=6, dealsDamage=True, damage=40)
         super(KamikazeDyingState, self).update()

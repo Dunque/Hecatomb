@@ -39,7 +39,6 @@ class Level1(Scene):
         self.iluminacion = True
 
         self.fog = pg.Surface((WIDTH, HEIGHT))
-        self.fog.fill(DARKGREY)
 
         #Exit condition: player must interact with an amount of npcs to exit the level
         self.talkedCount = 0
