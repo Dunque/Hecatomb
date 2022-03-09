@@ -18,7 +18,7 @@ class Hud:
 
 	def draw_health(self, surf):
 		self.draw_health_bar(surf, (20,20), (300,50),
-				(0, 0, 0), (0, 0, 0), (200, 50, 50), self.player.entityData.actualHP/self.player.entityData.maxHP)
+                       WHITE, BLACK, (180, 50, 0), self.player.entityData.actualHP/self.player.entityData.maxHP)
 
 
 class Interaccion(pg.sprite.Sprite):

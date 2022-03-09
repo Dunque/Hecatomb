@@ -55,14 +55,6 @@ class Player(Character):
 	def stopMovement(self):
 		self.state.move = False
 
-	def die(self):
-		if self.weapon:
-			self.weapon.kill()
-		self.entityData.currentDeathAnimTimer += 1
-		if (self.entityData.currentDeathAnimTimer >= self.entityData.deathAnimTimer):
-			self.scene.player_SG.remove(self)
-			self.kill()
-
 	def update(self):
 		super(Player, self).update()
 		self.state.handleInput()

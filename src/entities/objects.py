@@ -102,7 +102,43 @@ class Candelabro(pg.sprite.Sprite):
 		self.rect.x = x * TILESIZE
 		self.rect.y = y * TILESIZE
 
-	def update(self):
-		self.image = self.candelabroAnim.get_frame()
+		self.isActive = False
 
+	def update(self):
+		if self.isActive:
+			self.image = self.candelabroAnim.get_frame()
+
+class Exit(pg.sprite.Sprite):
+	def __init__(self, scene, x, y, textLines=None):
+		self.scene = scene
+		self._layer = WALL_LAYER
+		self.groups = self.scene.all_sprites, self.scene.walls_SG
+		pg.sprite.Sprite.__init__(self, self.groups)
+
+		self.image = self.scene.exitImg
+		self.rect = self.image.get_rect()
+
+		self.x = x
+		self.y = y
+		self.rect.x = x * TILESIZE
+		self.rect.y = y * TILESIZE
+		self.pos = vec(self.rect.x, self.rect.y)
+		self.interaccion = Interaccion(self.scene, self.pos, self.scene.abrirImg)
+
+		self.opened = False
+		self.talking = False
+
+	def update(self):
+		player = pg.sprite.spritecollideany(self, self.scene.player_SG)
+		if player:
+			if not self.opened:
+				if not self.talking:
+					self.interaccion.activate()
+					if player.interact:
+						self.open()
+		else:
+			self.interaccion.deactivate()
+
+	def open(self):
+		self.scene.nextScene("next")
 

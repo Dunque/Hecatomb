@@ -32,6 +32,9 @@ class RoomStatePlaying(RoomState):
         for enemy in self.room.enemies:
             self.room.scene.all_sprites.add(enemy)
             enemy.isActive = True
+
+        for obj in self.room.objects:
+            obj.isActive = True
     
     def update(self):
         if self.room.enemies == []:
@@ -56,7 +59,7 @@ class Room(Observer):
         self.matrix = matrix
         self.scene = scene
 
-        # Set the room boundaries in x axis
+        # Set the room boundaries
         self.limitX0 = limitX
         self.limitX = limitX + ROOMWIDTH - 1
         self.limitY0 = limitY
