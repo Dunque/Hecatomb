@@ -19,6 +19,7 @@ class Level1(Scene):
 
         #Initialize sprite groups
         self.all_sprites = pg.sprite.LayeredUpdates()
+        self.all_hud = pg.sprite.LayeredUpdates()
         self.background_SG = pg.sprite.LayeredUpdates()
         self.walls_SG = pg.sprite.LayeredUpdates()
         self.candelabros_SG = pg.sprite.LayeredUpdates()
@@ -35,6 +36,7 @@ class Level1(Scene):
         self.screen = None
 
         self.player = None
+        self.iluminacion = True
 
         self.fog = pg.Surface((WIDTH, HEIGHT))
         self.fog.fill(DARKGREY)
@@ -134,6 +136,7 @@ class Level1(Scene):
         self.dt = time
         # update portion of the game loop
         self.all_sprites.update()
+        self.all_hud.update()
         self.camera.update(self.player)
 
         # Si el jugado ha muerto
@@ -159,13 +162,17 @@ class Level1(Scene):
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
 
+        if self.iluminacion:
+            self.render_fog()
+            #for sprite in list(self.candelabros_SG):
+            #    self.render_fog(sprite)
+            self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
+
+        for hud in self.all_hud:
+            self.screen.blit(hud.image, self.camera.apply(hud))
+
         self.drawDialogue()
         self.hud.draw_health(screen)
-
-        self.render_fog()
-        for sprite in list(self.candelabros_SG):
-            self.render_fog(sprite)
-        self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
 
     def drawDialogue(self):
         if not self.dialogue_cooldown and self.dialogue:
@@ -183,8 +190,8 @@ class Level1(Scene):
         phrase1 = ''.join(self.text_lines[1])
         phrase2 = ''.join(self.text_lines[2])
 
-        text_surface0, rect0 = self.game_font.render(phrase0, (255, 255, 255))
-        text_surface1, rect1 = self.game_font.render(phrase1, (255, 255, 255))
+        text_surface0, rect0 = self.game_font.render(phrase0, (150, 150, 150))
+        text_surface1, rect1 = self.game_font.render(phrase1, (200, 200, 200))
         text_surface2, rect2 = self.game_font.render(phrase2, (255, 255, 255))
         self.screen.blit(text_surface0, (WIDTH / 2 - 500, (HEIGHT / 2) + y_offset0))
         self.screen.blit(text_surface1, (WIDTH / 2 - 500, (HEIGHT / 2) + y_offset1))
@@ -235,17 +242,14 @@ class Level1(Scene):
         self.skip_dialogue = False
 
     def render_fog(self, sprite = None):
+        self.light_mask = pg.transform.scale(self.light_mask, (15000, 15000))
+        self.light_rect = self.light_mask.get_rect()
         if not sprite:
             self.fog.fill(DARKGREY)
-            self.light_mask = pg.transform.scale(self.light_mask, (1000, 1000))
-            self.light_rect = self.light_mask.get_rect()
             self.light_rect.center = self.camera.apply(self.player).center
-            self.fog.blit(self.light_mask, self.light_rect)
         else:
-            self.light_mask = pg.transform.scale(self.light_mask, (1000, 1000))
-            self.light_rect = self.light_mask.get_rect()
             self.light_rect.center = self.camera.apply(sprite).center
-            self.fog.blit(self.light_mask, self.light_rect)
+        self.fog.blit(self.light_mask, self.light_rect)
 
     def events(self, eventList):
         # Se mira la lista de eventos

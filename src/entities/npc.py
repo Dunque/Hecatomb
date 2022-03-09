@@ -32,6 +32,7 @@ class NPCBase(Character):
 					dialogue = line
 		self.dialogo = DialogoInGame(self.scene, dialogue.rstrip("\n").split('\\n'), stopMove=True, profileImg=self.profileImg)
 		self.talking = False
+		self.right = True
 
 	def update(self):
 		player = pg.sprite.spritecollideany(self, self.scene.player_SG)
@@ -52,6 +53,14 @@ class NPCBase(Character):
 
 	def talk(self):
 		self.talking = True
+		print(self.scene.player.rect)
+		print(self.rect)
+		if self.rect.x > self.scene.player.rect.x and self.right:
+			self.image = pg.transform.flip(self.image, True, False)
+			self.right = False
+		elif self.rect.x < self.scene.player.rect.x and not self.right:
+			self.image = pg.transform.flip(self.image, True, False)
+			self.right = True
 		self.interaccion.deactivate()
 		if not self.scene.completly_finished:
 			self.dialogo.drawText()

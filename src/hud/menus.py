@@ -76,10 +76,10 @@ class WeaponMenu(MenuManager):
 	def toggle_menu(self, visible):
 		if visible:
 			self.notify('update')
-			[button.add(self.scene.all_sprites) for button in self._observers]
+			[button.add(self.scene.all_hud) for button in self._observers]
 			self.is_active = True
 		else:
-			[button.remove(self.scene.all_sprites) for button in self._observers]
+			[button.remove(self.scene.all_hud) for button in self._observers]
 			self.is_active = False
 
 	def highlight(self):

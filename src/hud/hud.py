@@ -35,19 +35,19 @@ class Interaccion(pg.sprite.Sprite):
 	def activate(self):
 		if not self.visible:
 			self.visible = True
-			self.add(self.scene.all_sprites)
+			self.add(self.scene.all_hud)
 
 	def deactivate(self):
 		if self.visible:
 			self.visible = False
-			self.remove(self.scene.all_sprites)
+			self.remove(self.scene.all_hud)
 
 
 class CrossHair:
 	def __init__(self, scene, image):
 		self._layer = HUD_LAYER
 		self.scene = scene
-		self.groups = scene.all_sprites
+		self.groups = scene.all_hud
 		pg.sprite.Sprite.__init__(self, self.groups)
 		self.image = image
 		self.rect = self.image.get_rect()
@@ -63,7 +63,7 @@ class CrossHair:
 		self.rect.center = mouse_x, mouse_y
 
 	def activate(self):
-		self.add(self.scene.all_sprites)
+		self.add(self.scene.all_hud)
 
 
 class CrosshairGun(CrossHair, pg.sprite.Sprite):
@@ -106,10 +106,10 @@ class ProfileBoxDialogue(pg.sprite.Sprite):
 			self.image = self.anim.frames[0]
 
 	def activate(self):
-		self.scene.all_sprites.add(self)
+		self.scene.all_hud.add(self)
 
 	def deactivate(self):
-		self.scene.all_sprites.remove(self)
+		self.scene.all_hud.remove(self)
 
 
 class ContinuationDialogue(pg.sprite.Sprite):
@@ -129,10 +129,10 @@ class ContinuationDialogue(pg.sprite.Sprite):
 		self.rect.center = pos_x, pos_y
 
 	def activate(self):
-		self.scene.all_sprites.add(self)
+		self.scene.all_hud.add(self)
 
 	def deactivate(self):
-		self.scene.all_sprites.remove(self)
+		self.scene.all_hud.remove(self)
 
 
 class DialogoInGame(pg.sprite.Sprite):
@@ -164,7 +164,7 @@ class DialogoInGame(pg.sprite.Sprite):
 			self.continuation.deactivate()
 
 	def drawText(self):
-		self.scene.all_sprites.add(self)
+		self.scene.all_hud.add(self)
 		if self.profileBox:
 			self.profileBox.activate()
 		self.scene.updateDialogue(self.text)
@@ -173,7 +173,7 @@ class DialogoInGame(pg.sprite.Sprite):
 		self.scene.stopText()
 
 	def end(self):
-		self.scene.all_sprites.remove(self)
+		self.scene.all_hud.remove(self)
 		if self.profileBox:
 			self.profileBox.deactivate()
 		self.continuation.deactivate()
