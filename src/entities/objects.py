@@ -1,13 +1,13 @@
 import pygame as pg
 from src.settings.settings import *
 from src.sprites.anim import Anim
-from src.hud.hud import Interaccion
+from src.hud.hud import Interaccion, DialogoInGame
 
 vec = pg.math.Vector2
 
 
 class Chest(pg.sprite.Sprite):
-	def __init__(self, scene, x, y):
+	def __init__(self, scene, x, y, textLines = None):
 		self.scene = scene
 		self._layer = WALL_LAYER
 		self.groups = self.scene.all_sprites, self.scene.walls_SG
@@ -24,23 +24,54 @@ class Chest(pg.sprite.Sprite):
 		self.pos = vec(self.rect.x + 50, self.rect.y)
 		self.interaccion = Interaccion(self.scene, self.pos, self.scene.abrirImg)
 
+		self.dialogo = None
+		if textLines:
+			with open(self.scene.dialogues_src) as f:
+				for i, line in enumerate(f):
+					if i == textLines:
+						dialogue = line
+			self.dialogo = DialogoInGame(self.scene, dialogue.rstrip("\n").split('\\n'), stopMove=True)
+
 		self.opened = False
+		self.talking = False
 
 	def update(self):
-		if not self.opened:
-			player = pg.sprite.spritecollideany(self, self.scene.player_SG)
-			if player:
-				self.interaccion.activate()
-				if player.interact:
-					self.open()
+		player = pg.sprite.spritecollideany(self, self.scene.player_SG)
+		if player:
+			if not self.opened:
+				if not self.talking:
+					self.interaccion.activate()
+					if player.interact:
+						self.open()
 			else:
-				self.interaccion.deactivate()
+				if player.interact:
+					self.talkFast()
+				else:
+					self.stopTalkFast()
+		else:
+			self.interaccion.deactivate()
+			if self.talking:
+				self.scene.completly_finished = False
+			self.talking = False
 
 	def open(self):
 		self.opened = True
+		self.talking = True
+		self.talking = True
 		self.interaccion.deactivate()
 		self.chestAnim.current_frame = 1
 		self.image = self.chestAnim.get_frame()
+		if not self.scene.completly_finished:
+			self.dialogo.drawText()
+
+	def talkFast(self):
+		if not self.scene.completly_finished:
+			self.dialogo.drawText()
+		else:
+			self.dialogo.end()
+
+	def stopTalkFast(self):
+		self.dialogo.stopText()
 
 	def kill(self):
 		super(Chest, self).kill()

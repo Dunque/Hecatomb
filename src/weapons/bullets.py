@@ -75,7 +75,7 @@ class ShotgunBullet(Bullet, pg.sprite.Sprite):
 class Explosion(pg.sprite.Sprite):
 	def __init__(self, scene, pos, anim, targetGroup, scale = 1, destroy = False, dealsDamage = False, damage = 0):
 		self._layer = PICKUP_LAYER
-		self.groups = scene.all_sprites, scene.bullets_SG
+		self.groups = scene.all_sprites, scene.explosions_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
 		self.scene = scene
 		self.targetGroup = targetGroup

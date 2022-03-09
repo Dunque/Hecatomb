@@ -24,6 +24,7 @@ class Level1(Scene):
         self.player_SG = pg.sprite.LayeredUpdates()
         self.npc_SG = pg.sprite.LayeredUpdates()
         self.bullets_SG = pg.sprite.LayeredUpdates()
+        self.explosions_SG = pg.sprite.LayeredUpdates()
         self.weapons_SG = pg.sprite.LayeredUpdates()
         self.floors_SG = pg.sprite.LayeredUpdates()
         self.chest_SG = pg.sprite.LayeredUpdates()
@@ -33,6 +34,8 @@ class Level1(Scene):
 
         self.player = None
 
+        self.fog = pg.Surface((WIDTH, HEIGHT))
+        self.fog.fill(DARKGREY)
         #Loads all sprite and sound data
         self.load_data()
 
@@ -66,6 +69,7 @@ class Level1(Scene):
         self.dialogueBox = pg.image.load("./sprites/Hud/dialoguebox.png").convert_alpha()
         self.dialogueContinuation = pg.image.load("./sprites/Hud/continuation.png").convert_alpha()
         self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
+        self.light_mask = pg.image.load("./sprites/Hud/light_350_soft.png").convert_alpha()
 
         #NPC
         self.npc1Profile = pg.image.load("./sprites/Player/profile1.png").convert_alpha()
@@ -146,8 +150,14 @@ class Level1(Scene):
         #self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
+
         self.drawDialogue()
         self.hud.draw_health(screen)
+
+        self.render_fog()
+        for sprite in list(self.explosions_SG):
+            self.render_fog(sprite)
+        self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
 
     def drawDialogue(self):
         if not self.dialogue_cooldown and self.dialogue:
@@ -215,6 +225,19 @@ class Level1(Scene):
 
     def stopText(self):
         self.skip_dialogue = False
+
+    def render_fog(self, sprite = None):
+        if not sprite:
+            self.fog.fill(DARKGREY)
+            self.light_mask = pg.transform.scale(self.light_mask, (1000, 1000))
+            self.light_rect = self.light_mask.get_rect()
+            self.light_rect.center = self.camera.apply(self.player).center
+            self.fog.blit(self.light_mask, self.light_rect)
+        else:
+            self.light_mask = pg.transform.scale(self.light_mask, (200, 200))
+            self.light_rect = self.light_mask.get_rect()
+            self.light_rect.center = self.camera.apply(sprite).center
+            self.fog.blit(self.light_mask, self.light_rect)
 
     def events(self, eventList):
         # catch all events here

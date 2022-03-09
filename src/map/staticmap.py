@@ -125,7 +125,7 @@ class StaticMap(Notifier):
                     elif self.finalMap[row][col] == '-':
                         room.addDoor(Door(self.scene, col, row, ROCK_IMAGE))
                     elif self.finalMap[row][col] == 'C':
-                        Chest(self.scene, col, row)
+                        Chest(self.scene, col, row, textLines=7)
                     elif self.finalMap[row][col] == '4':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=1))
                     elif self.finalMap[row][col] == '5':
