@@ -34,7 +34,6 @@ class Intro(Scene):
         # Dibujamos título del juego
         font = pg.font.Font(HANSHAND_FONT, 224)
         text = font.render('HECATOMB', True, MAROON)
-        text.set_alpha(192)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)
 

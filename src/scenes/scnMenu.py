@@ -70,7 +70,7 @@ class TextHecatomb(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(HANSHAND_FONT, 160)
         pos = (WIDTH/2, HEIGHT*3/10)
-        CenteredTextGUI.__init__(self, screen, font, MAROON, 'HECATOMB', pos, 192)
+        CenteredTextGUI.__init__(self, screen, font, MAROON, 'HECATOMB', pos)
 
     def action(self):
         pass
