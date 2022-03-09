@@ -242,7 +242,7 @@ class Level1(Scene):
         self.skip_dialogue = False
 
     def render_fog(self, sprite = None):
-        self.light_mask = pg.transform.scale(self.light_mask, (15000, 15000))
+        self.light_mask = pg.transform.scale(self.light_mask, (10000, 10000))
         self.light_rect = self.light_mask.get_rect()
         if not sprite:
             self.fog.fill(LIGHTGREY)
