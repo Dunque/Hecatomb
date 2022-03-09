@@ -24,6 +24,7 @@ if __name__ == '__main__':
     from src.scenes.levels.scnLevel3 import Level3
     from src.scenes.cutscenes.scnCutscene1 import Cutscene1
     from src.scenes.scnPause import PauseMenu
+    from src.scenes.scnLosing import LosingMenu
 
     if len(sys.argv) > 2:
         sys.exit("error: demasiados args")
@@ -41,8 +42,11 @@ if __name__ == '__main__':
         elif sys.argv[1] == 'l3':
             director.stackScene(Level3(director))
         elif sys.argv[1] == 'pause':
-            director.stackScene(Cutscene1(director))
+            director.stackScene(Level1(director))
             director.stackScene(PauseMenu(director))
+        elif sys.argv[1] == 'losing':
+            director.stackScene(Level1(director))
+            director.stackScene(LosingMenu(director))
 
         else:
             sys.exit("error: posibles valores de arg: {menu, l1, l2, l3, pause}")

@@ -5,6 +5,7 @@ from src.map.randmap import RandMap
 from src.map.staticmap import StaticMap
 from src.scenes.cutscenes.scnCutscene2 import Cutscene2
 from src.scenes.scene import Scene
+from src.scenes.scnLosing import LosingMenu
 from src.scenes.scnPause import PauseMenu
 from src.settings.settings import *
 
@@ -96,9 +97,9 @@ class Level1(Scene):
         self.all_sprites.update()
         self.camera.update(self.player)
 
+        # Si el jugado ha muerto
         if not self.player_SG.has(self.player):
-            scene1 = Level1(self.director)
-            self.director.changeScene(scene1)
+            self.losingScene()
 
         for menu in self.menus:
             menu.update()
@@ -137,6 +138,10 @@ class Level1(Scene):
 
     def pauseScene(self):
         scene = PauseMenu(self.director)
+        self.director.stackScene(scene)
+    
+    def losingScene(self):
+        scene = LosingMenu(self.director)
         self.director.stackScene(scene)
 
     def nextScene(self):

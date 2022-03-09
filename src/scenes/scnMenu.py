@@ -1,7 +1,6 @@
 import pygame as pg
 from src.scenes.cutscenes.scnCutscene1 import Cutscene1
 from src.scenes.guiElems import *
-from src.scenes.resourceManager import ResourceManager
 from src.scenes.scene import Scene
 from src.scenes.survival.scnSurvival import Survival
 from src.settings.settings import *

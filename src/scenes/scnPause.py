@@ -1,6 +1,5 @@
 import pygame as pg
 from src.scenes.guiElems import *
-from src.scenes.resourceManager import ResourceManager
 from src.scenes.scene import Scene
 from src.settings.settings import *
 
@@ -69,6 +68,9 @@ class TextPause(CenteredTextGUI):
         pass
 
 
+# ---------------------------------------------------------
+# Textos
+
 class TextOptions(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(HANSHAND_FONT, 112)
@@ -98,6 +100,9 @@ class InitialScreenGUI(ScreenGUI):
         self.elementsGUI.append(buttonRestart)
         self.elementsGUI.append(buttonExitToMenu)
 
+
+# ---------------------------------------------------------
+# Pantallas
 
 class OptionsScreenGUI(ScreenGUI):
     def __init__(self, menu):

@@ -29,8 +29,12 @@ l2:
 l3:
 	$(PYTHON) $(FILE) $@
 
-# Pause (sobre Cutscene1)
+# Pause (sobre Level1)
 pause:
+	$(PYTHON) $(FILE) $@
+
+# Losing (sobre Level1)
+losing:
 	$(PYTHON) $(FILE) $@
 
 #------------------------------------------------
