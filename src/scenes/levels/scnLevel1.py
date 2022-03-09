@@ -111,6 +111,7 @@ class Level1(Scene):
         self.heraldWalkSheet = pg.image.load("./sprites/Herald/heraldWalkSheet.png").convert_alpha()
         self.heraldDeathSheet = pg.image.load("./sprites/Herald/heraldDeathSheet.png").convert_alpha()
 
+
         #MAP BACKGROUNDS
         self.background1 = pg.image.load("./sprites/background1.png").convert_alpha()
         self.background2 = pg.image.load("./sprites/background2.png").convert_alpha()

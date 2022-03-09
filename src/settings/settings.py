@@ -43,6 +43,14 @@ CAMERA_Y = 0
 #player sprite size
 CHARACTER_SPRITE_SIZE = 96
 
+# SOUNDS
+FIRE_BULLET_SOUND = pg.mixer.Sound("./sounds/Fire_4.wav")
+DEATH_SOUND = pg.mixer.Sound("./sounds/Game_Over.wav")
+CHANGE_SOUND = pg.mixer.Sound("./sounds/recharge.wav")
+ENEMY_DEATH_SOUND = pg.mixer.Sound("./sounds/Hit_1.wav")
+SWORD_SOUND = pg.mixer.Sound("./sounds/sword.wav")
+PALYER_DAMAGE_SOUND = pg.mixer.Sound("./sounds/Fire_2.wav")
+EXPLOSION_SOUND = pg.mixer.Sound("./sounds/explosion.wav")
 #SPRITE LAYERS top > bottom
 HUD_LAYER = 9
 PICKUP_LAYER = 8
@@ -51,11 +59,7 @@ CHARACTER_LAYER = 6
 WALL_LAYER = 1
 FLOOR_LAYER = 0
 
-FIRE_BULLET_SOUND =pg.mixer.Sound("./sounds/Fire_4.wav")
-DEATH_SOUND =pg.mixer.Sound("./sounds/Game_Over.wav")
-CHANGE_SOUND =pg.mixer.Sound("./sounds/recharge.wav")
-ENEMY_DEATH_SOUND= pg.mixer.Sound("./sounds/Hit_1.wav")
-SWORD_SOUND=pg.mixer.Sound("./sounds/sword.wav")
+
 musica =pg.mixer.music.load("./sounds/menu_music.mp3")
 #TODO borrar esta trapallada
 

@@ -41,7 +41,7 @@ class Player(Character):
 		self.interact = False
 		self.state = PlayerGroundedState(self, "GROUNDED")
 
-		self.soundDamage = None
+		self.soundDamage =DEATH_SOUND
 
 	def die(self):
 		if self.weapon:
