@@ -5,7 +5,7 @@ from src.entities.player import *
 from src.entities.enemies import *
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
-from src.entities.objects import Chest
+from src.entities.objects import Chest, Candelabro
 from src.entities.ground import *
 from src.map.camera import *
 from src.map.room import Room
@@ -134,6 +134,9 @@ class StaticMap(Notifier):
                         room.addNPC(NPCBase(self.scene, col, row, textLines=3))
                     elif self.finalMap[row][col] == '7':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=4))
+
+                    elif self.finalMap[row][col] == '8':
+                        Candelabro(self.scene, col, row)
                         pass
             #We initialize the room doors to be open, until the player wanders in
             room.openAllDoors()

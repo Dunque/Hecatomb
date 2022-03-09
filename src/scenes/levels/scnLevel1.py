@@ -20,6 +20,7 @@ class Level1(Scene):
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.background_SG = pg.sprite.LayeredUpdates()
         self.walls_SG = pg.sprite.LayeredUpdates()
+        self.candelabros_SG = pg.sprite.LayeredUpdates()
         self.mobs_SG = pg.sprite.LayeredUpdates()
         self.player_SG = pg.sprite.LayeredUpdates()
         self.npc_SG = pg.sprite.LayeredUpdates()
@@ -48,7 +49,10 @@ class Level1(Scene):
         self.playerGunImg = pg.image.load("./sprites/Weapons/gun.png").convert_alpha()
         self.playerShotgunImg = pg.image.load("./sprites/Weapons/shotgun.png").convert_alpha()
         self.playerSwordImg = pg.image.load("./sprites/Weapons/sword.png").convert_alpha()
+
+
         self.chestImg = pg.image.load("./sprites/Objects/chest.png").convert_alpha()
+        self.candelabroImg = pg.image.load("./sprites/Objects/candelabro.png").convert_alpha()
 
         #BULLETS/AMMUNITION DATA
         self.gunBulletImg = pg.image.load("./sprites/Fire_Ball/gun_bullet.png").convert_alpha()
@@ -155,7 +159,7 @@ class Level1(Scene):
         self.hud.draw_health(screen)
 
         self.render_fog()
-        for sprite in list(self.explosions_SG):
+        for sprite in list(self.candelabros_SG):
             self.render_fog(sprite)
         self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
 
@@ -234,7 +238,7 @@ class Level1(Scene):
             self.light_rect.center = self.camera.apply(self.player).center
             self.fog.blit(self.light_mask, self.light_rect)
         else:
-            self.light_mask = pg.transform.scale(self.light_mask, (200, 200))
+            self.light_mask = pg.transform.scale(self.light_mask, (1000, 1000))
             self.light_rect = self.light_mask.get_rect()
             self.light_rect.center = self.camera.apply(sprite).center
             self.fog.blit(self.light_mask, self.light_rect)

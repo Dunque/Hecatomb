@@ -1,3 +1,5 @@
+import random
+
 import pygame as pg
 from src.settings.settings import *
 from src.sprites.anim import Anim
@@ -76,3 +78,31 @@ class Chest(pg.sprite.Sprite):
 	def kill(self):
 		super(Chest, self).kill()
 		self.interaccion.deactivate()
+
+
+class Candelabro(pg.sprite.Sprite):
+	def __init__(self, scene, x, y):
+		self.scene = scene
+		self._layer = WALL_LAYER
+		self.groups = self.scene.all_sprites, self.scene.walls_SG, self.scene.candelabros_SG
+		pg.sprite.Sprite.__init__(self, self.groups)
+
+		self.candelabroAnim = Anim(self.scene.candelabroImg, (64, 64), 2, 0, 8)
+		self.candelabroAnim.current_frame = random.randint(0, 7)
+		self.image = self.candelabroAnim.get_frame()
+		self.rect = self.image.get_rect()
+
+		self.pos = vec(x, y)
+
+		# tilemap position
+		self.x = x
+		self.y = y
+
+		# Global position
+		self.rect.x = x * TILESIZE
+		self.rect.y = y * TILESIZE
+
+	def update(self):
+		self.image = self.candelabroAnim.get_frame()
+
+
