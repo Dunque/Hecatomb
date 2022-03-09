@@ -47,7 +47,17 @@ class RoomStatePlaying(RoomState):
 class RoomStateCleared(RoomState):
     def __init__(self, room, name):
         super(RoomStateCleared, self).__init__(room, name)
-        self.room.openAllDoors()             
+        self.room.openAllDoors()
+
+    def update(self):
+        if self.room.npcs == []:
+            pass
+        else:
+            for npc in self.room.npcs:
+                print(npc.talked)
+                if npc.talked:
+                    self.room.scene.talkedCount += 1
+                    self.room.npcs.remove(npc)
 
 
 class Room(Observer):
@@ -70,7 +80,7 @@ class Room(Observer):
 
         #Entities present in the room
         self.enemies = []
-        self.npc = []
+        self.npcs = []
         self.objects = []
         self.doors = []
 
@@ -84,7 +94,7 @@ class Room(Observer):
         self.enemies.append(enemy)
 
     def addNPC(self, npc):
-        self.npc.append(npc)
+        self.npcs.append(npc)
 
     def closeAllDoors(self):
         for door in self.doors:
@@ -95,7 +105,9 @@ class Room(Observer):
             door.open()
 
     def startRoom(self):
-        self.state = RoomStatePlaying(self,"PLAYING")
+        if self.state.name == "UNCLEARED":
+            self.state = RoomStatePlaying(self,"PLAYING")
     
     def update(self):
+        print(self.state.name)
         self.state.update()

@@ -142,7 +142,5 @@ class CutsceneMap(Notifier):
             # Update the active rooms
             for room in self.rooms:
                 # Check if the player is in a given room by comparing their limits
-                if self.scene.player.hit_rect.x in range((room.limitX0+1)*TILESIZE, (room.limitX-1)*TILESIZE) and self.scene.player.hit_rect.y in range((room.limitY0+1)*TILESIZE, (room.limitY-1)*TILESIZE):
-                    self.notify(room, "start")
-
+                self.notify(room, "start")
                 room.update()

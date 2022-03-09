@@ -40,6 +40,11 @@ class Level1(Scene):
 
         self.fog = pg.Surface((WIDTH, HEIGHT))
         self.fog.fill(DARKGREY)
+
+        #Exit condition: player must interact with an amount of npcs to exit the level
+        self.talkedCount = 0
+        self.canExit = False
+
         #Loads all sprite and sound data
         self.load_data()
     
@@ -149,10 +154,13 @@ class Level1(Scene):
         if not self.player_SG.has(self.player):
             self.losingScene()
 
+        #Exit condition
+        if self.talkedCount >= 4:
+            self.canExit = True
+
         for menu in self.menus:
             menu.update()
 
-        #Win condition is checked in the map object
         self.map.update()
 
     def draw(self, screen):

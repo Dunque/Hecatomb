@@ -35,6 +35,8 @@ class NPCBase(Character):
 		self.talking = False
 		self.right = True
 
+		self.talked = False
+
 	def update(self):
 		if self.right:
 			self.image = pg.transform.flip(self.currentAnim.get_frame(), False, False)
@@ -63,6 +65,9 @@ class NPCBase(Character):
 			self.currentAnim = self.animList[1]
 
 	def talk(self):
+		#boolean to check if player hs interacted with the npc
+		self.talked = True
+		#Boolean to trigger the talking logic
 		self.talking = True
 		self.currentAnim = self.animList[1]
 		if self.rect.x > self.scene.player.rect.x and self.right:
