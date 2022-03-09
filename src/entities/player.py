@@ -41,6 +41,8 @@ class Player(Character):
 		self.interact = False
 		self.state = PlayerGroundedState(self, "GROUNDED")
 
+		self.soundDamage = None
+
 	def die(self):
 		if self.weapon:
 			self.weapon.deactivate()
@@ -97,3 +99,6 @@ class Player(Character):
 			pg.mouse.set_visible(False)
 			self.weapon.activate()
 			self.weapon_slot = slot
+
+	def takeDamage(self, dmg):
+		super(Player, self).takeDamage(dmg, self.soundDamage)

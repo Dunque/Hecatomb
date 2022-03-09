@@ -169,9 +169,9 @@ class Cutscene1(Scene):
         phrase1 = ''.join(self.text_lines[1])
         phrase2 = ''.join(self.text_lines[2])
 
-        text_surface0, rect0 = self.game_font.render(phrase0, (255, 255, 255))
-        text_surface1, rect1 = self.game_font.render(phrase1, (255, 255, 255))
-        text_surface2, rect2 = self.game_font.render(phrase2, (255, 255, 255))
+        text_surface0, rect0 = self.game_font.render(phrase0, (200, 200, 200))
+        text_surface1, rect1 = self.game_font.render(phrase1, (200, 200, 200))
+        text_surface2, rect2 = self.game_font.render(phrase2, (200, 200, 200))
         self.screen.blit(text_surface0, (WIDTH / 2 -
                          500, (HEIGHT / 2) + y_offset0))
         self.screen.blit(text_surface1, (WIDTH / 2 -

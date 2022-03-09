@@ -88,9 +88,12 @@ class Character(pg.sprite.Sprite):
                 self.vel.y = 0
                 self.hit_rect.centery = self.pos.y
 
-    def takeDamage(self, dmg):
+    def takeDamage(self, dmg, sound=None):
         if self.isActive:
             if self.entityData.vulnerable and (self.state.name != "DODGING"):
+                if sound:
+                    pass
+                    ##PLAY SOUND DAMAGE
                 self.entityData.takeDamage(dmg)
 
     def update(self):
