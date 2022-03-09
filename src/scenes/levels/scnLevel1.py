@@ -1,3 +1,5 @@
+import copy
+
 import pygame as pg
 from src.hud.hud import Hud
 from src.map.staticmap import StaticMap
@@ -82,7 +84,7 @@ class Level1(Scene):
         self.dialogueBox = pg.image.load("./sprites/Hud/dialoguebox.png").convert_alpha()
         self.dialogueContinuation = pg.image.load("./sprites/Hud/continuation.png").convert_alpha()
         self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
-        self.light_mask = pg.image.load("./sprites/Hud/light_350_soft.png").convert_alpha()
+        self.light_mask = pg.transform.scale(pg.image.load("./sprites/Hud/light_350_soft.png").convert_alpha(), (1000, 1000))
 
         #NPC
         self.npc1Profile = pg.image.load("./sprites/Player/profile1.png").convert_alpha()
@@ -167,8 +169,8 @@ class Level1(Scene):
         #Fog
         if self.iluminacion:
             self.render_fog()
-            #for sprite in list(self.candelabros_SG):
-            #    self.render_fog(sprite)
+            for sprite in list(self.candelabros_SG):
+                self.render_fog(sprite)
             self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
 
         #Hud
@@ -245,7 +247,6 @@ class Level1(Scene):
         self.skip_dialogue = False
 
     def render_fog(self, sprite = None):
-        self.light_mask = pg.transform.scale(self.light_mask, (800, 800))
         self.light_rect = self.light_mask.get_rect()
         if not sprite:
             self.fog.fill(LIGHTGREY)
