@@ -1,24 +1,237 @@
 import pygame as pg
+from src.hud.hud import Hud
 from src.scenes.levels.scnLevel1 import Level1
-from src.scenes.resourceManager import ResourceManager
 from src.scenes.scene import Scene
 from src.scenes.scnPause import PauseMenu
 from src.settings.settings import *
+from src.entities.character import *
+from src.map.cutscenemap import CutsceneMap
+from src.hud.hud import Hud
 
 
 class Cutscene1(Scene):
 
     def __init__(self, director):
-        # Llamamos al constructor de la clase padre
-        Scene.__init__(self, director);
-        # Creamos la imagen de fondo
-        # self.image = ResourceManager.LoadImage('resources/images/intro.png')
-    
+        #Initialize superclass
+        Scene.__init__(self, director)
+
+        #Initialize sprite groups
+        self.all_sprites = pg.sprite.LayeredUpdates()
+        self.all_hud = pg.sprite.LayeredUpdates()
+        self.background_SG = pg.sprite.LayeredUpdates()
+        self.walls_SG = pg.sprite.LayeredUpdates()
+        self.candelabros_SG = pg.sprite.LayeredUpdates()
+        self.mobs_SG = pg.sprite.LayeredUpdates()
+        self.player_SG = pg.sprite.LayeredUpdates()
+        self.npc_SG = pg.sprite.LayeredUpdates()
+        self.bullets_SG = pg.sprite.LayeredUpdates()
+        self.explosions_SG = pg.sprite.LayeredUpdates()
+        self.weapons_SG = pg.sprite.LayeredUpdates()
+        self.floors_SG = pg.sprite.LayeredUpdates()
+        self.chest_SG = pg.sprite.LayeredUpdates()
+        self.menus = []
+
+        self.screen = None
+
+        self.player = None
+        self.iluminacion = True
+
+        self.fog = pg.Surface((WIDTH, HEIGHT))
+        self.fog.fill(DARKGREY)
+        #Loads all sprite and sound data
+        self.load_data()
+
     def reset(self):
         self.__init__(self.director)
 
-    def update(self, *args):
-        return
+    def load_data(self):
+        #PLAYER DATA
+        self.playerWalkSheet = pg.image.load(
+            "./sprites/Player/playerWalkSheet.png").convert_alpha()
+        self.playerIdleSheet = pg.image.load(
+            "./sprites/Player/playerIdleSheet.png").convert_alpha()
+        self.playerDodgeSheet = pg.image.load(
+            "./sprites/Player/playerDodgeSheet.png").convert_alpha()
+        self.playerDeathSheet = pg.image.load(
+            "./sprites/Player/playerDeathSheet.png").convert_alpha()
+        self.playerTalkingSheet = pg.image.load(
+            "./sprites/Player/playerTalkingSheet.png").convert_alpha()
+        self.playerGunImg = pg.image.load(
+            "./sprites/Weapons/gun.png").convert_alpha()
+        self.playerShotgunImg = pg.image.load(
+            "./sprites/Weapons/shotgun.png").convert_alpha()
+        self.playerSwordImg = pg.image.load(
+            "./sprites/Weapons/sword.png").convert_alpha()
+
+        self.chestImg = pg.image.load(
+            "./sprites/Objects/chest.png").convert_alpha()
+        self.candelabroImg = pg.image.load(
+            "./sprites/Objects/candelabro.png").convert_alpha()
+
+        #HUD
+        self.radialMenuImg = pg.image.load(
+            "./sprites/Hud/radial_menu.png").convert_alpha()
+        self.abrirImg = pg.image.load(
+            "./sprites/Hud/abrir.png").convert_alpha()
+        self.hablarImg = pg.image.load(
+            "./sprites/Hud/hablar.png").convert_alpha()
+        self.gunCrosshairImg = pg.image.load(
+            "./sprites/Hud/gun_crosshair.png").convert_alpha()
+        self.shotgunCrosshairImg = pg.image.load(
+            "./sprites/Hud/shotgun_crosshair.png").convert_alpha()
+        self.dialogueBox = pg.image.load(
+            "./sprites/Hud/dialoguebox.png").convert_alpha()
+        self.dialogueContinuation = pg.image.load(
+            "./sprites/Hud/continuation.png").convert_alpha()
+        self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
+        self.light_mask = pg.image.load(
+            "./sprites/Hud/light_700_soft.png").convert_alpha()
+
+        #NPC
+        self.npc1Profile = pg.image.load(
+            "./sprites/Player/profile1.png").convert_alpha()
+
+        #MAP BACKGROUNDS
+        self.background1 = pg.image.load(
+            "./sprites/background1.png").convert_alpha()
+
+        self.dialogues_src = "./resources/text/dialogues.txt"
+
+        self.exitImg = pg.image.load(
+            "./sprites/Objects/exit.png").convert_alpha()
+
+        #Map generation
+        self.map = CutsceneMap(self, './maps/cutscenemap1.txt')
+
+        self.hud = Hud(self)
+
+        self.dialogue = None
+        self.remainder_dialogue = None
+        self.active_dialogue = False
+        self.skip_dialogue = False
+        self.dialogue_cooldown = 0
+        self.prev_text = []
+        self.text_line0 = []
+        self.text_line1 = []
+        self.text_line2 = []
+        self.text_lines = [self.text_line0, self.text_line1, self.text_line2]
+        self.dialogue_length = 0
+        self.dialogue_line = 0
+        self.lines = 0
+        self.completly_finished = False
+        self.dialogue_continuation = False
+
+    def update(self, time):
+        self.dt = time
+        # update portion of the game loop
+        self.all_sprites.update()
+        self.all_hud.update()
+        self.camera.update(self.player)
+
+        #Win condition is checked in the map object
+        self.map.update()
+
+    def draw(self, screen):
+        #Background color
+        self.screen = screen
+        self.screen.fill(BGCOLOR)
+
+        #Sprites
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, self.camera.apply(sprite))
+
+        #Fog
+        if self.iluminacion:
+            self.render_fog()
+            for sprite in list(self.candelabros_SG):
+                self.render_fog(sprite)
+            self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
+
+        #Hud
+        for hud in self.all_hud:
+            self.screen.blit(hud.image, self.camera.apply(hud))
+        self.drawDialogue()
+        self.hud.draw_health(screen)
+
+    def drawDialogue(self):
+        if not self.dialogue_cooldown and self.dialogue:
+            letter = self.dialogue.pop(0)
+            self.dialogue_cooldown = 5
+            self.text_lines[self.dialogue_line].append(letter)
+        if self.dialogue_cooldown:
+            self.dialogue_cooldown -= 1
+
+        y_offset0 = 250
+        y_offset1 = 300
+        y_offset2 = 350
+
+        phrase0 = ''.join(self.text_lines[0])
+        phrase1 = ''.join(self.text_lines[1])
+        phrase2 = ''.join(self.text_lines[2])
+
+        text_surface0, rect0 = self.game_font.render(phrase0, (255, 255, 255))
+        text_surface1, rect1 = self.game_font.render(phrase1, (255, 255, 255))
+        text_surface2, rect2 = self.game_font.render(phrase2, (255, 255, 255))
+        self.screen.blit(text_surface0, (WIDTH / 2 -
+                         500, (HEIGHT / 2) + y_offset0))
+        self.screen.blit(text_surface1, (WIDTH / 2 -
+                         500, (HEIGHT / 2) + y_offset1))
+        self.screen.blit(text_surface2, (WIDTH / 2 -
+                         500, (HEIGHT / 2) + y_offset2))
+
+        if self.active_dialogue and len(self.text_lines[self.dialogue_line]) >= self.dialogue_length:
+            if len(self.remainder_dialogue) > 0:
+                self.active_dialogue = False
+                self.dialogue_line += 1
+                self.updateDialogue(self.remainder_dialogue)
+            else:
+                self.dialogue_continuation = True
+
+    def updateDialogue(self, textLine):
+        self.dialogue_continuation = False
+        self.total_lines = len(textLine)
+        if not self.active_dialogue:
+            self.completly_finished = False
+            if self.dialogue_line == 0:
+                self.firstBatch = textLine[:3]
+                self.remainderBatch = textLine[3:]
+                self.total_lines_batch = len(self.firstBatch)
+                textLine = self.firstBatch
+
+            self.player.stopMovement()
+            self.active_dialogue = True
+            self.lines = len(textLine)
+            self.dialogue = list(textLine[0])
+            self.remainder_dialogue = textLine[1:]
+            self.dialogue_length = len(self.dialogue)
+        elif self.dialogue_line == self.total_lines_batch - 1 and len(self.text_lines[self.dialogue_line]) >= self.dialogue_length and not self.skip_dialogue:
+            self.active_dialogue = False
+            self.prev_text = []
+            self.text_lines[0] = []
+            self.text_lines[1] = []
+            self.text_lines[2] = []
+            self.dialogue_line = 0
+            self.player.allowMovement()
+            if len(self.remainderBatch) > 0:
+                self.updateDialogue(self.remainderBatch)
+            else:
+                self.completly_finished = True
+        elif len(self.text_lines[0]) >= 2:
+            self.skip_dialogue = True
+            self.dialogue_cooldown = 0
+
+    def stopText(self):
+        self.skip_dialogue = False
+
+    def render_fog(self, sprite=None):
+        self.light_mask = pg.transform.scale(self.light_mask, (1000, 1000))
+        self.light_rect = self.light_mask.get_rect()
+        if not sprite:
+            self.fog.fill(LIGHTGREY)
+            self.light_rect.center = self.camera.apply(self.player).center
+        else:
+            self.light_rect.center = self.camera.apply(sprite).center
+        self.fog.blit(self.light_mask, self.light_rect)
 
     def events(self, eventList):
         # Se mira la lista de eventos
@@ -26,22 +239,11 @@ class Cutscene1(Scene):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:    # Tecla Esc, menú de pausa
                     self.pauseScene()
-                elif event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
+                # Tecla N, siguiente escena (solo para debug)
+                elif event.key == pg.K_n:
                     self.nextScene()
             elif event.type == pg.QUIT:
                 self.director.exitProgram()
-
-    def draw(self, screen):
-        # Dibujamos imagen de fondo
-        # screen.blit(self.image, self.image.get_rect())
-        screen.fill(BLUE)
-
-        # Dibujamos nombre de escena (para debug)
-        font = pg.font.Font(HANSHAND_FONT, 192)
-        text = font.render('Cutscene1', True, BLACK)
-        textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
-        screen.blit(text, textRect)
-
 
     # -----------------------------------------------------
     # Métodos propios de la escena

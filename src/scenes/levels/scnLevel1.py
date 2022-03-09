@@ -1,5 +1,3 @@
-import copy
-
 import pygame as pg
 from src.hud.hud import Hud
 from src.map.staticmap import StaticMap
@@ -271,13 +269,16 @@ class Level1(Scene):
     # Métodos propios de la escena
 
     def pauseScene(self):
+        pg.mouse.set_visible(True)
         scene = PauseMenu(self.director)
         self.director.stackScene(scene)
     
     def losingScene(self):
+        pg.mouse.set_visible(True)
         scene = LosingMenu(self.director)
         self.director.stackScene(scene)
 
     def nextScene(self):
+        pg.mouse.set_visible(True)
         scene = Cutscene2(self.director)
         self.director.changeScene(scene)

@@ -5,7 +5,7 @@ from src.entities.player import *
 from src.entities.enemies import *
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
-from src.entities.objects import Chest
+from src.entities.objects import *
 from src.entities.ground import *
 from src.map.camera import *
 from src.map.room import Room
@@ -22,11 +22,9 @@ class Notifier(ABC):
         pass
 
 
-class StaticMap(Notifier):
+class CutsceneMap(Notifier):
     def __init__(self, scene, roomsfile):
         self.scene = scene
-
-        self.rooms = []
 
         #This boolean dictates if the map is active or not
         self.isPlaying = False
@@ -35,9 +33,11 @@ class StaticMap(Notifier):
         self.tileset = Tileset(
             "./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0)
 
-        self.finalMap = self.parseFullMap(roomsfile)
+        self.finalMap = np.empty((ROOMHEIGHT, ROOMWIDTH), dtype=str)
 
-        self.parseRooms()
+        self.rooms = []
+        
+        self.parseRooms(roomsfile)
 
         self.generateTiles()
 
@@ -53,38 +53,36 @@ class StaticMap(Notifier):
     #This function reads the txt file containing the rooms, and it transforms them into
     #string matrices which contain the information of the tiles, objects, enemies etc
     #of the room
-    def parseRooms(self):
-        for row in range(5):
-            for col in range(5):
-                roomMatrix = self.finalMap[row*ROOMHEIGHT: (
-                    row*ROOMHEIGHT + ROOMHEIGHT), col*ROOMWIDTH: (col*ROOMWIDTH + ROOMWIDTH)]
-                self.rooms.append(
-                    Room(self.scene, roomMatrix, col*ROOMWIDTH, row*ROOMHEIGHT))
+    def parseRooms(self, mapFile):
 
-    def parseFullMap(self, mapFile):
         with open(mapFile, 'rt') as f:
             tmpRoom = []
             for line in f:
-                tmpRoom.append(line.strip())
-            matrix = np.array(list(map(list, tmpRoom)))
-        return matrix
+                if line.__contains__("/"):
+                    roomMatrix = np.array(list(map(list, tmpRoom)))
+                elif len(line) == 0 or line.isspace():
+                    pass
+                else:
+                    tmpRoom.append(line.strip())
+
+        #Insert the room in the room list
+        self.rooms.append(Room(self.scene, roomMatrix, 0, 0))
+        #Copy it to the global map. In this case, the global map is only one room
+        i = 0
+        j = 0
+        #Copy it to the position relative to the global map
+        for row in range(0, ROOMHEIGHT):
+            for col in range(0, ROOMWIDTH):
+                self.finalMap[row][col] = tmpRoom[i][j]
+                j += 1
+            i += 1
+            j = 0
 
     def generateTiles(self):
         for room in self.rooms:
             #First we choose a random floor for the room. This spices things up
-            n_img = randint(1, 4)
-            if n_img == 1:
-                Floor(self.scene, room.limitX0,
-                      room.limitY0, self.scene.background1)
-            elif n_img == 2:
-                Floor(self.scene, room.limitX0,
-                      room.limitY0, self.scene.background2)
-            elif n_img == 3:
-                Floor(self.scene, room.limitX0,
-                      room.limitY0, self.scene.background3)
-            elif n_img == 4:
-                Floor(self.scene, room.limitX0,
-                      room.limitY0, self.scene.background4)
+            Floor(self.scene, room.limitX0,
+                room.limitY0, self.scene.background1)
             #Now we proceed with the rest of the tiles
             for row in range(room.limitY0, room.limitY+1):
                 for col in range(room.limitX0, room.limitX+1):
@@ -117,7 +115,7 @@ class StaticMap(Notifier):
                         self.scene.player = Player(self.scene, col, row)
                     elif self.finalMap[row][col] == 'C':
                         Chest(self.scene, col, row, textLines=7)
-                    elif self.finalMap[row][col] == 'R':
+                    elif self.finalMap[row][col] == '4':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=1))
                     elif self.finalMap[row][col] == '5':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=2))
@@ -125,7 +123,10 @@ class StaticMap(Notifier):
                         room.addNPC(NPCBase(self.scene, col, row, textLines=3))
                     elif self.finalMap[row][col] == '7':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=4))
-                        pass
+                    elif self.finalMap[row][col] == '8':
+                        room.addObject(Candelabro(self.scene, col, row))
+                    elif self.finalMap[row][col] == '0':
+                        room.addObject(Exit(self.scene, col, row))
             #We initialize the room doors to be open, until the player wanders in
             room.openAllDoors()
 

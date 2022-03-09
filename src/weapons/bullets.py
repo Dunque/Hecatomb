@@ -69,7 +69,7 @@ class ShotgunBullet(Bullet, pg.sprite.Sprite):
 		self.lifetime = 1000
 		self.damage = 1
 		self.scale_explosion = 2
-		self.destroy_scene = True
+		self.destroy_scene = False
 
 
 class Explosion(pg.sprite.Sprite):
