@@ -116,7 +116,7 @@ class EnemyShotgun(EnemyFireWeapon, pg.sprite.Sprite):
         super().__init__(self.scene, owner, x, y, self.image)
 
         self.barrel_offset = vec(55, -10)
-        self.bullet_rate = 4000
+        self.bullet_rate = 2000
         self.damage = 15
         self.kickback = 1000
         self.spread = 10

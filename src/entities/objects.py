@@ -130,15 +130,16 @@ class Exit(pg.sprite.Sprite):
 		self.talking = False
 
 	def update(self):
-		player = pg.sprite.spritecollideany(self, self.scene.player_SG)
-		if player:
-			if not self.opened:
-				if not self.talking:
-					self.interaccion.activate()
-					if player.interact:
-						self.open()
-		else:
-			self.interaccion.deactivate()
+		if self.scene.canExit:
+			player = pg.sprite.spritecollideany(self, self.scene.player_SG)
+			if player:
+				if not self.opened:
+					if not self.talking:
+						self.interaccion.activate()
+						if player.interact:
+							self.open()
+			else:
+				self.interaccion.deactivate()
 
 	def open(self):
 		self.scene.nextScene()
