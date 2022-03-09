@@ -108,6 +108,7 @@ class Candelabro(pg.sprite.Sprite):
 		if self.isActive:
 			self.image = self.candelabroAnim.get_frame()
 
+
 class Exit(pg.sprite.Sprite):
 	def __init__(self, scene, x, y, textLines=None):
 		self.scene = scene

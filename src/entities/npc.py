@@ -10,14 +10,15 @@ class NPCBase(Character):
 	def __init__(self, scene, x, y, textLines, anims = None):
 		if not anims:
 			# Aniamtion stuff
-			idleAnim = Anim(scene.playerIdleSheet,
-							(CHARACTER_SPRITE_SIZE, CHARACTER_SPRITE_SIZE), 10, 0, 4)
+			idleAnim = Anim(scene.playerIdleSheet, (CHARACTER_SPRITE_SIZE, CHARACTER_SPRITE_SIZE), 10, 0, 4)
+			talkingAnim = Anim(scene.playerTalkingSheet, (CHARACTER_SPRITE_SIZE, CHARACTER_SPRITE_SIZE), 10, 0, 4)
 		else:
 			idleAnim = anims
 
-		animList = [idleAnim, idleAnim, idleAnim, idleAnim, idleAnim]
+		self.animList = [idleAnim, talkingAnim, idleAnim, idleAnim, idleAnim]
+		self.currentAnim=self.animList[0]
 
-		super(NPCBase, self).__init__(scene, x, y, animList,
+		super(NPCBase, self).__init__(scene, x, y, self.animList,
 									 (scene.all_sprites, scene.npc_SG), PlayerStats())
 		self.acc = vec(0, 0)
 		self.rect.center = self.pos
@@ -35,6 +36,10 @@ class NPCBase(Character):
 		self.right = True
 
 	def update(self):
+		if self.right:
+			self.image = pg.transform.flip(self.currentAnim.get_frame(), False, False)
+		else:
+			self.image = pg.transform.flip(self.currentAnim.get_frame(), True, False)
 		player = pg.sprite.spritecollideany(self, self.scene.player_SG)
 		if player:
 			if not self.talking:
@@ -50,11 +55,16 @@ class NPCBase(Character):
 			if self.talking:
 				self.scene.completly_finished = False
 			self.talking = False
+			self.currentAnim = self.animList[0]
+
+		if not self.talking or self.scene.dialogue_continuation:
+			self.currentAnim = self.animList[0]
+		else:
+			self.currentAnim = self.animList[1]
 
 	def talk(self):
 		self.talking = True
-		print(self.scene.player.rect)
-		print(self.rect)
+		self.currentAnim = self.animList[1]
 		if self.rect.x > self.scene.player.rect.x and self.right:
 			self.image = pg.transform.flip(self.image, True, False)
 			self.right = False
@@ -69,7 +79,9 @@ class NPCBase(Character):
 		if not self.scene.completly_finished:
 			self.dialogo.drawText()
 		else:
+			self.talking = False
 			self.dialogo.end()
+			self.currentAnim = self.animList[1]
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()

@@ -52,6 +52,9 @@ class Level1(Scene):
         self.playerIdleSheet = pg.image.load("./sprites/Player/playerIdleSheet.png").convert_alpha()
         self.playerDodgeSheet =  pg.image.load("./sprites/Player/playerDodgeSheet.png").convert_alpha()
         self.playerDeathSheet =  pg.image.load("./sprites/Player/playerDeathSheet.png").convert_alpha()
+        self.playerTalkingSheet =  pg.image.load("./sprites/Player/playerTalkingSheet.png").convert_alpha()
+
+        #WEAPONS
         self.playerGunImg = pg.image.load("./sprites/Weapons/gun.png").convert_alpha()
         self.playerShotgunImg = pg.image.load("./sprites/Weapons/shotgun.png").convert_alpha()
         self.playerSwordImg = pg.image.load("./sprites/Weapons/sword.png").convert_alpha()
@@ -242,7 +245,7 @@ class Level1(Scene):
         self.skip_dialogue = False
 
     def render_fog(self, sprite = None):
-        self.light_mask = pg.transform.scale(self.light_mask, (10000, 10000))
+        self.light_mask = pg.transform.scale(self.light_mask, (800, 800))
         self.light_rect = self.light_mask.get_rect()
         if not sprite:
             self.fog.fill(LIGHTGREY)
