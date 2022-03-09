@@ -1,5 +1,6 @@
 import pygame as pg
 from src.scenes.guiElems import *
+from src.scenes.guiUtils import UtilsGUI
 from src.scenes.scene import Scene
 from src.settings.settings import *
 
@@ -9,7 +10,7 @@ from src.settings.settings import *
 
 class ButtonRestart(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, LOSING_MENU_LAYOUT, 0)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, LOSING_MENU_LAYOUT, 0)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Reiniciar')
 
     def action(self):
@@ -18,7 +19,7 @@ class ButtonRestart(ButtonGUI):
 
 class ButtonExitToMenu(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, LOSING_MENU_LAYOUT, 1)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, LOSING_MENU_LAYOUT, 1)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menú')
 
     def action(self):

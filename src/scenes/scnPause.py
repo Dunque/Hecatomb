@@ -1,5 +1,6 @@
 import pygame as pg
 from src.scenes.guiElems import *
+from src.scenes.guiUtils import UtilsGUI
 from src.scenes.scene import Scene
 from src.settings.settings import *
 
@@ -9,7 +10,7 @@ from src.settings.settings import *
 
 class ButtonContinue(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, PAUSE_MENU_LAYOUT, 0)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, PAUSE_MENU_LAYOUT, 0)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Continuar')
 
     def action(self):
@@ -18,7 +19,7 @@ class ButtonContinue(ButtonGUI):
 
 class ButtonOptions(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, PAUSE_MENU_LAYOUT, 1)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, PAUSE_MENU_LAYOUT, 1)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Opciones')
 
     def action(self):
@@ -27,7 +28,7 @@ class ButtonOptions(ButtonGUI):
 
 class ButtonRestart(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, PAUSE_MENU_LAYOUT, 2)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, PAUSE_MENU_LAYOUT, 2)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Reiniciar')
 
     def action(self):
@@ -36,7 +37,7 @@ class ButtonRestart(ButtonGUI):
 
 class ButtonExitToMenu(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, PAUSE_MENU_LAYOUT, 3)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, PAUSE_MENU_LAYOUT, 3)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menú')
 
     def action(self):
@@ -48,7 +49,7 @@ class ButtonExitToMenu(ButtonGUI):
 
 class ButtonBack(ButtonGUI):
     def __init__(self, screen):
-        pos = ButtonGUI.calculatePosition(OTHER_MENU_Y0, OPTIONS_MENU_LAYOUT, 0)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 0)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
 
     def action(self):
