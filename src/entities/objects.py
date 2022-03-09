@@ -110,7 +110,7 @@ class Candelabro(pg.sprite.Sprite):
 
 
 class Exit(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, textLines=None):
+	def __init__(self, scene, x, y):
 		self.scene = scene
 		self._layer = WALL_LAYER
 		self.groups = self.scene.all_sprites, self.scene.walls_SG
@@ -141,5 +141,5 @@ class Exit(pg.sprite.Sprite):
 			self.interaccion.deactivate()
 
 	def open(self):
-		self.scene.nextScene("next")
+		self.scene.nextScene()
 

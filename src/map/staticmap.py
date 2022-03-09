@@ -71,8 +71,19 @@ class StaticMap(Notifier):
     def generateTiles(self):
         for room in self.rooms:
             #First we choose a random floor for the room. This spices things up
-            Floor(self.scene, room.limitX0,
+            n_img = randint(1, 4)
+            if n_img == 1:
+                Floor(self.scene, room.limitX0,
                       room.limitY0, self.scene.background1)
+            elif n_img == 2:
+                Floor(self.scene, room.limitX0,
+                      room.limitY0, self.scene.background2)
+            elif n_img == 3:
+                Floor(self.scene, room.limitX0,
+                      room.limitY0, self.scene.background3)
+            elif n_img == 4:
+                Floor(self.scene, room.limitX0,
+                      room.limitY0, self.scene.background4)
             #Now we proceed with the rest of the tiles
             for row in range(room.limitY0, room.limitY+1):
                 for col in range(room.limitX0, room.limitX+1):
