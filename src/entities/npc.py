@@ -69,6 +69,7 @@ class NPCBase(Character):
 		self.talked = True
 		#Boolean to trigger the talking logic
 		self.talking = True
+
 		self.currentAnim = self.animList[1]
 		if self.rect.x > self.scene.player.rect.x and self.right:
 			self.image = pg.transform.flip(self.image, True, False)
@@ -76,6 +77,7 @@ class NPCBase(Character):
 		elif self.rect.x < self.scene.player.rect.x and not self.right:
 			self.image = pg.transform.flip(self.image, True, False)
 			self.right = True
+
 		self.interaccion.deactivate()
 		if not self.scene.completly_finished:
 			self.dialogo.drawText()
@@ -84,9 +86,9 @@ class NPCBase(Character):
 		if not self.scene.completly_finished:
 			self.dialogo.drawText()
 		else:
-			self.talking = False
 			self.dialogo.end()
 			self.currentAnim = self.animList[1]
+			self.scene.completly_finished = True
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()

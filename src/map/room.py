@@ -54,7 +54,7 @@ class RoomStateCleared(RoomState):
             pass
         else:
             for npc in self.room.npcs:
-                print(npc.talked)
+                #print(npc.talked)
                 if npc.talked:
                     self.room.scene.talkedCount += 1
                     self.room.npcs.remove(npc)
@@ -109,5 +109,5 @@ class Room(Observer):
             self.state = RoomStatePlaying(self,"PLAYING")
     
     def update(self):
-        print(self.state.name)
+        #print(self.state.name)
         self.state.update()
