@@ -1,14 +1,14 @@
 import pygame as pg
-from src.scenes.resourceManager import *
-from src.scenes.scene import *
+from src.scenes.resourceManager import ResourceManager
+from src.scenes.scene import Scene
 from src.settings.settings import *
 
 
 class SurvivalEnd(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         # Llamamos al constructor de la clase padre
-        Scene.__init__(self, sceneManager);
+        Scene.__init__(self, director);
         # Creamos la imagen de fondo
         # self.image = ResourceManager.LoadImage('resources/images/intro.png')
 
@@ -16,17 +16,13 @@ class SurvivalEnd(Scene):
         return
 
     def events(self, eventList):
-        # Se mira si se quiere hacer algo
+        # Se mira la lista de eventos
         for event in eventList:
-            # En ese caso, se le indica al sceneManager
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:   # Tecla Esc, salir
-                    self.exitProgram()
-                elif event.key == K_n:      # Tecla N, siguiente escena (solo para debug)
-                    self.nextScene()
-
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
+                    self.exitScene()
             elif event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+                self.director.exitProgram()
 
     def draw(self, screen):
         # Dibujamos imagen de fondo
@@ -40,11 +36,8 @@ class SurvivalEnd(Scene):
         screen.blit(text, textRect)
 
 
-    #--------------------------------------
-    # Metodos propios del menu
+    # -----------------------------------------------------
+    # Métodos propios de la escena
 
-    def exitProgram(self):
-        self.sceneManager.exitProgram()
-
-    def nextScene(self):
-        self.sceneManager.exitScene()
+    def exitScene(self):
+        self.director.exitScene()

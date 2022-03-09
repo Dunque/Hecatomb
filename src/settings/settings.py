@@ -63,7 +63,7 @@ ROCK_IMAGE= pg.image.load("./sprites/RockPile.png")
 
 
 
-# -------------------------------------------------
+# ---------------------------------------------------------
 # GUI settings
 
 # Font settings
@@ -72,14 +72,23 @@ HANSHAND_FONT = 'resources/fonts/hanshand.ttf'
 # Button settings
 BUTTON_IMAGE = 'resources/images/gold_button.png'
 
-BUTTON_WIDTH = 352
-BUTTON_HEIGHT = 80
+BUTTON_WIDTH = 400
+BUTTON_HEIGHT = 90
 BUTTON_SIZE = (BUTTON_WIDTH, BUTTON_HEIGHT)
 
-BUTTON_SEP_X = 70
-BUTTON_SEP_Y = 44
+BUTTON_SEP_X = 80
+BUTTON_SEP_Y = 45
 
 # Main menu layout
-TOP_MARGIN = HEIGHT/2
-MENU_SIZE = (2, 3)
+MAIN_MENU_Y0 = HEIGHT/2
+MAIN_MENU_LAYOUT = (2, 3)
 
+# Other menus layout
+OTHER_MENU_Y0 = HEIGHT*38/100
+
+RECORDS_MENU_LAYOUT = (1, 1)
+OPTIONS_MENU_LAYOUT = (1, 1)
+CREDITS_MENU_LAYOUT = (1, 6)
+
+PAUSE_MENU_LAYOUT = (1, 4)
+LOSING_MENU_LAYOUT = (1, 2)

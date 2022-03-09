@@ -1,33 +1,35 @@
 import pygame as pg
-from src.scenes.resourceManager import *
-from src.scenes.scene import *
+from src.scenes.levels.scnLevel1 import Level1
+from src.scenes.resourceManager import ResourceManager
+from src.scenes.scene import Scene
+from src.scenes.scnPause import PauseMenu
 from src.settings.settings import *
-from src.scenes.levels.scnLevel1 import *
 
 
 class Cutscene1(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         # Llamamos al constructor de la clase padre
-        Scene.__init__(self, sceneManager);
+        Scene.__init__(self, director);
         # Creamos la imagen de fondo
         # self.image = ResourceManager.LoadImage('resources/images/intro.png')
+    
+    def reset(self):
+        self.__init__(self.director)
 
     def update(self, *args):
         return
 
     def events(self, eventList):
-        # Se mira si se quiere hacer algo
+        # Se mira la lista de eventos
         for event in eventList:
-            # En ese caso, se le indica al sceneManager
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:   # Tecla Esc, salir
-                    self.exitProgram()
-                elif event.key == K_n:      # Tecla N, siguiente escena (solo para debug)
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:    # Tecla Esc, menú de pausa
+                    self.pauseScene()
+                elif event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
                     self.nextScene()
-
             elif event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+                self.director.exitProgram()
 
     def draw(self, screen):
         # Dibujamos imagen de fondo
@@ -41,15 +43,17 @@ class Cutscene1(Scene):
         screen.blit(text, textRect)
 
 
-    #--------------------------------------
-    # Metodos propios del menu
+    # -----------------------------------------------------
+    # Métodos propios de la escena
 
-    def exitProgram(self):
-        self.sceneManager.exitProgram()
+    def pauseScene(self):
+        scene = PauseMenu(self.director)
+        self.director.stackScene(scene)
 
     def nextScene(self):
         pg.mixer.music.stop
         pg.mixer.music.load("./sounds/level_music.mp3")
         pg.mixer.music.play(-1)
-        scene = Level1(self.sceneManager)
-        self.sceneManager.changeScene(scene)
+
+        scene = Level1(self.director)
+        self.director.changeScene(scene)

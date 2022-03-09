@@ -7,11 +7,11 @@ from src.settings.settings import *
 
 class Intro(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         # Llamamos al constructor de la clase padre
-        Scene.__init__(self, sceneManager)
+        Scene.__init__(self, director)
         # Se carga la imagen de fondo
-        self.image = ResourceManager.LoadImage('resources/images/intro_image.png')
+        self.image = ResourceManager.LoadImage('resources/images/intro.png')
         self.image = pg.transform.scale(self.image, (WIDTH, HEIGHT))
 
     def update(self, *args):
@@ -20,21 +20,20 @@ class Intro(Scene):
     def events(self, eventList):
         # Se mira la lista de eventos
         for event in eventList:
-            if event.type == pg.KEYDOWN:
+            if event.type == pg.KEYDOWN:            # Cualquier tecla, menú principal
                 self.nextScene()
-            elif event.type == pg.MOUSEBUTTONDOWN:
+            elif event.type == pg.MOUSEBUTTONDOWN:  # Cualquier botón del ratón, menú principal
                 self.nextScene()
             elif event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+                self.director.exitProgram()
 
     def draw(self, screen):
         # Dibujamos imagen de fondo
         screen.blit(self.image, self.image.get_rect())
 
         # Dibujamos título del juego
-        font = pg.font.Font(HANSHAND_FONT, 192)
+        font = pg.font.Font(HANSHAND_FONT, 224)
         text = font.render('HECATOMB', True, MAROON)
-        text.set_alpha(192)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)
 
@@ -45,9 +44,9 @@ class Intro(Scene):
         screen.blit(text, textRect)
 
 
-    # --------------------------------------
+    # -----------------------------------------------------
     # Métodos propios de la escena
 
     def nextScene(self):
-        scene = Menu(self.sceneManager)
-        self.sceneManager.changeScene(scene)
+        scene = Menu(self.director)
+        self.director.changeScene(scene)

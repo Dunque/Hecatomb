@@ -1,84 +1,28 @@
 import pygame as pg
 from src.scenes.cutscenes.scnCutscene1 import Cutscene1
-from src.scenes.resourceManager import ResourceManager
+from src.scenes.guiElems import *
+from src.scenes.guiUtils import UtilsGUI
 from src.scenes.scene import Scene
 from src.scenes.survival.scnSurvival import Survival
 from src.settings.settings import *
 
 
-# -------------------------------------------------
-# Clase abstracta ElementGUI
+# ---------------------------------------------------------
+# Elementos de pantalla Menu
 
-class ElementGUI:
-
-
-    def __init__(self, screen, rectangle):
-        self.screen = screen
-        self.rect = rectangle
-
-    def setPosition(self, position):
-        (positionx, positiony) = position
-        self.rect.left = positionx
-        self.rect.bottom = positiony
-
-    def positionInElement(self, position):
-        (positionx, positiony) = position
-        if ((positionx>=self.rect.left) and (positionx<=self.rect.right) 
-            and (positiony>=self.rect.top) and (positiony<=self.rect.bottom)):
-            return True
-        else:
-            return False
-
-    def draw(self):
-        raise NotImplemented("Tiene que implementar el metodo draw.")
+class TextHecatomb(CenteredTextGUI):
+    def __init__(self, screen):
+        font = pg.font.Font(HANSHAND_FONT, 160)
+        pos = (WIDTH/2, HEIGHT*3/10)
+        CenteredTextGUI.__init__(self, screen, font, MAROON, 'HECATOMB', pos)
 
     def action(self):
-        raise NotImplemented("Tiene que implementar el metodo action.")
-
-
-# -------------------------------------------------
-# Clase ButtonGUI y los distintos botones
-
-class ButtonGUI(ElementGUI):
-
-    def __init__(self, screen, imageName, size, position, text):
-        # Se carga la imagen del botón
-        self.image = ResourceManager.LoadImage(imageName, -1)
-        self.image = pg.transform.scale(self.image, size)
-
-        # Se llama al método de la clase padre con el rectángulo que ocupa el button
-        imageRect = self.image.get_rect(center=position)
-        ElementGUI.__init__(self, screen, imageRect)
-
-        # Se carga el texto del botón
-        font = pg.font.Font(HANSHAND_FONT, 42)
-        self.text = font.render(text, True, BROWN)
-        self.textRect = self.text.get_rect(center=position)
-
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-        screen.blit(self.text, self.textRect)
-
-
-def calculatePosition(y0, menuSize, n):
-    """Calcula la posición del centro del rectángulo que ocupa el n-ésimo botón 
-    (n = 0, 1, 2...) en un menú de tamaño menuSize, empezando en la altura y0"""
-
-    (cols, rows) = menuSize
-    assert (n+1 <= cols*rows), f"There are more buttons than positions ({cols*rows} positions)"
-
-    dx = BUTTON_WIDTH + BUTTON_SEP_X
-    dy = BUTTON_HEIGHT + BUTTON_SEP_Y
-    x0 = WIDTH/2 - (cols-1)*dx/2
-    col = n // rows
-    row = n % rows
-
-    return (x0 + col*dx, y0 + row*dy)
+        pass
 
 
 class ButtonAdventure(ButtonGUI):
     def __init__(self, screen):
-        pos = calculatePosition(TOP_MARGIN, MENU_SIZE, 0)
+        pos = UtilsGUI.calculatePosition(MAIN_MENU_Y0, BUTTON_SEP_Y, MAIN_MENU_LAYOUT, 0)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Aventura')
 
     def action(self):
@@ -87,7 +31,7 @@ class ButtonAdventure(ButtonGUI):
 
 class ButtonSurvival(ButtonGUI):
     def __init__(self, screen):
-        pos = calculatePosition(TOP_MARGIN, MENU_SIZE, 1)
+        pos = UtilsGUI.calculatePosition(MAIN_MENU_Y0, BUTTON_SEP_Y, MAIN_MENU_LAYOUT, 1)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Supervivencia')
 
     def action(self):
@@ -96,117 +40,131 @@ class ButtonSurvival(ButtonGUI):
 
 class ButtonRecords(ButtonGUI):
     def __init__(self, screen):
-        pos = calculatePosition(TOP_MARGIN, MENU_SIZE, 2)
+        pos = UtilsGUI.calculatePosition(MAIN_MENU_Y0, BUTTON_SEP_Y, MAIN_MENU_LAYOUT, 2)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Récords')
 
     def action(self):
-        # self.screen.menu.exitProgram()
-        None
+        self.screen.menu.showRecordsScreen()
 
 
 class ButtonOptions(ButtonGUI):
     def __init__(self, screen):
-        pos = calculatePosition(TOP_MARGIN, MENU_SIZE, 3)
+        pos = UtilsGUI.calculatePosition(MAIN_MENU_Y0, BUTTON_SEP_Y, MAIN_MENU_LAYOUT, 3)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Opciones')
 
     def action(self):
-        # self.screen.menu.exitProgram()
-        None
+        self.screen.menu.showOptionsScreen()
 
 
 class ButtonCredits(ButtonGUI):
     def __init__(self, screen):
-        pos = calculatePosition(TOP_MARGIN, MENU_SIZE, 4)
+        pos = UtilsGUI.calculatePosition(MAIN_MENU_Y0, BUTTON_SEP_Y, MAIN_MENU_LAYOUT, 4)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Créditos')
 
     def action(self):
-        # self.screen.menu.exitProgram()
-        None
+        self.screen.menu.showCreditsScreen()
 
 
 class ButtonExit(ButtonGUI):
     def __init__(self, screen):
-        pos = calculatePosition(TOP_MARGIN, MENU_SIZE, 5)
+        pos = UtilsGUI.calculatePosition(MAIN_MENU_Y0, BUTTON_SEP_Y, MAIN_MENU_LAYOUT, 5)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir')
 
     def action(self):
         self.screen.menu.exitProgram()
 
 
-# -------------------------------------------------
-# Clase TextGUI y los distintos textos
+# ---------------------------------------------------------
+# Elementos de pantalla Records
 
-class TextGUI(ElementGUI):
-    def __init__(self, screen, font, color, text, position):
-        # Se crea la image del text
-        self.image = font.render(text, True, color)
-        # Se llama al método de la clase padre con el rectángulo que ocupa el text
-        ElementGUI.__init__(self, screen, self.image.get_rect())
-        # Se coloca el rectangle en su posición
-        self.setPosition(position)
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
-class TextPlay(TextGUI):
+class TextRecords(CenteredTextGUI):
     def __init__(self, screen):
-        # La font la debería cargar el estor de recursos
-        font = pg.font.SysFont('arial', 26);
-        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Jugar', (WIDTH/2, HEIGHT/2-50))
-    def action(self):
-        self.screen.menu.nextScene()
+        font = pg.font.Font(HANSHAND_FONT, 112)
+        pos = (WIDTH/2, HEIGHT/5)
+        CenteredTextGUI.__init__(self, screen, font, MAROON, 'Récords', pos)
 
-class TextExit(TextGUI):
+    def action(self):
+        pass
+
+
+class ButtonBackRecords(ButtonGUI):
     def __init__(self, screen):
-        # La font la debería cargar el estor de recursos
-        font = pg.font.SysFont('arial', 26);
-        TextGUI.__init__(self, screen, font, (0, 0, 0), 'Salir', (WIDTH/2, HEIGHT/2+50))
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, RECORDS_MENU_LAYOUT, 0)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
+
     def action(self):
-        self.screen.menu.exitProgram()
+        self.screen.menu.showInitialScreen()
 
-# -------------------------------------------------
-# Clase ScreenGUI y las distintas pantallas
 
-class ScreenGUI:
+# ---------------------------------------------------------
+# Elementos de pantalla Options
 
-    def __init__(self, menu, imageName):
-        self.menu = menu
-        # Se carga la image de fondo
-        self.image = ResourceManager.LoadImage(imageName)
-        self.image = pg.transform.scale(self.image, (WIDTH, HEIGHT))
-        # Se tiene una lista de elements GUI
-        self.elementsGUI = []
+class TextOptions(CenteredTextGUI):
+    def __init__(self, screen):
+        font = pg.font.Font(HANSHAND_FONT, 112)
+        pos = (WIDTH/2, HEIGHT/5)
+        CenteredTextGUI.__init__(self, screen, font, MAROON, 'Opciones', pos)
 
-    def events(self, eventList):
-        for event in eventList:
-            if event.type == pg.MOUSEBUTTONDOWN:
-                self.elementClick = None
-                for element in self.elementsGUI:
-                    if element.positionInElement(event.pos):
-                        self.elementClick = element
-            if event.type == pg.MOUSEBUTTONUP:
-                for element in self.elementsGUI:
-                    if element.positionInElement(event.pos):
-                        if (element == self.elementClick):
-                            element.action()
+    def action(self):
+        pass
 
-    def draw(self, screen):
-        # Dibujamos primero la image de fondo
-        screen.blit(self.image, self.image.get_rect())
-        # Después los botones
-        for element in self.elementsGUI:
-            element.draw(screen)
+
+class ButtonBackOptions(ButtonGUI):
+    def __init__(self, screen):
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 0)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
+
+    def action(self):
+        self.screen.menu.showInitialScreen()
+
+
+# ---------------------------------------------------------
+# Elementos de pantalla Credits
+
+class TextCredits(CenteredTextGUI):
+    def __init__(self, screen):
+        font = pg.font.Font(HANSHAND_FONT, 112)
+        pos = (WIDTH/2, HEIGHT/5)
+        CenteredTextGUI.__init__(self, screen, font, MAROON, 'Créditos', pos)
+
+    def action(self):
+        pass
+
+class TextAuthor(CenteredTextGUI):
+    def __init__(self, screen, n, name):
+        font = pg.font.Font(HANSHAND_FONT, 50)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, 0, CREDITS_MENU_LAYOUT, n)
+        CenteredTextGUI.__init__(self, screen, font, WHITE, name, pos)
+
+    def action(self):
+        pass
+
+
+class ButtonBackCredits(ButtonGUI):
+    def __init__(self, screen):
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, 0, CREDITS_MENU_LAYOUT, 5)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
+
+    def action(self):
+        self.screen.menu.showInitialScreen()
+
+
+# ---------------------------------------------------------
+# Pantallas
 
 class InitialScreenGUI(ScreenGUI):
     def __init__(self, menu):
-
-        ScreenGUI.__init__(self, menu, 'resources/images/menu_image.png')
-        # Creamos los botones y los metemos en la lista
+        ScreenGUI.__init__(self, menu, 'resources/images/menu.png')
+        # Creamos los elementos GUI
+        textTitle = TextHecatomb(self)
         buttonAdventure = ButtonAdventure(self)
         buttonSurvival = ButtonSurvival(self)
         buttonRecords = ButtonRecords(self)
         buttonOptions = ButtonOptions(self)
         buttonCredits = ButtonCredits(self)
         buttonExit = ButtonExit(self)
+        # Y los metemos en la lista
+        self.elementsGUI.append(textTitle)
         self.elementsGUI.append(buttonAdventure)
         self.elementsGUI.append(buttonSurvival)
         self.elementsGUI.append(buttonRecords)
@@ -215,19 +173,64 @@ class InitialScreenGUI(ScreenGUI):
         self.elementsGUI.append(buttonExit)
 
 
-# -------------------------------------------------
+class RecordsScreenGUI(ScreenGUI):
+    def __init__(self, menu):
+        ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
+        # Creamos los elementos GUI
+        textTitle = TextRecords(self)
+        buttonBack = ButtonBackRecords(self)
+        # Y los metemos en la lista
+        self.elementsGUI.append(textTitle)
+        self.elementsGUI.append(buttonBack)
+
+
+class OptionsScreenGUI(ScreenGUI):
+    def __init__(self, menu):
+        ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
+        # Creamos los elementos GUI
+        textTitle = TextOptions(self)
+        buttonBack = ButtonBackOptions(self)
+        # Y los metemos en la lista
+        self.elementsGUI.append(textTitle)
+        self.elementsGUI.append(buttonBack)
+
+
+class CreditsScreenGUI(ScreenGUI):
+    def __init__(self, menu):
+        ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
+        # Creamos los elementos GUI
+        textTitle = TextCredits(self)
+        textAuthor0 = TextAuthor(self, 0, 'Roi Santos Ríos')
+        textAuthor1 = TextAuthor(self, 1, 'Antón Concheiro Fernández')
+        textAuthor2 = TextAuthor(self, 2, 'Iago Fernández Garrido')
+        textAuthor3 = TextAuthor(self, 3, 'Jorge Rivadulla Brey')
+        textAuthor4 = TextAuthor(self, 4, 'Xes Garbajosa Fernández')
+        buttonBack = ButtonBackCredits(self)
+        # Y los metemos en la lista
+        self.elementsGUI.append(textTitle)
+        self.elementsGUI.append(textAuthor0)
+        self.elementsGUI.append(textAuthor1)
+        self.elementsGUI.append(textAuthor2)
+        self.elementsGUI.append(textAuthor3)
+        self.elementsGUI.append(textAuthor4)
+        self.elementsGUI.append(buttonBack)
+
+
+# ---------------------------------------------------------
 # Clase Menu, la escena en sí
 
 class Menu(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         # Llamamos al constructor de la clase padre
-        Scene.__init__(self, sceneManager);
+        Scene.__init__(self, director)
         # Creamos la lista de pantallas
         self.screenList = []
-        # Creamos las pantallas que vamos a tener
-        #   y las metemos en la lista
+        # Creamos las pantallas que vamos a tener y las metemos en la lista
         self.screenList.append(InitialScreenGUI(self))
+        self.screenList.append(RecordsScreenGUI(self))
+        self.screenList.append(OptionsScreenGUI(self))
+        self.screenList.append(CreditsScreenGUI(self))
         # En que screen estamos actualmente
         self.showInitialScreen()
 
@@ -235,44 +238,44 @@ class Menu(Scene):
         return
 
     def events(self, eventList):
-        # Se mira si se quiere salir de esta escena
+        # Se mira la lista de eventos
         for event in eventList:
-            # Si se quiere salir, se le indica al sceneManager
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
-                    self.exitProgram()
-            elif event.type == pg.QUIT:
-                self.sceneManager.exitProgram()
+            if event.type == pg.QUIT:
+                self.director.exitProgram()
 
-        # Se pasa la lista de events a la screen actual
+        # Se pasa la lista de eventos a la pantalla actual
         self.screenList[self.currentScreen].events(eventList)
 
     def draw(self, screen):
         self.screenList[self.currentScreen].draw(screen)
 
 
-    #--------------------------------------
-    # Métodos propios del menu
+    # -----------------------------------------------------
+    # Métodos propios de la escena
+
+    def showInitialScreen(self):
+        self.currentScreen = 0
 
     def playAdventure(self):
-        scene = Cutscene1(self.sceneManager)
-        self.sceneManager.stackScene(scene)
+        scene = Cutscene1(self.director)
+        self.director.stackScene(scene)
 
     def playSurvival(self):
         pg.mixer.music.stop
         pg.mixer.music.load("./sounds/level_music.mp3")
         pg.mixer.music.play(-1)
-        scene = Survival(self.sceneManager)
-        self.sceneManager.stackScene(scene)
+
+        scene = Survival(self.director)
+        self.director.stackScene(scene)
+
+    def showRecordsScreen(self):
+        self.currentScreen = 1
+    
+    def showOptionsScreen(self):
+        self.currentScreen = 2
+
+    def showCreditsScreen(self):
+        self.currentScreen = 3
 
     def exitProgram(self):
-        self.sceneManager.exitProgram()
-
-    #--------------------------------------
-    # TODO: pensar si eliminar esto
-
-    def showInitialScreen(self):
-        self.currentScreen = 0
-
-    # def mostrarPantallaConfiguracion(self):
-    #    self.currentScreen = ...
+        self.director.exitProgram()

@@ -1,20 +1,21 @@
 import pygame as pg
-import sys
+from src.hud.hud import Hud
 from src.map.staticmap import StaticMap
-from src.scenes.scene import *
+from src.scenes.cutscenes.scnCutscene2 import Cutscene2
+from src.scenes.scene import Scene
+from src.scenes.scnLosing import LosingMenu
+from src.scenes.scnPause import PauseMenu
 from src.settings.settings import *
 from src.entities.character import *
 from src.map.randmap import *
-from src.hud.hud import Hud
 from src.hud.hud import Hud, Line
-from src.scenes.cutscenes.scnCutscene2 import *
 
 
 class Level1(Scene):
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         #Initialize superclass
-        Scene.__init__(self, sceneManager)
+        Scene.__init__(self, director)
 
         #Initialize sprite groups
         self.all_sprites = pg.sprite.LayeredUpdates()
@@ -39,6 +40,9 @@ class Level1(Scene):
         self.fog.fill(DARKGREY)
         #Loads all sprite and sound data
         self.load_data()
+    
+    def reset(self):
+        self.__init__(self.director)
 
     def load_data(self):
         #PLAYER DATA
@@ -132,9 +136,9 @@ class Level1(Scene):
         self.all_sprites.update()
         self.camera.update(self.player)
 
+        # Si el jugado ha muerto
         if not self.player_SG.has(self.player):
-            scene1 = Level1(self.sceneManager)
-            self.sceneManager.changeScene(scene1)
+            self.losingScene()
 
         for menu in self.menus:
             menu.update()
@@ -244,23 +248,28 @@ class Level1(Scene):
             self.fog.blit(self.light_mask, self.light_rect)
 
     def events(self, eventList):
-        # catch all events here
+        # Se mira la lista de eventos
         for event in eventList:
-            if event.type == pg.QUIT:
-                pg.mouse.set_visible(True)
-                self.sceneManager.exitScene()
-
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
-                    pg.mouse.set_visible(True)
-                    self.sceneManager.exitScene()
-                elif event.key == K_n:          # Tecla N, siguiente escena (solo para debug)
+                if event.key == pg.K_ESCAPE:    # Tecla Esc, menú de pausa
+                    self.pauseScene()
+                elif event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
                     self.nextScene()
+            elif event.type == pg.QUIT:
+                self.director.exitProgram()
 
 
-    #--------------------------------------
-    # Metodos propios
+    # -----------------------------------------------------
+    # Métodos propios de la escena
+
+    def pauseScene(self):
+        scene = PauseMenu(self.director)
+        self.director.stackScene(scene)
+    
+    def losingScene(self):
+        scene = LosingMenu(self.director)
+        self.director.stackScene(scene)
 
     def nextScene(self):
-        scene = Cutscene2(self.sceneManager)
-        self.sceneManager.changeScene(scene)
+        scene = Cutscene2(self.director)
+        self.director.changeScene(scene)

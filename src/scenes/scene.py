@@ -1,7 +1,7 @@
 class Scene:
 
-    def __init__(self, sceneManager):
-        self.sceneManager = sceneManager
+    def __init__(self, director):
+        self.director = director
 
     def update(self, *args):
         raise NotImplemented("Tiene que implementar el metodo update.")

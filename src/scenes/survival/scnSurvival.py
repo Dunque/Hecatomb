@@ -1,20 +1,20 @@
 import pygame as pg
-import sys
-from src.map.staticmap import StaticMap
-from src.scenes.scene import *
-from src.settings.settings import *
-from src.entities.character import *
-from src.map.randmap import *
+from src.entities.character import Character
 from src.hud.hud import Hud
-from src.scenes.survival.scnSurvivalEnd import *
+from src.map.randmap import RandMap
+from src.map.staticmap import StaticMap
+from src.scenes.scene import Scene
+from src.scenes.scnPause import PauseMenu
+from src.scenes.survival.scnSurvivalEnd import SurvivalEnd
+from src.settings.settings import *
 
 
 class Survival(Scene):
     pg.mixer.music.play(-1)
 
-    def __init__(self, sceneManager):
+    def __init__(self, director):
         #Initialize superclass
-        Scene.__init__(self, sceneManager)
+        Scene.__init__(self, director)
 
         #Initialize sprite groups
         self.all_sprites = pg.sprite.LayeredUpdates()
@@ -32,6 +32,9 @@ class Survival(Scene):
 
         #Loads all sprite and sound data
         self.load_data()
+    
+    def reset(self):
+        self.__init__(self.director)
 
     def load_data(self):
         #PLAYER DATA
@@ -116,8 +119,8 @@ class Survival(Scene):
         self.camera.update(self.player)
 
         if not self.player_SG.has(self.player):
-            scene1 = Survival(self.sceneManager)
-            self.sceneManager.changeScene(scene1)
+            scene1 = Survival(self.director)
+            self.director.changeScene(scene1)
 
         for menu in self.menus:
             menu.update()
@@ -134,25 +137,24 @@ class Survival(Scene):
         self.hud.draw_health(screen)
 
     def events(self, eventList):
-        # catch all events here
+        # Se mira la lista de eventos
         for event in eventList:
-            if event.type == pg.QUIT:
-                pg.mouse.set_visible(True)
-                self.sceneManager.exitScene()
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_ESCAPE:
-                    pg.mouse.set_visible(True)
-                    self.sceneManager.exitScene()
-                # Tecla N, siguiente escena (solo para debug)
-                elif event.key == K_n:
+                if event.key == pg.K_ESCAPE:    # Tecla Esc, menú de pausa
+                    self.pauseScene()
+                elif event.key == pg.K_n:       # Tecla N, siguiente escena (solo para debug)
                     self.nextScene()
+            elif event.type == pg.QUIT:
+                self.director.exitProgram()
 
-    #--------------------------------------
-    # Metodos propios del menu
 
-    def exitProgram(self):
-        self.sceneManager.exitProgram()
+    # -----------------------------------------------------
+    # Métodos propios de la escena
+
+    def pauseScene(self):
+        scene = PauseMenu(self.director)
+        self.director.stackScene(scene)
 
     def nextScene(self):
-        scene = SurvivalEnd(self.sceneManager)
-        self.sceneManager.changeScene(scene)
+        scene = SurvivalEnd(self.director)
+        self.director.changeScene(scene)
