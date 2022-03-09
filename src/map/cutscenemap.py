@@ -5,7 +5,7 @@ from src.entities.player import *
 from src.entities.enemies import *
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
-from src.entities.objects import Chest, Candelabro
+from src.entities.objects import Chest
 from src.entities.ground import *
 from src.map.camera import *
 from src.map.room import Room
@@ -21,6 +21,7 @@ class Notifier(ABC):
     def notify(self):
         pass
 
+
 class StaticMap(Notifier):
     def __init__(self, scene, roomsfile):
         self.scene = scene
@@ -35,7 +36,7 @@ class StaticMap(Notifier):
             "./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0)
 
         self.finalMap = self.parseFullMap(roomsfile)
-        
+
         self.parseRooms()
 
         self.generateTiles()
@@ -55,7 +56,8 @@ class StaticMap(Notifier):
     def parseRooms(self):
         for row in range(5):
             for col in range(5):
-                roomMatrix = self.finalMap[row*ROOMHEIGHT: (row*ROOMHEIGHT + ROOMHEIGHT), col*ROOMWIDTH: (col*ROOMWIDTH + ROOMWIDTH)]
+                roomMatrix = self.finalMap[row*ROOMHEIGHT: (
+                    row*ROOMHEIGHT + ROOMHEIGHT), col*ROOMWIDTH: (col*ROOMWIDTH + ROOMWIDTH)]
                 self.rooms.append(
                     Room(self.scene, roomMatrix, col*ROOMWIDTH, row*ROOMHEIGHT))
 
@@ -67,12 +69,22 @@ class StaticMap(Notifier):
             matrix = np.array(list(map(list, tmpRoom)))
         return matrix
 
-
     def generateTiles(self):
         for room in self.rooms:
             #First we choose a random floor for the room. This spices things up
-            Floor(self.scene, room.limitX0,
+            n_img = randint(1, 4)
+            if n_img == 1:
+                Floor(self.scene, room.limitX0,
                       room.limitY0, self.scene.background1)
+            elif n_img == 2:
+                Floor(self.scene, room.limitX0,
+                      room.limitY0, self.scene.background2)
+            elif n_img == 3:
+                Floor(self.scene, room.limitX0,
+                      room.limitY0, self.scene.background3)
+            elif n_img == 4:
+                Floor(self.scene, room.limitX0,
+                      room.limitY0, self.scene.background4)
             #Now we proceed with the rest of the tiles
             for row in range(room.limitY0, room.limitY+1):
                 for col in range(room.limitX0, room.limitX+1):
@@ -103,16 +115,6 @@ class StaticMap(Notifier):
                              self.tileset.tiles[15 * randint(1, 7)])
                     elif self.finalMap[row][col] == 'P':
                         self.scene.player = Player(self.scene, col, row)
-                    elif self.finalMap[row][col] == 'H':
-                        room.addEnemy(Herald(self.scene, col, row))
-                    elif self.finalMap[row][col] == 'K':
-                        room.addEnemy(Khan(self.scene, col, row))
-                    elif self.finalMap[row][col] == 'W':
-                        room.addEnemy(Worm(self.scene, col, row))
-                    elif self.finalMap[row][col] == 'Y':
-                        room.addEnemy(Eye(self.scene, col, row))
-                    elif self.finalMap[row][col] == '-':
-                        room.addDoor(Door(self.scene, col, row, ROCK_IMAGE))
                     elif self.finalMap[row][col] == 'C':
                         Chest(self.scene, col, row, textLines=7)
                     elif self.finalMap[row][col] == 'R':
@@ -123,8 +125,6 @@ class StaticMap(Notifier):
                         room.addNPC(NPCBase(self.scene, col, row, textLines=3))
                     elif self.finalMap[row][col] == '7':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=4))
-                    elif self.finalMap[row][col] == '8':
-                        room.addObject(Candelabro(self.scene, col, row))
                         pass
             #We initialize the room doors to be open, until the player wanders in
             room.openAllDoors()

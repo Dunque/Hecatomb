@@ -36,6 +36,8 @@ class Director():
 
             # Actualiza la escena
             scene.update(elapsed_time)
+            #TODO remove this fps counter
+            pg.display.set_caption(str(elapsed_time))
 
             # Se dibuja en pantalla
             scene.draw(self.screen)

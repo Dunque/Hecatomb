@@ -85,6 +85,7 @@ class Level1(Scene):
         # EYE DATA
         self.eyeWalkSheet = pg.image.load("./sprites/Eye/eye_ball_4.png").convert_alpha()
         self.eyeDeathSheet = pg.image.load("./sprites/Eye/eye_boom_4.png").convert_alpha()
+
         # WORM DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
         self.wormIdleSheet = pg.image.load("./sprites/Worm/Idle.png").convert_alpha()
@@ -108,9 +109,11 @@ class Level1(Scene):
 
         self.dialogues_src = "./resources/text/dialogues.txt"
 
+        self.exitImage = pg.image.load(
+            "./sprites/Objects/exit.png").convert_alpha()
+
         #Map generation
         self.map = StaticMap(self, './maps/map1.txt')
-        #self.map = RandMap(self, './maps/rooms.txt')
 
         self.hud = Hud(self)
 
@@ -143,29 +146,27 @@ class Level1(Scene):
         for menu in self.menus:
             menu.update()
 
+        #Win condition is checked in the map object
         self.map.update()
-        pg.display.set_caption(str(time))
-
-    def draw_grid(self):
-        for x in range(0, WIDTH, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
-        for y in range(0, HEIGHT, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
     def draw(self, screen):
+        #Background color
         self.screen = screen
         self.screen.fill(BGCOLOR)
-        #self.draw_grid()
+
+        #Sprites
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
 
-        self.drawDialogue()
-        self.hud.draw_health(screen)
-
+        #Fog
         self.render_fog()
         for sprite in list(self.candelabros_SG):
             self.render_fog(sprite)
         self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
+
+        #Hud
+        self.drawDialogue()
+        self.hud.draw_health(screen)
 
     def drawDialogue(self):
         if not self.dialogue_cooldown and self.dialogue:
@@ -236,7 +237,7 @@ class Level1(Scene):
 
     def render_fog(self, sprite = None):
         if not sprite:
-            self.fog.fill(DARKGREY)
+            self.fog.fill(LIGHTGREY)
             self.light_mask = pg.transform.scale(self.light_mask, (1000, 1000))
             self.light_rect = self.light_mask.get_rect()
             self.light_rect.center = self.camera.apply(self.player).center
