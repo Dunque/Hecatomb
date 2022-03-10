@@ -34,6 +34,7 @@ class ButtonRestart(ButtonGUI):
 
     def action(self):
         Music.volumemusic(self,1)
+        Music.effectsvolume(self,0.25)
         self.screen.menu.restartScene()
 
 

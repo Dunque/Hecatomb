@@ -262,7 +262,7 @@ class Menu(Scene):
         self.director.stackScene(scene)
 
     def playSurvival(self):
-        m = random.randint(1, 2)
+        m = random.randint(1, 5)
         Music.changemusic(self,m)
         scene = Survival(self.director)
         self.director.stackScene(scene)

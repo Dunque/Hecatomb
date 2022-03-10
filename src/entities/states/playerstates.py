@@ -1,7 +1,7 @@
 import pygame as pg
 from math import pi, atan2
 from src.entities.states.state import State
-
+from src.settings.settings import *
 vec = pg.math.Vector2
 
 class PlayerState(State):
@@ -99,6 +99,7 @@ class PlayerDodgingState(PlayerState):
 
     def update(self):
         self.character.currentAnim = self.character.dodgeAnim
+
         if self.character.weapon is not None:
             self.character.weapon.deactivate()
         if self.character.currentAnim.current_frame != self.character.currentAnim.max_frame - 1:

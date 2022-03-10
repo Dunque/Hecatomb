@@ -49,8 +49,10 @@ DEATH_SOUND = pg.mixer.Sound("./sounds/Game_Over.wav")
 CHANGE_SOUND = pg.mixer.Sound("./sounds/recharge.wav")
 ENEMY_DEATH_SOUND = pg.mixer.Sound("./sounds/Hit_1.wav")
 SWORD_SOUND = pg.mixer.Sound("./sounds/sword.wav")
-PALYER_DAMAGE_SOUND = pg.mixer.Sound("./sounds/Fire_2.wav")
+PLAYER_DAMAGE_SOUND = pg.mixer.Sound("./sounds/Fire_2.wav")
 EXPLOSION_SOUND = pg.mixer.Sound("./sounds/explosion.wav")
+DODGE_SOUND = pg.mixer.Sound("./sounds/roll.wav")
+WIN_ROOM_SOUND=pg.mixer.Sound("./sounds/win_sound.wav")
 #SPRITE LAYERS top > bottom
 HUD_LAYER = 9
 PICKUP_LAYER = 8

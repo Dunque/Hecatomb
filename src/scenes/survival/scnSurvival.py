@@ -203,6 +203,6 @@ class Survival(Scene):
 
     def nextScene(self):
         scene = SurvivalEnd(self.director)
-        m = random.randint(1,2)
-        Music.chagemusic(self,m)
+        m = random.randint(1,5)
+        Music.changemusic(self,m)
         self.director.changeScene(scene)
