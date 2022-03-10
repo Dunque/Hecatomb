@@ -5,7 +5,7 @@ from src.entities.player import *
 from src.entities.enemies import *
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
-from src.entities.objects import Chest, Candelabro
+from src.entities.objects import *
 from src.entities.ground import *
 from src.map.camera import *
 from src.map.room import Room
@@ -87,6 +87,8 @@ class StaticMap(Notifier):
             #Now we proceed with the rest of the tiles
             for row in range(room.limitY0, room.limitY+1):
                 for col in range(room.limitX0, room.limitX+1):
+
+                    #--------------------------TILES----------------------
                     if self.finalMap[row][col] == '1':
                         Wall(self.scene, col, row, self.tileset.tiles[25])
                     elif self.finalMap[row][col] == '2':
@@ -112,31 +114,40 @@ class StaticMap(Notifier):
                     elif self.finalMap[row][col] == '3':
                         Wall(self.scene, col, row,
                              self.tileset.tiles[15 * randint(1, 7)])
+
+                    elif self.finalMap[row][col] == '-':
+                        room.addDoor(Door(self.scene, col, row, ROCK_IMAGE))
+
+                    elif self.finalMap[row][col] == '8':
+                        room.addObject(Candelabro(self.scene, col, row))
+                    
+                    #------------------ENTITIES--------------------------
                     elif self.finalMap[row][col] == 'P':
                         self.scene.player = Player(self.scene, col, row)
+
                     elif self.finalMap[row][col] == 'H':
-                        room.addEnemy(Herald(self.scene, col, row))
+                        room.addEnemy(HeraldGun(self.scene, col, row))
+                    elif self.finalMap[row][col] == 'h':
+                        room.addEnemy(HeraldShotgun(self.scene, col, row))
+
                     elif self.finalMap[row][col] == 'K':
-                        room.addEnemy(Khan(self.scene, col, row))
+                        room.addEnemy(KhanGun(self.scene, col, row))
+                    elif self.finalMap[row][col] == 'k':
+                        room.addEnemy(KhanShotgun(self.scene, col, row))
+
                     elif self.finalMap[row][col] == 'W':
                         room.addEnemy(Worm(self.scene, col, row))
                     elif self.finalMap[row][col] == 'Y':
                         room.addEnemy(Eye(self.scene, col, row))
-                    elif self.finalMap[row][col] == '-':
-                        room.addDoor(Door(self.scene, col, row, ROCK_IMAGE))
-                    elif self.finalMap[row][col] == 'C':
-                        Chest(self.scene, col, row, textLines=7)
+
                     elif self.finalMap[row][col] == 'R':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=1))
-                    elif self.finalMap[row][col] == '5':
-                        room.addNPC(NPCBase(self.scene, col, row, textLines=2))
-                    elif self.finalMap[row][col] == '6':
-                        room.addNPC(NPCBase(self.scene, col, row, textLines=3))
-                    elif self.finalMap[row][col] == '7':
-                        room.addNPC(NPCBase(self.scene, col, row, textLines=4))
-                    elif self.finalMap[row][col] == '8':
-                        room.addObject(Candelabro(self.scene, col, row))
-                        pass
+
+                    elif self.finalMap[row][col] == 'C':
+                        room.addObject(Chest(self.scene, col, row, textLines=7))
+                    elif self.finalMap[row][col] == 'M':
+                        room.addObject(Medkit(self.scene, col, row, 40))
+
             #We initialize the room doors to be open, until the player wanders in
             room.openAllDoors()
 

@@ -36,25 +36,27 @@ class Chest(pg.sprite.Sprite):
 
 		self.opened = False
 		self.talking = False
+		self.isActive = False
 
 	def update(self):
-		player = pg.sprite.spritecollideany(self, self.scene.player_SG)
-		if player:
-			if not self.opened:
-				if not self.talking:
-					self.interaccion.activate()
-					if player.interact:
-						self.open()
-			else:
-				if player.interact:
-					self.talkFast()
+		if self.isActive:
+			player = pg.sprite.spritecollideany(self, self.scene.player_SG)
+			if player:
+				if not self.opened:
+					if not self.talking:
+						self.interaccion.activate()
+						if player.interact:
+							self.open()
 				else:
-					self.stopTalkFast()
-		else:
-			self.interaccion.deactivate()
-			if self.talking:
-				self.scene.completly_finished = False
-			self.talking = False
+					if player.interact:
+						self.talkFast()
+					else:
+						self.stopTalkFast()
+			else:
+				self.interaccion.deactivate()
+				if self.talking:
+					self.scene.completly_finished = False
+				self.talking = False
 
 	def open(self):
 		self.opened = True
@@ -102,11 +104,8 @@ class Candelabro(pg.sprite.Sprite):
 		self.rect.x = x * TILESIZE
 		self.rect.y = y * TILESIZE
 
-		self.isActive = False
-
 	def update(self):
-		if self.isActive:
-			self.image = self.candelabroAnim.get_frame()
+		self.image = self.candelabroAnim.get_frame()
 
 
 class Exit(pg.sprite.Sprite):
@@ -144,3 +143,39 @@ class Exit(pg.sprite.Sprite):
 	def open(self):
 		self.scene.nextScene()
 
+
+class Medkit(pg.sprite.Sprite):
+	def __init__(self, scene, x, y, healAmount):
+		self.scene = scene
+		self._layer = WALL_LAYER
+		self.groups = self.scene.all_sprites
+		pg.sprite.Sprite.__init__(self, self.groups)
+
+		self.image = self.scene.medkitImg
+		self.rect = self.image.get_rect()
+
+		self.x = x
+		self.y = y
+		self.rect.x = x * TILESIZE
+		self.rect.y = y * TILESIZE
+		self.pos = vec(self.rect.x, self.rect.y)
+		self.interaccion = Interaccion(self.scene, self.pos, self.scene.abrirImg)
+
+		self.healAmount = healAmount
+		self.isActive = False
+
+	def update(self):
+		if self.isActive:
+			player = pg.sprite.spritecollideany(self, self.scene.player_SG)
+			if player:
+				self.interaccion.activate()
+				if player.interact:
+					self.interaccion.deactivate()
+					self.healPlayer()
+					#TODO SOUND healing	
+					self.kill()	
+			else:
+				self.interaccion.deactivate()
+
+	def healPlayer(self):
+		self.scene.player.entityData.heal(self.healAmount)

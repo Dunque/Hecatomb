@@ -8,7 +8,7 @@ from src.weapons.bullets import GunBullet, ShotgunBullet
 vec = pg.math.Vector2
 
 class EnemyWeapon():
-    def __init__(self, scene, owner, x, y, image):
+    def __init__(self, scene, dmg, rate, owner, x, y, image):
         self._layer = WEAPON_LAYER
         # Init sprite and groups
         self.groups = scene.all_sprites
@@ -25,11 +25,11 @@ class EnemyWeapon():
         # Init position and rotation
         self.pos = vec(x, y) * TILESIZE
         self.rot = 0
-        self.crosshair = None
 
-        self.damage = 1
+        self.damage = dmg
+        self.bullet_rate = rate
 
-    def updatePos(self, x, y, player_rect):
+    def updatePos(self, x, y):
         self.pos = vec(x, y)
 
         pg.display.update()
@@ -55,8 +55,8 @@ class EnemyWeapon():
         pass
 
 class EnemyFireWeapon(EnemyWeapon):
-    def __init__(self, scene, owner, x, y, image):
-        super().__init__(scene, owner, x, y, image)
+    def __init__(self, scene, dmg, rate, owner, x, y, image):
+        super(EnemyFireWeapon, self).__init__(scene, dmg, rate, owner, x, y, image)
 
         # Init shoot direction vector and shoot offset
         # The shoot vector indicates the bullet direction and
@@ -77,15 +77,14 @@ class EnemyFireWeapon(EnemyWeapon):
         self.current_cd += 1
 
 class EnemyGun(EnemyFireWeapon, pg.sprite.Sprite):
-    def __init__(self, scene, owner, x, y):
+    def __init__(self, scene, dmg, rate, owner, x, y):
         self.scene = scene
         self.image = self.scene.playerGunImg
         self.rect = self.image.get_rect()
-        super().__init__(self.scene, owner, x, y, self.image)
+        super(EnemyGun, self).__init__(
+            self.scene, dmg, rate, owner, x, y, self.image)
 
         self.barrel_offset = vec(55, -10)
-        self.bullet_rate = 2000
-        self.damage = 10
         self.kickback = 200
         self.spread = 10
 
@@ -109,15 +108,14 @@ class EnemyGun(EnemyFireWeapon, pg.sprite.Sprite):
                 self.owner.vel = vec(-self.kickback, 0).rotate(-push)
 
 class EnemyShotgun(EnemyFireWeapon, pg.sprite.Sprite):
-    def __init__(self, scene, owner, x, y):
+    def __init__(self, scene, dmg, rate, owner, x, y):
         self.scene = scene
         self.image = self.scene.playerShotgunImg
         self.rect = self.image.get_rect()
-        super().__init__(self.scene, owner, x, y, self.image)
+        super(EnemyShotgun, self).__init__(
+            self.scene, dmg, rate, owner, x, y, self.image)
 
         self.barrel_offset = vec(55, -10)
-        self.bullet_rate = 2000
-        self.damage = 15
         self.kickback = 1000
         self.spread = 10
 

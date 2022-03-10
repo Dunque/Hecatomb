@@ -10,7 +10,7 @@ from src.entities.character import *
 vec = pg.math.Vector2
 
 
-class Herald(Character):
+class HeraldGun(Character):
     def __init__(self, scene, x, y):
         # Aniamtion stuff
         walkAnim = Anim(scene.heraldWalkSheet,
@@ -19,7 +19,7 @@ class Herald(Character):
                          (CHARACTER_SPRITE_SIZE, CHARACTER_SPRITE_SIZE), 10, 0, 5)
         animList = [walkAnim, walkAnim, deathAnim, walkAnim, walkAnim]
 
-        super(Herald, self).__init__(scene, x, y,
+        super(HeraldGun, self).__init__(scene, x, y,
                                      animList, (scene.mobs_SG), HeraldStats())
 
         self.acc = vec(0, 0)
@@ -28,12 +28,34 @@ class Herald(Character):
         self.weaponOffsetX = -20
         self.weaponOffsetY = -10
 
-        self.weapon = EnemyGun(self.scene, self, self.rect.centerx -
+        self.weapon = EnemyGun(self.scene, 15, 1800, self, self.rect.centerx -
                                self.weaponOffsetX, self.rect.centery - self.weaponOffsetY)
         self.state = EnemyGroundedState(self, "GROUNDED")
 
 
-class Khan(Character):
+class HeraldShotgun(Character):
+    def __init__(self, scene, x, y):
+        # Aniamtion stuff
+        walkAnim = Anim(scene.herald2WalkSheet,
+                        (CHARACTER_SPRITE_SIZE, CHARACTER_SPRITE_SIZE), 7, 0, 6)
+        deathAnim = Anim(scene.herald2DeathSheet,
+                         (CHARACTER_SPRITE_SIZE, CHARACTER_SPRITE_SIZE), 10, 0, 5)
+        animList = [walkAnim, walkAnim, deathAnim, walkAnim, walkAnim]
+
+        super(HeraldShotgun, self).__init__(scene, x, y,
+                                        animList, (scene.mobs_SG), HeraldStats())
+
+        self.acc = vec(0, 0)
+        self.rect.center = self.pos
+
+        self.weaponOffsetX = -20
+        self.weaponOffsetY = -10
+
+        self.weapon = EnemyShotgun(self.scene, 20, 2500, self, self.rect.centerx -
+                               self.weaponOffsetX, self.rect.centery - self.weaponOffsetY)
+        self.state = EnemyGroundedState(self, "GROUNDED")
+
+class KhanGun(Character):
     def __init__(self, scene, x, y):
         # Aniamtion stuff
         walkAnim = Anim(scene.khanWalkSheet,
@@ -42,7 +64,29 @@ class Khan(Character):
             scene.khanDeathSheet, (CHARACTER_SPRITE_SIZE, CHARACTER_SPRITE_SIZE), 10, 0, 6)
         animList = [walkAnim, walkAnim, deathAnim, walkAnim, walkAnim]
 
-        super(Khan, self).__init__(scene, x, y,
+        super(KhanGun, self).__init__(scene, x, y,
+                                          animList, (scene.mobs_SG), KhanStats())
+
+        self.acc = vec(0, 0)
+        self.rect.center = self.pos
+
+        self.weaponOffsetX = -20
+        self.weaponOffsetY = -10
+
+        self.weapon = EnemyGun(self.scene, 10, 2000, self, self.rect.centerx -
+                                   self.weaponOffsetX, self.rect.centery - self.weaponOffsetY)
+        self.state = EnemyGroundedState(self, "GROUNDED")
+
+class KhanShotgun(Character):
+    def __init__(self, scene, x, y):
+        # Aniamtion stuff
+        walkAnim = Anim(scene.khanWalkSheet,
+                        (CHARACTER_SPRITE_SIZE, CHARACTER_SPRITE_SIZE), 7, 0, 6)
+        deathAnim = Anim(
+            scene.khanDeathSheet, (CHARACTER_SPRITE_SIZE, CHARACTER_SPRITE_SIZE), 10, 0, 6)
+        animList = [walkAnim, walkAnim, deathAnim, walkAnim, walkAnim]
+
+        super(KhanShotgun, self).__init__(scene, x, y,
                                    animList, (scene.mobs_SG), KhanStats())
 
         self.acc = vec(0, 0)
@@ -51,7 +95,7 @@ class Khan(Character):
         self.weaponOffsetX = -20
         self.weaponOffsetY = -10
 
-        self.weapon = EnemyShotgun(self.scene, self, self.rect.centerx -
+        self.weapon = EnemyShotgun(self.scene, 15, 3000, self, self.rect.centerx -
                                    self.weaponOffsetX, self.rect.centery - self.weaponOffsetY)
         self.state = EnemyGroundedState(self, "GROUNDED")
 
@@ -74,7 +118,7 @@ class Worm(Character):
         self.hasAttacked = False
         self.attackOffset = vec(30, 30)
         self.explosionWalls = Anim(
-            scene.fire_ballExplosionSheet, (46, 46), 10, 0, 7)
+            scene.fire_ballExplosion2Sheet, (48, 48), 5, 0, 8)
 
         self.state = EnemyGroundedState(self, "GROUNDED")
 
@@ -82,7 +126,7 @@ class Eye(Character):
     def __init__(self, scene, x, y):
         # Aniamtion stuff
 
-        walkAnim = Anim(scene.eyeWalkSheet, (48,92 ), 7, 0, 7)
+        walkAnim = Anim(scene.eyeWalkSheet, (48,92), 7, 0, 7)
         deathAnim = Anim(scene.eyeDeathSheet, (148, 92), 4, 0, 4)
 
         animList = [walkAnim, walkAnim, deathAnim, walkAnim, walkAnim]
@@ -96,7 +140,7 @@ class Eye(Character):
         self.hasAttacked = False
         self.attackOffset = vec(30, 30)
         self.explosionWalls = Anim(
-            scene.fire_ballExplosionSheet, (46, 46), 20, 0, 7)
+            scene.fire_ballExplosion2Sheet, (48, 48), 5, 0, 8)
 
 
         self.state = KamikazeGroundedState(self, "GROUNDED")

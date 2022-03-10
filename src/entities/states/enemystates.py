@@ -40,7 +40,7 @@ class EnemyGroundedState(EnemyState):
 
         if self.character.weapon:
             self.character.weapon.updatePos(self.character.rect.centerx - self.character.weaponOffsetX,
-                                self.character.rect.centery - self.character.weaponOffsetY, self.character.rect)
+                                self.character.rect.centery - self.character.weaponOffsetY)
             self.character.weapon.attack()
         else:
             if pg.sprite.spritecollide(self.character, self.character.scene.player_SG, False):

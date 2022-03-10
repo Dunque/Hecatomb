@@ -38,9 +38,8 @@ class Cutscene1(Scene):
 
         self.fog = pg.Surface((WIDTH, HEIGHT))
 
-        #Exit condition: player must interact with an amount of npcs to exit the level
-        self.talkedCount = 0
-        self.canExit = False
+        #Exit condition: none, tha player may leave whenever they please
+        self.canExit = True
 
         #Loads all sprite and sound data
         self.load_data()
@@ -108,6 +107,7 @@ class Cutscene1(Scene):
 
         self.hud = Hud(self)
 
+        #Dialogue variables
         self.dialogue = None
         self.remainder_dialogue = None
         self.active_dialogue = False
@@ -130,9 +130,6 @@ class Cutscene1(Scene):
         self.all_sprites.update()
         self.all_hud.update()
         self.camera.update(self.player)
-
-        if self.talkedCount >= 4:
-            self.canExit = True
 
         self.map.update()
 
