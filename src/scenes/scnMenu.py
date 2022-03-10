@@ -5,7 +5,7 @@ from src.scenes.guiUtils import UtilsGUI
 from src.scenes.scene import Scene
 from src.scenes.survival.scnSurvival import Survival
 from src.settings.settings import *
-
+from src.scenes.music import *
 
 # ---------------------------------------------------------
 # Elementos de pantalla Menu
@@ -74,7 +74,7 @@ class ButtonExit(ButtonGUI):
         self.screen.menu.exitProgram()
 
 
-# ---------------------------------------------------------
+                 # ---------------------------------------------------------
 # Elementos de pantalla Records
 
 class TextRecords(CenteredTextGUI):
@@ -261,10 +261,7 @@ class Menu(Scene):
         self.director.stackScene(scene)
 
     def playSurvival(self):
-        pg.mixer.music.stop
-        pg.mixer.music.load("./sounds/level_music.mp3")
-        pg.mixer.music.play(-1)
-
+        Music.changemusic(self,2)
         scene = Survival(self.director)
         self.director.stackScene(scene)
 

@@ -10,7 +10,7 @@ from src.settings.settings import *
 
 
 class Survival(Scene):
-    pg.mixer.music.play(-1)
+
 
     def __init__(self, director):
         #Initialize superclass
