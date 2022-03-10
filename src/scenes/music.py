@@ -11,7 +11,7 @@ class Music():
         pg.mixer.music.play(-1)
 
     def changemusic(self, num):
-
+        Music.volumemusic(self, 1)
         if (num==0):
             pg.mixer.music.stop
             pg.mixer.music.load("./sounds/music/menu_music.mp3")

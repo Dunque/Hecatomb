@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 from src.entities.character import Character
 from src.hud.hud import Hud
 from src.map.randmap import RandMap
@@ -7,7 +8,7 @@ from src.scenes.scene import Scene
 from src.scenes.scnPause import PauseMenu
 from src.scenes.survival.scnSurvivalEnd import SurvivalEnd
 from src.settings.settings import *
-
+from src.scenes.music import *
 
 class Survival(Scene):
 
@@ -197,8 +198,11 @@ class Survival(Scene):
 
     def pauseScene(self):
         scene = PauseMenu(self.director)
+        Music.volumemusic(self,0.25)
         self.director.stackScene(scene)
 
     def nextScene(self):
         scene = SurvivalEnd(self.director)
+        m = random.randint(1,2)
+        Music.chagemusic(self,m)
         self.director.changeScene(scene)

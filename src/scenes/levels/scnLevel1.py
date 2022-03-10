@@ -9,7 +9,7 @@ from src.settings.settings import *
 from src.entities.character import *
 from src.map.randmap import *
 from src.hud.hud import Hud, Line
-
+from src.scenes.music import *
 
 class Level1(Scene):
 
@@ -279,6 +279,7 @@ class Level1(Scene):
     def pauseScene(self):
         pg.mouse.set_visible(True)
         scene = PauseMenu(self.director)
+        Music.volumemusic(self, 0.25)
         self.director.stackScene(scene)
     
     def losingScene(self):

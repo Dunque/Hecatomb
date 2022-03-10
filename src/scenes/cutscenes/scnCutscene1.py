@@ -7,7 +7,7 @@ from src.settings.settings import *
 from src.entities.character import *
 from src.map.cutscenemap import CutsceneMap
 from src.hud.hud import Hud
-
+from src.scenes.music import *
 
 class Cutscene1(Scene):
 
@@ -255,8 +255,10 @@ class Cutscene1(Scene):
 
     def pauseScene(self):
         scene = PauseMenu(self.director)
+        Music.volumemusic(self, 0.25)
         self.director.stackScene(scene)
 
     def nextScene(self):
         scene = Level1(self.director)
+        Music.changemusic(self,1)
         self.director.changeScene(scene)

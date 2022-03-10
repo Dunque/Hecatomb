@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 from src.scenes.cutscenes.scnCutscene1 import Cutscene1
 from src.scenes.guiElems import *
 from src.scenes.guiUtils import UtilsGUI
@@ -261,7 +262,8 @@ class Menu(Scene):
         self.director.stackScene(scene)
 
     def playSurvival(self):
-        Music.changemusic(self,2)
+        m = random.randint(1, 2)
+        Music.changemusic(self,m)
         scene = Survival(self.director)
         self.director.stackScene(scene)
 

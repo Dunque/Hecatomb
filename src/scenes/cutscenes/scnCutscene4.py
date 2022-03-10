@@ -3,7 +3,7 @@ from src.scenes.resourceManager import ResourceManager
 from src.scenes.scene import Scene
 from src.scenes.scnPause import PauseMenu
 from src.settings.settings import *
-
+from src.scenes.music import *
 
 class Cutscene4(Scene):
 
@@ -47,6 +47,7 @@ class Cutscene4(Scene):
 
     def pauseScene(self):
         scene = PauseMenu(self.director)
+        Music.volumemusic(self, 0.25)
         self.director.stackScene(scene)
 
     def exitScene(self):
