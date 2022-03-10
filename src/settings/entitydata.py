@@ -13,7 +13,7 @@ class CharacterStats:
         #Stablishing invencibility frames in order to not be able
         #to be damaged several times in the span of miliseconds
         self.vulnerable = True
-        self.iframes = 15
+        self.iframes = 0
         self.currentIframe = 0
 
     def takeDamage(self, dmg):
@@ -24,6 +24,13 @@ class CharacterStats:
         #Die
         if (self.actualHP <= 0):
             self.isAlive = False
+
+    def heal(self, hp):
+        #Check in order to not heal more than the max hp allows
+        if self.actualHP + hp > self.maxHP:
+            self.actualHP = self.maxHP
+        else:
+            self.actualHP += hp
 
     def update(self):
         #If the character is invulneable, we start counting the
