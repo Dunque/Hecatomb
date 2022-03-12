@@ -27,7 +27,7 @@ class ResourceManager(object):
                 raise (SystemExit, message)
             image = image.convert()
             if colorKey is not None:
-                if colorKey is -1:
+                if colorKey == -1:
                     colorKey = image.get_at((0,0))
                 image.set_colorkey(colorKey, RLEACCEL)
             # Se almacena
@@ -46,7 +46,7 @@ class ResourceManager(object):
             # Se carga el recurso indicando el name de su carpeta
             # fullName = os.path.join('imagenes', name)
             fullName = os.path.join(name)
-            pfile=open(fullName,'r')
+            pfile=open(fullName,'r',encoding='utf-8')
             data=pfile.read()
             pfile.close()
             # Se almacena

@@ -252,7 +252,7 @@ class Menu(Scene):
 
 
     # -----------------------------------------------------
-    # Métodos propios de la escena
+    # Scene transitions
 
     def showInitialScreen(self):
         self.currentScreen = 0

@@ -28,7 +28,7 @@ class Chest(pg.sprite.Sprite):
 
 		self.dialogo = None
 		if textLines:
-			with open(self.scene.dialogues_src) as f:
+			with open(self.scene.dialogues_src,encoding='utf-8') as f:
 				for i, line in enumerate(f):
 					if i == textLines:
 						dialogue = line

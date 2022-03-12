@@ -194,7 +194,7 @@ class Survival(Scene):
 
 
     # -----------------------------------------------------
-    # Métodos propios de la escena
+    # Scene transitions
 
     def pauseScene(self):
         scene = PauseMenu(self.director)
