@@ -88,7 +88,7 @@ class ProfileBoxDialogue(pg.sprite.Sprite):
 		self._layer = HUD_LAYER
 		self.scene = scene
 		pg.sprite.Sprite.__init__(self, [])
-		self.anim = Anim(profileImg, (157, 155), 15, 0, 2)
+		self.anim = Anim(profileImg, (155, 155), 15, 0, 2)
 		self.image = self.anim.get_frame()
 		self.rect = self.image.get_rect()
 		self.rect.center = HEIGHT - 300, -400

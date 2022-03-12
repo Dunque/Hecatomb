@@ -89,7 +89,7 @@ class Candelabro(pg.sprite.Sprite):
 		self.groups = self.scene.all_sprites, self.scene.walls_SG, self.scene.candelabros_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
 
-		self.candelabroAnim = Anim(self.scene.candelabroImg, (64, 64), 2, 0, 8)
+		self.candelabroAnim = Anim(self.scene.candelabroImg, (64, 64), 5, 0, 8)
 		self.candelabroAnim.current_frame = random.randint(0, 7)
 		self.image = self.candelabroAnim.get_frame()
 		self.rect = self.image.get_rect()

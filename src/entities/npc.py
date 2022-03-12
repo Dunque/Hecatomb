@@ -99,7 +99,14 @@ class TacoTruck(pg.sprite.Sprite):
 		self.scene = scene
 		self.groups = self.scene.all_sprites, self.scene.npc_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
-		self.image = self.scene.tacoTruck
+		idleAnim = Anim(scene.tacoTruck, (423, 311), 20, 0, 4)
+		talkingAnim = Anim(scene.tacoTruckTalking, (423, 311), 20, 0, 4)
+		#self.image = self.scene.tacoTruck
+		self.animList = [idleAnim, talkingAnim, idleAnim, idleAnim, idleAnim]
+		self.currentAnim = self.animList[0]
+
+		#self.image = self.idleAnim.get_frame()
+		self.image = self.currentAnim.get_frame()
 		self.rect = self.image.get_rect()
 		self.x = x
 		self.y = y
@@ -116,10 +123,12 @@ class TacoTruck(pg.sprite.Sprite):
 			for i, line in enumerate(f):
 				if i == textLines:
 					dialogue = line
-		self.dialogo = DialogoInGame(self.scene, dialogue.rstrip("\n").split('\\n'), stopMove=True)
+		self.profileImg = self.scene.tacoProfile
+		self.dialogo = DialogoInGame(self.scene, dialogue.rstrip("\n").split('\\n'), stopMove=True, profileImg=self.profileImg)
 		self.talking = False
 
 	def update(self):
+		self.image = self.currentAnim.get_frame()
 		player = self.talk_rect.colliderect(self.scene.player.rect)
 		if player:
 			if not self.talking:
@@ -135,6 +144,12 @@ class TacoTruck(pg.sprite.Sprite):
 			if self.talking:
 				self.scene.completly_finished = False
 			self.talking = False
+			self.currentAnim = self.animList[0]
+
+		if not self.talking or self.scene.dialogue_continuation:
+			self.currentAnim = self.animList[0]
+		else:
+			self.currentAnim = self.animList[1]
 
 	def talk(self):
 		self.talking = True

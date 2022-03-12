@@ -56,6 +56,8 @@ class Cutscene1(Level):
         #NPC
         self.npc1Profile = pg.image.load("./sprites/Player/profile1.png").convert_alpha()
         self.tacoTruck = pg.image.load("./sprites/NPC/tacotruck.png").convert_alpha()
+        self.tacoTruckTalking = pg.image.load("./sprites/NPC/truckTalking.png").convert_alpha()
+        self.tacoProfile = pg.image.load("./sprites/NPC/profileBoxTruck.png").convert_alpha()
 
         # EYE DATA
         self.eyeWalkSheet = pg.image.load("./sprites/Eye/eye_ball_4.png").convert_alpha()
