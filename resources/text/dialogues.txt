@@ -3,7 +3,7 @@ Sven, los Khan nos han traicionado. Llegaron de la nada\ny han arrasado con todo
 Vete hacia el monte del norte, y mira si queda gente con\nvida. Debemos ayudar a todos los nuestros que podamos.\nHabla con el armero y preparate.
 Sven, toma este Stop y un revolver. Para cambiar\nde arma manten pulsado Tab y mueve el raton hacia\nel arma que quieras.\nLuego con levantar Tab te la equiparas.\nPara disparar o atacar, pulsa Click izquierdo.
 Vamos a ayudar a los heridos y apagar los incendios. Te\nenviaremos refuerzos en cuanto podamos. Recuerda que\nmientras te mueves, si pulsas ESPACIO daras una\nvoltereta y esquivaras todos los disparos o ataques.
-
+Gracias por audarme, Sven. Por favor, busca a los\ndemas, no te vayas sin encontrarnos a todos.
 #COFRES
 Has obtenido mil hostias.
 

@@ -37,7 +37,7 @@ class SurvivalEnd(Scene):
 
 
     # -----------------------------------------------------
-    # Métodos propios de la escena
+    # Scene transitions
 
     def exitScene(self):
         self.director.exitScene()

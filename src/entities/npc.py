@@ -27,7 +27,7 @@ class NPCBase(Character):
 		self.pos = vec(self.rect.x + 50, self.rect.y)
 		self.profileImg = self.scene.npc1Profile
 		self.interaccion = Interaccion(self.scene, self.pos, self.scene.hablarImg)
-		with open(self.scene.dialogues_src) as f:
+		with open(self.scene.dialogues_src,encoding='utf-8') as f:
 			for i, line in enumerate(f):
 				if i == textLines:
 					dialogue = line

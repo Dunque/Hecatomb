@@ -40,7 +40,7 @@ class EnemyGroundedState(EnemyState):
 
         if self.character.weapon:
             self.character.weapon.updatePos(self.character.rect.centerx - self.character.weaponOffsetX,
-                                self.character.rect.centery - self.character.weaponOffsetY, self.character.rect)
+                                self.character.rect.centery - self.character.weaponOffsetY)
             self.character.weapon.attack()
         else:
             if pg.sprite.spritecollide(self.character, self.character.scene.player_SG, False):
@@ -133,10 +133,9 @@ class KamikazeDyingState(EnemyDyingState):
         super(KamikazeDyingState, self).__init__(character, name)
 
     def update(self):
-
+        EXPLOSION_SOUND.play()
         Explosion(self.character.scene, self.character.pos, self.character.explosionWalls,
                   self.character.scene.player_SG, scale=6, dealsDamage=True, damage=40)
-        #EXPLOSION_SOUND.play()
         Explosion(self.character.scene, self.character.pos, self.character.explosionWalls,
                 self.character.scene.mobs_SG, scale=6, dealsDamage=True, damage=40)
         super(KamikazeDyingState, self).update()

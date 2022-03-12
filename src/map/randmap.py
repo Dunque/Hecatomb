@@ -1,25 +1,11 @@
 #from matplotlib.style import available
 import pygame as pg
 import numpy as np
-from random import seed, randint, random, choice
-from src.entities.player import *
-from src.entities.enemies import *
-from src.entities.npc import NPCBase
+from random import seed, randint, choice
 from src.settings.settings import *
-from src.sprites.tileset import Tileset
-from src.entities.objects import Chest
 from src.entities.ground import *
-from src.map.camera import *
 from src.map.room import Room
-from abc import ABC, abstractmethod
-
-vec = pg.math.Vector2
-
-class Notifier(ABC):
-
-    @abstractmethod
-    def notify(self):
-        pass
+from src.map.map import Map
 
 #el generador de mapas furrula asi:
 #tu pones unas salas en el txt, una de ellas tiene que tener
@@ -29,43 +15,19 @@ class Notifier(ABC):
 #una vez cada una. Es decir, si queremos tener 8 salas,
 #ponemos 8 salas en el txt, y si queremos tener 2 veces la
 #misma sala, la duplicamos en el txt.
-class RandMap(Notifier):
-    def __init__(self, scene, roomsfile):
-        self.scene = scene
-        
-        self.rooms = []
-
-        #This boolean dictates if the map is active or not
-        self.isPlaying = False
-
-        #Load the tileset
-        self.tileset = Tileset("./sprites/tilesetAshlands.png", (TILESIZE,TILESIZE), 0, 0)
-
-        #The final mal will be a string matrix initialized to contain all empty strings
-        #Later, it will be filled with each room's data
-        self.finalMap = np.empty((5 * ROOMHEIGHT, 5 * ROOMWIDTH), dtype=str)
+class RandMap(Map):
+    def __init__(self, scene, roomsfile, tileset, backgrounds):
+        super(RandMap,self).__init__(scene, roomsfile, tileset, backgrounds)
 
         self.tmpRooms = self.parseRooms(roomsfile)
-
         self.randomizeRooms()
-
-        self.generateTiles()
-
-        self.tilewidth = len(self.finalMap[0])
-        self.tileheight = len(self.finalMap)
-        self.width = self.tilewidth * TILESIZE
-        self.height = self.tileheight * TILESIZE
-
-        self.scene.camera = Camera(self.width, self.height)
-
-        self.isPlaying = True
 
     #This function reads the txt file containing the rooms, and it transforms them into
     #string matrices which contain the information of the tiles, objects, enemies etc
     #of the room
     def parseRooms(self, mapFile):
         tmpRooms = []
-        with open(mapFile, 'rt') as f:
+        with open(mapFile, 'rt',encoding='utf-8') as f:
             tmpRoom = []
             for line in f:
                 if line.__contains__("/"):
@@ -180,67 +142,3 @@ class RandMap(Notifier):
             room.addDoor(Door(self.scene, col, row, ROCK_IMAGE))
         else:
             Wall(self.scene, col, row, self.tileset.tiles[15])
-
-    def generateTiles(self):
-        for room in self.rooms:
-            #First we choose a random floor for the room. This spices up things
-            n_img=randint(1,4)
-            if n_img==1:
-                Floor(self.scene, room.limitX0, room.limitY0, self.scene.background1)
-            elif n_img == 2:
-                Floor(self.scene, room.limitX0, room.limitY0, self.scene.background2)
-            elif n_img == 3:
-                Floor(self.scene, room.limitX0, room.limitY0, self.scene.background3)
-            elif n_img == 4:
-                Floor(self.scene, room.limitX0, room.limitY0, self.scene.background4)
-            #Now we proceed with the rest of the tiles
-            for row in range(room.limitY0,room.limitY+1):
-                for col in range(room.limitX0,room.limitX+1):
-                    if self.finalMap[row][col] == '1':
-                        Wall(self.scene, col, row, self.tileset.tiles[25])
-                    elif self.finalMap[row][col] == '2':
-                        Wall(self.scene, col, row, self.tileset.tiles[23])
-                    elif self.finalMap[row][col] == '3':
-                        Wall(self.scene, col, row, self.tileset.tiles[15 * randint(1,7)])
-                    elif self.finalMap[row][col] == 'P':
-                        self.scene.player = Player(self.scene, col, row)
-                    elif self.finalMap[row][col] == 'H':
-                        room.addEnemy(Herald(self.scene, col, row))    
-                    elif self.finalMap[row][col] == 'K':
-                        room.addEnemy(Khan(self.scene, col, row))
-                    elif self.finalMap[row][col] == 'W':
-                        room.addEnemy(Worm(self.scene, col, row))
-                    elif self.finalMap[row][col] == 'Y':
-                        room.addEnemy(Eye(self.scene, col, row))
-                    elif self.finalMap[row][col] == '-':
-                        self.removeUnusedDoors(room,'-', row, col)
-                    elif self.finalMap[row][col] == 'C':
-                        Chest(self.scene, col, row)
-                    elif self.finalMap[row][col] == '4':
-                        room.addNPC(NPCBase(self.scene, col, row, textLines=1))
-                    elif self.finalMap[row][col] == '5':
-                        room.addNPC(NPCBase(self.scene, col, row, textLines=2))
-                    elif self.finalMap[row][col] == '6':
-                        room.addNPC(NPCBase(self.scene, col, row, textLines=3))
-                    elif self.finalMap[row][col] == '7':
-                        room.addNPC(NPCBase(self.scene, col, row, textLines=4))
-                        pass
-            #We initialize the room doors to be open, until the player wanders in
-            room.openAllDoors()
-
-    def notify(self, room, notification):
-        if notification == "start":
-            room.startRoom()
-                
-    def update(self):
-        # If the floor is still generating, wait
-        if self.isPlaying == False:
-            return
-        else:
-            # Update the active rooms
-            for room in self.rooms:
-                # Check if the player is in a given room by comparing their limits
-                if self.scene.player.hit_rect.x in range((room.limitX0+1)*TILESIZE, (room.limitX-1)*TILESIZE) and self.scene.player.hit_rect.y in range((room.limitY0+1)*TILESIZE, (room.limitY-1)*TILESIZE):
-                    self.notify(room, "start")
-
-                room.update()

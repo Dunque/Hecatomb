@@ -1,11 +1,12 @@
 import pygame as pg
+import random
 from src.scenes.cutscenes.scnCutscene1 import Cutscene1
 from src.scenes.guiElems import *
 from src.scenes.guiUtils import UtilsGUI
 from src.scenes.scene import Scene
 from src.scenes.survival.scnSurvival import Survival
 from src.settings.settings import *
-
+from src.scenes.music import *
 
 # ---------------------------------------------------------
 # Elementos de pantalla Menu
@@ -74,7 +75,7 @@ class ButtonExit(ButtonGUI):
         self.screen.menu.exitProgram()
 
 
-# ---------------------------------------------------------
+                 # ---------------------------------------------------------
 # Elementos de pantalla Records
 
 class TextRecords(CenteredTextGUI):
@@ -251,7 +252,7 @@ class Menu(Scene):
 
 
     # -----------------------------------------------------
-    # Métodos propios de la escena
+    # Scene transitions
 
     def showInitialScreen(self):
         self.currentScreen = 0
@@ -261,10 +262,8 @@ class Menu(Scene):
         self.director.stackScene(scene)
 
     def playSurvival(self):
-        pg.mixer.music.stop
-        pg.mixer.music.load("./sounds/level_music.mp3")
-        pg.mixer.music.play(-1)
-
+        m = random.randint(1, 5)
+        Music.changemusic(self,m)
         scene = Survival(self.director)
         self.director.stackScene(scene)
 

@@ -45,7 +45,7 @@ class Intro(Scene):
 
 
     # -----------------------------------------------------
-    # Métodos propios de la escena
+    # Scene transitions
 
     def nextScene(self):
         scene = Menu(self.director)

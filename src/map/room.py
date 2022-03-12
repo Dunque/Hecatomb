@@ -32,22 +32,25 @@ class RoomStatePlaying(RoomState):
         for enemy in self.room.enemies:
             self.room.scene.all_sprites.add(enemy)
             enemy.isActive = True
-
-        for obj in self.room.objects:
-            obj.isActive = True
     
     def update(self):
         if self.room.enemies == []:
+
             self.toState(RoomStateCleared(self.room, "CLEARED"))
         else:
             for enemy in self.room.enemies:
                 if not enemy.entityData.isAlive:
+                    WIN_ROOM_SOUND.play()
                     self.room.enemies.remove(enemy)
 
 class RoomStateCleared(RoomState):
     def __init__(self, room, name):
         super(RoomStateCleared, self).__init__(room, name)
+
         self.room.openAllDoors()
+
+        for obj in self.room.objects:
+            obj.isActive = True
 
     def update(self):
         if self.room.npcs == []:

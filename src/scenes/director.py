@@ -2,7 +2,7 @@ import pygame as pg
 from src.settings.settings import *
 from src.scenes.scene import *
 from pygame.locals import *
-
+from src.scenes.music import *
 
 class Director():
 
@@ -45,7 +45,7 @@ class Director():
 
 
     def execute(self):
-
+        Music.changemusic(self, 0)
         # Mientras haya escenas en la pila, ejecutaremos la de arriba
         while (len(self.stack)>0):
 

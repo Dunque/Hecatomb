@@ -3,7 +3,7 @@ from src.scenes.guiElems import *
 from src.scenes.guiUtils import UtilsGUI
 from src.scenes.scene import Scene
 from src.settings.settings import *
-
+from src.scenes.music import *
 
 # ---------------------------------------------------------
 # Botones
@@ -14,6 +14,7 @@ class ButtonContinue(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Continuar')
 
     def action(self):
+        Music.volumemusic(self, 1)
         self.screen.menu.continueGame()
 
 
@@ -32,6 +33,8 @@ class ButtonRestart(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Reiniciar')
 
     def action(self):
+        Music.volumemusic(self,1)
+        Music.effectsvolume(self,0.25)
         self.screen.menu.restartScene()
 
 
@@ -41,6 +44,7 @@ class ButtonExitToMenu(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menú')
 
     def action(self):
+        Music.changemusic(self, 0)
         self.screen.menu.exitToMenu()
 
 
@@ -152,7 +156,7 @@ class PauseMenu(Scene):
 
 
     # -----------------------------------------------------
-    # Métodos propios de la escena
+    # Scene transitions
 
     def showInitialScreen(self):
         self.currentScreen = 0
