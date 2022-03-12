@@ -9,7 +9,7 @@ from src.entities.ground import *
 from src.map.camera import *
 from src.map.room import Room
 from abc import ABC, abstractmethod
-from src.entities.npc import NPCBase
+from src.entities.npc import NPCBase, TacoTruck
 
 vec = pg.math.Vector2
 
@@ -112,6 +112,8 @@ class Map(Notifier):
                         room.addNPC(NPCBase(self.scene, col, row, textLines=4))
                     elif self.finalMap[row][col] == 'R':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=5))
+                    elif self.finalMap[row][col] == 'T':
+                        TacoTruck(self.scene, col, row, textLines=10)
 
                     #----------------------OBJECTS--------------------------
                     elif self.finalMap[row][col] == 'C':
