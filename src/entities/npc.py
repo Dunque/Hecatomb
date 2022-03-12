@@ -36,6 +36,7 @@ class NPCBase(Character):
 		self.right = True
 
 		self.talked = False
+		self.hit_rect = None
 
 	def update(self):
 		if self.right:
@@ -87,8 +88,68 @@ class NPCBase(Character):
 			self.dialogo.drawText()
 		else:
 			self.dialogo.end()
-			self.currentAnim = self.animList[1]
 			self.scene.completly_finished = True
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()
+
+
+class TacoTruck(pg.sprite.Sprite):
+	def __init__(self, scene, x, y, textLines = 10):
+		self.scene = scene
+		self.groups = self.scene.all_sprites, self.scene.npc_SG
+		pg.sprite.Sprite.__init__(self, self.groups)
+		self.image = self.scene.tacoTruck
+		self.rect = self.image.get_rect()
+		self.x = x
+		self.y = y
+		#self.pos = vec(self.x, self.y)
+		self.rect.x = x * TILESIZE
+		self.rect.y = y * TILESIZE
+
+		self.hit_rect = TRUCK_HIT_RECT.copy()
+		self.hit_rect.center = vec(self.rect.centerx, self.rect.centery - 40)
+
+		self.talk_rect = pg.Rect((self.rect.x + 200, self.rect.y + 200, 120, 50))
+		self.interaccion = Interaccion(self.scene, vec(self.talk_rect.x + 70, self.talk_rect.y - 50), self.scene.hablarImg)
+		with open(self.scene.dialogues_src) as f:
+			for i, line in enumerate(f):
+				if i == textLines:
+					dialogue = line
+		self.dialogo = DialogoInGame(self.scene, dialogue.rstrip("\n").split('\\n'), stopMove=True)
+		self.talking = False
+
+	def update(self):
+		player = self.talk_rect.colliderect(self.scene.player.rect)
+		if player:
+			if not self.talking:
+				self.interaccion.activate()
+				if self.scene.player.interact:
+					self.talk()
+			elif self.scene.player.interact:
+					self.talkFast()
+			else:
+				self.stopTalkFast()
+		else:
+			self.interaccion.deactivate()
+			if self.talking:
+				self.scene.completly_finished = False
+			self.talking = False
+
+	def talk(self):
+		self.talking = True
+		self.interaccion.deactivate()
+		if not self.scene.completly_finished:
+			self.dialogo.drawText()
+
+	def talkFast(self):
+		if not self.scene.completly_finished:
+			self.dialogo.drawText()
+		else:
+			self.dialogo.end()
+			self.scene.completly_finished = True
+
+	def stopTalkFast(self):
+		self.dialogo.stopText()
+
+

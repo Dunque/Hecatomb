@@ -6,6 +6,8 @@ vec = pg.math.Vector2
 
 
 def collide_hit_rect(one, two):
+    if hasattr(two,'hit_rect') and two.hit_rect:
+        return one.hit_rect.colliderect(two.hit_rect)
     return one.hit_rect.colliderect(two.rect)
 
 
@@ -69,24 +71,28 @@ class Character(pg.sprite.Sprite):
             self.kill()
 
     def collide_with_walls(self, dir):
-        if dir == 'x':
-            hits = pg.sprite.spritecollide(self, self.scene.walls_SG, False, collide_hit_rect)
-            if hits:
-                if self.vel.x > 0:
-                    self.pos.x = hits[0].rect.left - self.hit_rect.width / 2.0
-                if self.vel.x < 0:
-                    self.pos.x = hits[0].rect.right + self.hit_rect.width / 2.0
-                self.vel.x = 0
-                self.hit_rect.centerx = self.pos.x
-        if dir == 'y':
-            hits = pg.sprite.spritecollide(self, self.scene.walls_SG, False, collide_hit_rect)
-            if hits:
-                if self.vel.y > 0:
+        collisions = list(self.scene.walls_SG) + list(self.scene.npc_SG)
+        hits = pg.sprite.spritecollide(self, collisions, False, collide_hit_rect)
+        if dir == 'x' and hits:
+            if self.vel.x > 0:
+                self.pos.x = hits[0].rect.left - self.hit_rect.width / 2.
+            if self.vel.x < 0:
+                self.pos.x = hits[0].rect.right + self.hit_rect.width / 2.0
+            self.vel.x = 0
+            self.hit_rect.centerx = self.pos.x
+        if dir == 'y' and hits:
+            if self.vel.y > 0:
+                if hasattr(hits[0], 'hit_rect') and hits[0].hit_rect:
+                    self.pos.y = hits[0].hit_rect.top - self.hit_rect.height / 2.0
+                else:
                     self.pos.y = hits[0].rect.top - self.hit_rect.height / 2.0
-                if self.vel.y < 0:
+            if self.vel.y < 0:
+                if hasattr(hits[0], 'hit_rect') and hits[0].hit_rect:
+                    self.pos.y = hits[0].hit_rect.bottom + self.hit_rect.height / 2.0
+                else:
                     self.pos.y = hits[0].rect.bottom + self.hit_rect.height / 2.0
-                self.vel.y = 0
-                self.hit_rect.centery = self.pos.y
+            self.vel.y = 0
+            self.hit_rect.centery = self.pos.y
 
     def takeDamage(self, dmg, sound=None):
         if self.isActive:

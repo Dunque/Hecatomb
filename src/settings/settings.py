@@ -32,6 +32,7 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 
 # Player settings
 PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 35)
+TRUCK_HIT_RECT = pg.Rect(0, 0, 423, 255)
 
 CAMERA_X = 0
 CAMERA_Y = 0

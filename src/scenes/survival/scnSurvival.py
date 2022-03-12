@@ -166,7 +166,6 @@ class Survival(Scene):
 
         # Hud
         for hud in self.all_hud:
-            print(hud.rect)
             self.screen.blit(hud.image, self.camera.apply(hud))
         self.hud.draw_health(screen)
 

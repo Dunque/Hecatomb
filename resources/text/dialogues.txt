@@ -1,8 +1,11 @@
 #EJEMPLOS DE DIALOGO. 1 LÍNEA POR CADA WEY.
 Sven, los Khan nos han traicionado. Llegaron de la nada\ny han arrasado con todo. Muchos de los nuestros han\nmuerto, y varias personas han desaparecido.
 Vete hacia el monte del norte, y mira si queda gente con\nvida. Debemos ayudar a todos los nuestros que podamos.\nHabla con el armero y preparate.
-Sven, toma este Stop y un revolver. Para cambiar de arma\nmanten pulsado Tab y mueve el raton hacia el arma que\nquieras. Luego con levantar Tab te la equiparás.\nPara disparar o atacar, pulsa Click izquierdo.
+Sven, toma este Stop y un revolver. Para cambiar\nde arma manten pulsado Tab y mueve el raton hacia\nel arma que quieras.\nLuego con levantar Tab te la equiparas.\nPara disparar o atacar, pulsa Click izquierdo.
 Vamos a ayudar a los heridos y apagar los incendios. Te\nenviaremos refuerzos en cuanto podamos. Recuerda que\nmientras te mueves, si pulsas ESPACIO daras una\nvoltereta y esquivaras todos los disparos o ataques.
 
 #COFRES
 Has obtenido mil hostias.
+
+#CAMION
+Te has ganado mil hostias.

@@ -119,7 +119,14 @@ class ContinuationDialogue(pg.sprite.Sprite):
 		pg.sprite.Sprite.__init__(self, [])
 		self.image = self.scene.dialogueContinuation
 		self.rect = self.image.get_rect()
-		self.rect.center = HEIGHT + 390, 460
+		#self.rect.center = HEIGHT + 390, 460
+
+		if hasattr(self.scene,'camera'):
+			cam_moved = self.scene.camera.get_moved()
+			y_offset = 390
+			pos_x = (WIDTH / 2) - cam_moved[0] + 460
+			pos_y = (HEIGHT / 2) - cam_moved[1] + y_offset
+			self.rect.center = pos_x, pos_y
 
 	def update(self):
 		cam_moved = self.scene.camera.get_moved()

@@ -10,7 +10,7 @@ from src.entities.ground import *
 from src.map.camera import *
 from src.map.room import Room
 from abc import ABC, abstractmethod
-from src.entities.npc import NPCBase
+from src.entities.npc import NPCBase, TacoTruck
 
 vec = pg.math.Vector2
 
@@ -127,6 +127,8 @@ class CutsceneMap(Notifier):
                         room.addObject(Candelabro(self.scene, col, row))
                     elif self.finalMap[row][col] == '0':
                         room.addObject(Exit(self.scene, col, row))
+                    elif self.finalMap[row][col] == 'T':
+                        TacoTruck(self.scene, col, row)
             #We initialize the room doors to be open, until the player wanders in
             room.openAllDoors()
 

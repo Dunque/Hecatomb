@@ -93,6 +93,8 @@ class Cutscene1(Scene):
         #NPC
         self.npc1Profile = pg.image.load(
             "./sprites/Player/profile1.png").convert_alpha()
+        self.tacoTruck = pg.image.load(
+            "./sprites/NPC/tacotruck.png").convert_alpha()
 
         #MAP BACKGROUNDS
         self.background1 = pg.image.load(
