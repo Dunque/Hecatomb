@@ -83,6 +83,79 @@ class Line:
 		self.last = last
 
 
+class OptionPicker(pg.sprite.Sprite):
+	def __init__(self, scene):
+		self._layer = HUD_LAYER
+		self.scene = scene
+		pg.sprite.Sprite.__init__(self, [])
+		self.image = self.scene.dialogueOptionsPicker
+		self.rect = self.image.get_rect()
+		self.yOffsets = [526, 586, 650, 710, 800]
+		self.x = 1010
+		self.y = self.yOffsets[0]
+		self.rect.center = self.x, self.y
+
+		self.option = 0
+
+	def update(self):
+		if pg.mouse.get_pos()[1] < 366:
+			self.y = self.yOffsets[0]
+			self.option = 0
+		elif pg.mouse.get_pos()[1] < 431:
+			self.y = self.yOffsets[1]
+			self.option = 1
+		elif pg.mouse.get_pos()[1] < 491:
+			self.y = self.yOffsets[2]
+			self.option = 2
+		elif pg.mouse.get_pos()[1] < 571:
+			self.y = self.yOffsets[3]
+			self.option = 3
+		else:
+			self.y = self.yOffsets[4]
+			self.option = 4
+		self.rect.center = self.x, self.y
+
+	def activate(self):
+		self.scene.all_hud.add(self)
+
+	def deactivate(self):
+		self.scene.all_hud.remove(self)
+		self.scene.text_menu = []
+
+
+class DialogueOptions(pg.sprite.Sprite):
+	def __init__(self, scene, text):
+		self._layer = HUD_LAYER
+		self.scene = scene
+		pg.sprite.Sprite.__init__(self, [])
+		self.image = self.scene.dialogueOptions
+		self.rect = self.image.get_rect()
+		self.rect.center = HEIGHT - 300, -400
+		self.text = text
+		self.picker = OptionPicker(scene)
+		self.opcion = None
+
+	def update(self):
+		cam_moved = self.scene.camera.get_moved()
+		y_offset = 10
+		pos_x = (WIDTH / 2) - cam_moved[0] + 350
+		pos_y = (HEIGHT / 2) - cam_moved[1] + y_offset
+		self.rect.center = pos_x, pos_y
+		self.scene.text_menu = self.text
+
+		mouse = pg.mouse.get_pressed()
+		if mouse[0]:
+			self.opcion = self.picker.option
+
+	def activate(self):
+		self.scene.all_hud.add(self)
+		self.picker.activate()
+
+	def deactivate(self):
+		self.scene.all_hud.remove(self)
+		self.picker.deactivate()
+
+
 class ProfileBoxDialogue(pg.sprite.Sprite):
 	def __init__(self, scene, profileImg):
 		self._layer = HUD_LAYER
@@ -143,7 +216,7 @@ class ContinuationDialogue(pg.sprite.Sprite):
 
 
 class DialogoInGame(pg.sprite.Sprite):
-	def __init__(self, scene, text, stopMove = False, profileImg = None):
+	def __init__(self, scene, text, stopMove = False, profileImg = None, options = None):
 		self._layer = HUD_LAYER
 		self.scene = scene
 		pg.sprite.Sprite.__init__(self, [])
@@ -153,6 +226,9 @@ class DialogoInGame(pg.sprite.Sprite):
 		self.text = text
 		self.stopMove = stopMove
 		self.continuation = ContinuationDialogue(scene)
+		if options:
+			self.opciones = DialogueOptions(scene, options)
+			self.opcion_escoger = None
 
 		self.profileBox = None
 		if profileImg:
@@ -170,6 +246,11 @@ class DialogoInGame(pg.sprite.Sprite):
 		else:
 			self.continuation.deactivate()
 
+		if self.opciones and self.opciones.opcion:
+			self.opcion_escoger = self.opciones.opcion
+			self.opciones.deactivate()
+
+
 	def drawText(self):
 		self.scene.all_hud.add(self)
 		if self.profileBox:
@@ -184,3 +265,8 @@ class DialogoInGame(pg.sprite.Sprite):
 		if self.profileBox:
 			self.profileBox.deactivate()
 		self.continuation.deactivate()
+		if self.opciones:
+			self.opciones.deactivate()
+
+	def showOptions(self):
+		self.opciones.activate()

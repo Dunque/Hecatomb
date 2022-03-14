@@ -49,6 +49,8 @@ class Cutscene1(Level):
         self.gunCrosshairImg = pg.image.load("./sprites/Hud/gun_crosshair.png").convert_alpha()
         self.shotgunCrosshairImg = pg.image.load("./sprites/Hud/shotgun_crosshair.png").convert_alpha()
         self.dialogueBox = pg.image.load("./sprites/Hud/dialoguebox.png").convert_alpha()
+        self.dialogueOptions = pg.image.load("./sprites/Hud/chatOpciones.png").convert_alpha()
+        self.dialogueOptionsPicker = pg.image.load("./sprites/Hud/chatOpcionesPicker.png").convert_alpha()
         self.dialogueContinuation = pg.image.load("./sprites/Hud/continuation.png").convert_alpha()
         self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
         self.light_mask = pg.transform.scale(pg.image.load("./sprites/Hud/light_350_soft.png").convert_alpha(), (1500, 1500))
@@ -118,6 +120,7 @@ class Cutscene1(Level):
         for hud in self.all_hud:
             self.screen.blit(hud.image, self.camera.apply(hud))
         self.drawDialogue()
+        self.drawMenu()
         self.hud.draw_health(screen)
 
     def render_fog(self, sprite = None):

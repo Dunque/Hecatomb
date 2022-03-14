@@ -56,6 +56,8 @@ class Level(Scene):
         self.completly_finished = False
         self.dialogue_continuation = False
 
+        self.text_menu = None
+
         #Loads all sprite and sound data
         self.load_data()
     
@@ -162,6 +164,30 @@ class Level(Scene):
 
     def stopText(self):
         self.skip_dialogue = False
+
+    def drawMenu(self):
+        if self.text_menu:
+            phrase5 = ''.join(self.text_line0)
+            phrase0 = self.text_menu[0]
+            phrase1 = self.text_menu[1]
+            phrase2 = self.text_menu[2]
+            phrase3 = self.text_menu[3]
+            phrase4 = self.text_menu[4]
+            text_surface5, rect5 = self.game_font.render(phrase5, (200, 200, 200))
+            text_surface0, rect0 = self.game_font.render(phrase0, (200, 200, 200))
+            text_surface1, rect1 = self.game_font.render(phrase1, (200, 200, 200))
+            text_surface2, rect2 = self.game_font.render(phrase2, (200, 200, 200))
+            text_surface3, rect3 = self.game_font.render(phrase3, (200, 200, 200))
+            text_surface4, rect4 = self.game_font.render(phrase4, (200, 200, 200))
+            self.screen.blit(text_surface0, (WIDTH / 2 + 230, (HEIGHT / 2) - 130))
+            self.screen.blit(text_surface1, (WIDTH / 2 + 230, (HEIGHT / 2) - 70))
+            self.screen.blit(text_surface2, (WIDTH / 2 + 230, (HEIGHT / 2) - 10))
+            self.screen.blit(text_surface3, (WIDTH / 2 + 230, (HEIGHT / 2) + 50))
+            self.screen.blit(text_surface4, (WIDTH / 2 + 230, (HEIGHT / 2) + 140))
+            self.screen.blit(text_surface5, (WIDTH / 2 - 500, (HEIGHT / 2) + 250))
+
+
+
 
     def events(self, eventList):
         # Se mira la lista de eventos

@@ -95,7 +95,7 @@ class NPCBase(Character):
 
 
 class TacoTruck(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, textLines = 10):
+	def __init__(self, scene, x, y, textLines = 10, options = 11):
 		self.scene = scene
 		self.groups = self.scene.all_sprites, self.scene.npc_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
@@ -123,8 +123,10 @@ class TacoTruck(pg.sprite.Sprite):
 			for i, line in enumerate(f):
 				if i == textLines:
 					dialogue = line
+				if i == options:
+					options = line
 		self.profileImg = self.scene.tacoProfile
-		self.dialogo = DialogoInGame(self.scene, dialogue.rstrip("\n").split('\\n'), stopMove=True, profileImg=self.profileImg)
+		self.dialogo = DialogoInGame(self.scene, dialogue.rstrip("\n").split('\\n'), stopMove=True, profileImg=self.profileImg, options=options.rstrip("\n").split('\\n'))
 		self.talking = False
 
 	def update(self):
@@ -136,9 +138,14 @@ class TacoTruck(pg.sprite.Sprite):
 				if self.scene.player.interact:
 					self.talk()
 			elif self.scene.player.interact:
-					self.talkFast()
+				self.talkFast()
 			else:
-				self.stopTalkFast()
+				if self.dialogo.opcion_escoger:
+					self.dialogo.end()
+					self.scene.completly_finished = True
+				else:
+					self.stopTalkFast()
+
 		else:
 			self.interaccion.deactivate()
 			if self.talking:
@@ -161,8 +168,9 @@ class TacoTruck(pg.sprite.Sprite):
 		if not self.scene.completly_finished:
 			self.dialogo.drawText()
 		else:
-			self.dialogo.end()
-			self.scene.completly_finished = True
+			self.dialogo.showOptions()
+			#self.dialogo.end()
+			self.scene.completly_finished = False
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()
