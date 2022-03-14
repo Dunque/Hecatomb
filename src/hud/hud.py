@@ -229,6 +229,8 @@ class DialogoInGame(pg.sprite.Sprite):
 		if options:
 			self.opciones = DialogueOptions(scene, options)
 			self.opcion_escoger = None
+		else:
+			self.opciones = None
 
 		self.profileBox = None
 		if profileImg:
