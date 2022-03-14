@@ -90,7 +90,7 @@ class OptionPicker(pg.sprite.Sprite):
 		pg.sprite.Sprite.__init__(self, [])
 		self.image = self.scene.dialogueOptionsPicker
 		self.rect = self.image.get_rect()
-		self.yOffsets = [526, 586, 650, 710, 800]
+		self.yOffsets = [-115, -55, 5, 65, 150]
 		self.x = 1010
 		self.y = self.yOffsets[0]
 		self.rect.center = self.x, self.y
@@ -98,22 +98,25 @@ class OptionPicker(pg.sprite.Sprite):
 		self.option = 0
 
 	def update(self):
+		cam_moved = self.scene.camera.get_moved()
+		pos_x = (WIDTH / 2) - cam_moved[0] + 200
+		pos_y = (HEIGHT / 2) - cam_moved[1]
 		if pg.mouse.get_pos()[1] < 366:
-			self.y = self.yOffsets[0]
+			self.y = self.yOffsets[0] + pos_y
 			self.option = 0
 		elif pg.mouse.get_pos()[1] < 431:
-			self.y = self.yOffsets[1]
+			self.y = self.yOffsets[1] + pos_y
 			self.option = 1
 		elif pg.mouse.get_pos()[1] < 491:
-			self.y = self.yOffsets[2]
+			self.y = self.yOffsets[2] + pos_y
 			self.option = 2
 		elif pg.mouse.get_pos()[1] < 571:
-			self.y = self.yOffsets[3]
+			self.y = self.yOffsets[3] + pos_y
 			self.option = 3
 		else:
-			self.y = self.yOffsets[4]
+			self.y = self.yOffsets[4] + pos_y
 			self.option = 4
-		self.rect.center = self.x, self.y
+		self.rect.center = pos_x, self.y
 
 	def activate(self):
 		self.scene.all_hud.add(self)
