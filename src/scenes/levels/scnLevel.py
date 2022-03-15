@@ -14,7 +14,6 @@ class Level(Scene):
         #Initialize sprite groups
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.all_hud = pg.sprite.LayeredUpdates()
-        self.background_SG = pg.sprite.LayeredUpdates()
         self.walls_SG = pg.sprite.LayeredUpdates()
         self.candelabros_SG = pg.sprite.LayeredUpdates()
         self.mobs_SG = pg.sprite.LayeredUpdates()
@@ -30,10 +29,6 @@ class Level(Scene):
         self.screen = None
 
         self.player = None
-
-        self.iluminacion = True
-
-        self.fog = pg.Surface((WIDTH, HEIGHT))
 
         #Exit condition: player must interact with an amount of npcs to exit the level
         self.talkedCount = 0

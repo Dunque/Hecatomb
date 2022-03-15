@@ -35,7 +35,7 @@ class Level3(Level):
 
         #BULLETS/AMMUNITION/EXPLOSIONS DATA
         self.gunBulletImg = pg.image.load("./sprites/Fire_Ball/gun_bullet.png").convert_alpha()
-        self.fire_ballMoveSheet = pg.image.load("./sprites/Fire_Ball/Move.png").convert_alpha()
+        
         self.fire_ballExplosionSheet = pg.image.load("./sprites/Fire_Ball/Explosion.png").convert_alpha()
         self.fire_ballExplosion2Sheet = pg.image.load("./sprites/Fire_Ball/Explosion2.png").convert_alpha()
 
@@ -59,8 +59,6 @@ class Level3(Level):
 
         # WORM DATA
         self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
-        self.wormIdleSheet = pg.image.load("./sprites/Worm/Idle.png").convert_alpha()
-        self.wormHitSheet = pg.image.load("./sprites/Worm/GetHit.png").convert_alpha()
         self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
         self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
 

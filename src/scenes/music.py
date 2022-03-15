@@ -45,7 +45,7 @@ class Music():
         CHANGE_SOUND.set_volume(num)
         ENEMY_DEATH_SOUND.set_volume(num)
         SWORD_SOUND.set_volume(num)
-        PALYER_DAMAGE_SOUND.set_volume(num)
+        PLAYER_DAMAGE_SOUND.set_volume(num)
         EXPLOSION_SOUND.set_volume(num)
         DODGE_SOUND.set_volume(num)
         WIN_ROOM_SOUND.set_volume(num)
@@ -54,5 +54,5 @@ class Music():
 
 
     def geteffectsvolume(self): #Devuelve el volumen actual de los efectos
-        return IRE_BULLET_SOUND.get_volume
+        return FIRE_BULLET_SOUND.get_volume
 

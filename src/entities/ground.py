@@ -4,10 +4,10 @@ from src.settings.settings import *
 vec = pg.math.Vector2
 
 
-class Wall(pg.sprite.Sprite):
-    def __init__(self, scene, x, y, tileset):
-        self._layer = WALL_LAYER
-        self.groups = scene.all_sprites, scene.walls_SG
+class TerrainTile(pg.sprite.Sprite):
+    def __init__(self, scene, layer, groups, x, y, tileset):
+        self._layer = layer
+        self.groups = groups
         pg.sprite.Sprite.__init__(self, self.groups)
 
         self.scene = scene
@@ -23,26 +23,15 @@ class Wall(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
-
-class Floor(pg.sprite.Sprite):
+class Wall(TerrainTile):
     def __init__(self, scene, x, y, tileset):
-        self._layer = FLOOR_LAYER
-        self.groups = scene.all_sprites, scene.floors_SG
-        pg.sprite.Sprite.__init__(self, self.groups)
+        super(Wall, self).__init__(scene, WALL_LAYER,
+                                   (scene.all_sprites, scene.walls_SG), x, y, tileset)
 
-        self.scene = scene
-        self.image = tileset
-        self.rect = self.image.get_rect()
-        self.pos = vec(x, y)
-
-        #tilemap position
-        self.x = x
-        self.y = y
-
-        #Global position
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
-
+class Floor(TerrainTile):
+    def __init__(self, scene, x, y, tileset):
+        super(Floor, self).__init__(scene, FLOOR_LAYER,
+                                   (scene.all_sprites, scene.floors_SG), x, y, tileset)
 
 class Door(Wall):
     def __init__(self, scene, x, y, tileset):

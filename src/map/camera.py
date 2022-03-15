@@ -13,7 +13,7 @@ class Camera:
 
         self.width_height = vec(width, height)
         self.halfs = vec(int(WIDTH / 2), int(HEIGHT / 2))
-        self.def_cords = vec(CAMERA_X, CAMERA_Y)
+        self.def_cords = vec(0, 0)
 
         self.x = 0
         self.y = 0
