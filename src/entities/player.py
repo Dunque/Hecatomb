@@ -40,14 +40,14 @@ class Player(Character):
         self.interact = False
         self.state = PlayerGroundedState(self, "GROUNDED")
 
-        self.soundDamage = DEATH_SOUND
+
 
     def die(self):
         if self.weapon:
             self.weapon.deactivate()
         if self.deathAnim.current_frame == self.deathAnim.max_frame - 1:
             self.scene.player_SG.remove(self)
-            DEATH_SOUND.play()
+            self.secene.DEATH_SOUND.play()
             self.kill()
 
     def allowMovement(self):
@@ -69,7 +69,7 @@ class Player(Character):
         if self.weapon_slot != slot and slot == "top":
             if self.weapon is not None:
                 self.weapon.deactivate()
-            CHANGE_SOUND.play()
+            self.scene.CHANGE_SOUND.play()
             self.weapon = Gun(self.scene, self.pos.x - self.weaponOffsetX,
                               self.pos.y - self.weaponOffsetY)
             pg.mouse.set_visible(False)
@@ -83,7 +83,7 @@ class Player(Character):
         elif self.weapon_slot != slot and slot == "right":
             if self.weapon is not None:
                 self.weapon.deactivate()
-            SWORD_SOUND.play()
+            self.scene.SWORD_SOUND.play()
             self.weapon = Sword(self.scene, self.pos.x -
                                 self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
             pg.mouse.set_visible(True)
@@ -92,7 +92,7 @@ class Player(Character):
         elif self.weapon_slot != slot and slot == "left":
             if self.weapon is not None:
                 self.weapon.deactivate()
-            CHANGE_SOUND.play()
+            self.scene.CHANGE_SOUND.play()
             self.weapon = Shotgun(self.scene, self.pos.x -
                                   self.weaponOffsetX, self.pos.y - self.weaponOffsetY)
             pg.mouse.set_visible(False)
@@ -100,4 +100,4 @@ class Player(Character):
             self.weapon_slot = slot
 
     def takeDamage(self, dmg):
-        super(Player, self).takeDamage(dmg, self.soundDamage)
+        super(Player, self).takeDamage(dmg)

@@ -131,7 +131,16 @@ class Survival(Level):
         #Map generation
         self.map = RandMap(self, './maps/rooms.txt',
                              self.tileset, self.backgrounds)
-
+        # SOUNDS
+        self.FIRE_BULLET_SOUND = pg.mixer.Sound("./sounds/Fire_4.wav")
+        self.DEATH_SOUND = pg.mixer.Sound("./sounds/Game_Over.wav")
+        self.CHANGE_SOUND = pg.mixer.Sound("./sounds/recharge.wav")
+        self.ENEMY_DEATH_SOUND = pg.mixer.Sound("./sounds/Hit_1.wav")
+        self.SWORD_SOUND = pg.mixer.Sound("./sounds/sword.wav")
+        self.PLAYER_DAMAGE_SOUND = pg.mixer.Sound("./sounds/Fire_2.wav")
+        self.EXPLOSION_SOUND = pg.mixer.Sound("./sounds/explosion.wav")
+        self.DODGE_SOUND = pg.mixer.Sound("./sounds/roll.wav")
+        self.WIN_ROOM_SOUND = pg.mixer.Sound("./sounds/win_sound.wav")
         #Heads up display
         self.hud = Hud(self)
 

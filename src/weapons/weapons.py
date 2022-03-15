@@ -151,7 +151,7 @@ class Sword(Weapon, pg.sprite.Sprite):
 			else:
 				self.reached = 2
 				self.attacking = False
-				SWORD_SOUND.play()
+				self.scene.SWORD_SOUND.play()
 		elif self.reached == 2 and self.rot_attack > 0:
 			self.rot_attack -= self.sword_speed
 
@@ -264,7 +264,7 @@ class Gun(FireWeapon, pg.sprite.Sprite):
 				if self.rot <= -90 or self.rot >= 90:
 					dir = vec(dir.x * 1, dir.y * -1)
 					pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
-				FIRE_BULLET_SOUND.play()
+				self.scene.FIRE_BULLET_SOUND.play()
 				GunBullet(self.scene, self, pos, dir, self.scene.mobs_SG)
 				push = int((180 / math.pi) * -math.atan2(dir[1], dir[0]))
 				self.scene.player.vel = vec(-self.kickback, 0).rotate(-push)
@@ -305,7 +305,7 @@ class Shotgun(FireWeapon, pg.sprite.Sprite):
 					dir = vec(dir.x * 1, dir.y * -1)
 					pos = self.pos + vec(self.barrel_offset.x, self.barrel_offset.y * -1).rotate(self.rot)
 					direction_disperse = -0.2
-				FIRE_BULLET_SOUND.play()
+				self.scene.FIRE_BULLET_SOUND.play()
 				ShotgunBullet(self.scene, self, pos, dir, self.scene.mobs_SG)
 				ShotgunBullet(self.scene, self, (pos.x + dir.y * 10, pos.y + dir.x * 10), vec(dir.x+direction_disperse,dir.y+direction_disperse),self.scene.mobs_SG)
 				ShotgunBullet(self.scene, self, (pos.x - dir.y * 10, pos.y - dir.x * 10), vec(dir.x-direction_disperse,dir.y-direction_disperse),self.scene.mobs_SG)

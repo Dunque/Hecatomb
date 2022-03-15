@@ -38,16 +38,7 @@ TRUCK_HIT_RECT = pg.Rect(0, 0, 423, 255)
 #default humanoid sprite size
 CHARACTER_SPRITE_SIZE = 96
 
-# SOUNDS
-FIRE_BULLET_SOUND = pg.mixer.Sound("./sounds/Fire_4.wav")
-DEATH_SOUND = pg.mixer.Sound("./sounds/Game_Over.wav")
-CHANGE_SOUND = pg.mixer.Sound("./sounds/recharge.wav")
-ENEMY_DEATH_SOUND = pg.mixer.Sound("./sounds/Hit_1.wav")
-SWORD_SOUND = pg.mixer.Sound("./sounds/sword.wav")
-PLAYER_DAMAGE_SOUND = pg.mixer.Sound("./sounds/Fire_2.wav")
-EXPLOSION_SOUND = pg.mixer.Sound("./sounds/explosion.wav")
-DODGE_SOUND = pg.mixer.Sound("./sounds/roll.wav")
-WIN_ROOM_SOUND = pg.mixer.Sound("./sounds/win_sound.wav")
+
 
 #SPRITE LAYERS top > bottom
 HUD_LAYER = 9

@@ -55,7 +55,7 @@ class Character(pg.sprite.Sprite):
     # Plays the death animation and destroys the entity
     def die(self):
         if self.deathAnim.current_frame == self.deathAnim.max_frame - 1:
-            ENEMY_DEATH_SOUND.play()
+            self.scene.ENEMY_DEATH_SOUND.play()
             self.kill()
 
     #Wall collision funtion, takes into account both rect and hit_rect

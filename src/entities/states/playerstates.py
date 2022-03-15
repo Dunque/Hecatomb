@@ -95,6 +95,7 @@ class PlayerGroundedState(PlayerState):
 class PlayerDodgingState(PlayerState):
 
     def __init__(self, character, name):
+        character.scene.DODGE_SOUND.play()
         super(PlayerDodgingState, self).__init__(character, name)
 
     def update(self):
