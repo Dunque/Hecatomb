@@ -146,4 +146,5 @@ class Survival(Level):
     def nextScene(self):
         m = random.randint(1,5)
         Music.changemusic(self,m)
-        self.director.resetTopScene()
+        scene = SurvivalEnd(self.director)
+        self.director.changeScene(scene)
