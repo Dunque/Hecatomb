@@ -47,7 +47,7 @@ class Player(Character):
             self.weapon.deactivate()
         if self.deathAnim.current_frame == self.deathAnim.max_frame - 1:
             self.scene.player_SG.remove(self)
-            self.secene.DEATH_SOUND.play()
+            self.scene.DEATH_SOUND.play()
             self.kill()
 
     def allowMovement(self):

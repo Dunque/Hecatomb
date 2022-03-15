@@ -58,6 +58,7 @@ class PlayerGroundedState(PlayerState):
                 self.character.dodgeDir = self.character.vel * \
                     self.character.entityData.dodgeSpeed
                 self.toState(PlayerDodgingState(self.character, "DODGING"))
+                return
 
             ##DEBUG KEY TO KILL YOURSELF
             if keys[pg.K_0]:
@@ -109,6 +110,7 @@ class PlayerDodgingState(PlayerState):
             if self.character.weapon is not None:
                 self.character.weapon.activate()
             self.toState(PlayerGroundedState(self.character, "GROUNDED"))
+            return
     
     def handleInput(self):
         pass

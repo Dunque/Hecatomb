@@ -148,11 +148,14 @@ class Survival(Level):
     # Scene transitions
 
     def pauseScene(self):
+        pg.mouse.set_visible(True)
         scene = PauseMenu(self.director)
         Music.volumemusic(self,0.25)
         self.director.stackScene(scene)
 
     def nextScene(self):
+        pg.mouse.set_visible(True)
         m = random.randint(1,5)
         Music.changemusic(self,m)
-        self.director.resetTopScene()
+        scene = Survival(self.director)
+        self.director.changeScene(scene)

@@ -90,8 +90,6 @@ class Character(pg.sprite.Sprite):
             self.entityData.takeDamage(dmg)
 
     def update(self):
-        self.state.update()
-
         # MOVEMENT and collision
         self.pos += self.vel * self.scene.dt
         self.hit_rect.centerx = self.pos.x
@@ -106,3 +104,5 @@ class Character(pg.sprite.Sprite):
 
         # Update entity's data
         self.entityData.update()
+
+        self.state.update()
