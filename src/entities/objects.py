@@ -37,6 +37,7 @@ class Chest(pg.sprite.Sprite):
 		self.opened = False
 		self.talking = False
 		self.isActive = False
+		self.interacted = False
 
 	def update(self):
 		if self.isActive:
@@ -57,10 +58,12 @@ class Chest(pg.sprite.Sprite):
 				if self.talking:
 					self.scene.completly_finished = False
 				self.talking = False
+				if self.opened:
+					self.interacted = True
+		print(self.interacted)
 
 	def open(self):
 		self.opened = True
-		self.talking = True
 		self.talking = True
 		self.interaccion.deactivate()
 		self.chestAnim.current_frame = 1
@@ -70,9 +73,11 @@ class Chest(pg.sprite.Sprite):
 
 	def talkFast(self):
 		if not self.scene.completly_finished:
-			self.dialogo.drawText()
+			if not self.interacted:
+				self.dialogo.drawText()
 		else:
 			self.dialogo.end()
+			self.scene.completly_finished = True
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()
