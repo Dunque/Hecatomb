@@ -105,16 +105,13 @@ class TacoTruck(pg.sprite.Sprite):
 		pg.sprite.Sprite.__init__(self, self.groups)
 		idleAnim = Anim(scene.tacoTruck, (423, 311), 20, 0, 4)
 		talkingAnim = Anim(scene.tacoTruckTalking, (423, 311), 20, 0, 4)
-		#self.image = self.scene.tacoTruck
 		self.animList = [idleAnim, talkingAnim, idleAnim, idleAnim, idleAnim]
 		self.currentAnim = self.animList[0]
 
-		#self.image = self.idleAnim.get_frame()
 		self.image = self.currentAnim.get_frame()
 		self.rect = self.image.get_rect()
 		self.x = x
 		self.y = y
-		#self.pos = vec(self.x, self.y)
 		self.rect.x = x * TILESIZE
 		self.rect.y = y * TILESIZE
 
@@ -130,11 +127,10 @@ class TacoTruck(pg.sprite.Sprite):
 				if i == textLines[1]:
 					self.dialogue2 = line.rstrip("\n").split('\\n')
 				if i == options:
-					options = line.rstrip("\n").split('\\n')
+					self.dialogue_options = line.rstrip("\n").split('\\n')
 		self.profileImg = self.scene.tacoProfile
-		#self.dialogo = DialogoInGame(self.scene, self.dialogue1, stopMove=True, profileImg=self.profileImg, options=options)
 		self.dialogo = DialogoInGame(self.scene, self.dialogue1, stopMove=True, profileImg=self.profileImg)
-		self.options = DialogueOptions(self.scene, options=options)
+		self.options = DialogueOptions(self.scene, options=self.dialogue_options)
 		self.talking = False
 		self.to_finish = False
 
@@ -153,8 +149,6 @@ class TacoTruck(pg.sprite.Sprite):
 			else:
 				if hasattr(self.dialogo,'opcion_escoger') and self.dialogo.opcion_escoger is not None:
 					self.dialogo.end()
-					#self.scene.completly_finished = True
-
 					self.scene.resetDialogue()
 					self.talking = False
 				else:
@@ -184,6 +178,7 @@ class TacoTruck(pg.sprite.Sprite):
 
 	def talk(self):
 		self.talking = True
+		self.scene.has_menu = True
 		self.interaccion.deactivate()
 		if not self.scene.completly_finished:
 			self.dialogo.drawText()
@@ -198,6 +193,7 @@ class TacoTruck(pg.sprite.Sprite):
 				self.dialogo.end()
 				self.scene.completly_finished = True
 				self.dialogo.text = self.dialogue1
+				self.scene.has_menu = False
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()

@@ -34,10 +34,11 @@ class Level(Scene):
         self.talkedCount = 0
         self.canExit = True
 
-        #Dialogue variables
-        self.resetDialogue()
-
         self.text_menu = None
+        self.has_menu = False
+
+        # Dialogue variables
+        self.resetDialogue()
 
         #Loads all sprite and sound data
         self.load_data()
@@ -130,9 +131,10 @@ class Level(Scene):
         elif self.dialogue_line == self.total_lines_batch - 1 and len(self.text_lines[self.dialogue_line]) >= self.dialogue_length and not self.skip_dialogue:
             self.active_dialogue = False
             self.prev_text = []
-            self.text_lines[0] = []
-            self.text_lines[1] = []
-            self.text_lines[2] = []
+            if not self.has_menu:
+                self.text_lines[0] = []
+                self.text_lines[1] = []
+                self.text_lines[2] = []
             self.dialogue_line = 0
             self.player.allowMovement()
             if len(self.remainderBatch) > 0:

@@ -280,5 +280,7 @@ class DialogoInGame(pg.sprite.Sprite):
 		self.scene.text_lines[0] = []
 		self.scene.resetDialogue()
 
+
+
 	def showOptions(self):
 		self.opciones.activate()
