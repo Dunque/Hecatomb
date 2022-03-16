@@ -7,7 +7,7 @@ from src.map.map import Map
 
 class StaticMap(Map):
     def __init__(self, scene, roomsfile, tileset, backgrounds):
-        super(StaticMap,self).__init__(scene, roomsfile, tileset, backgrounds)
+        super(StaticMap, self).__init__(scene, tileset, backgrounds)
 
         self.finalMap = self.parseFullMap(roomsfile)
         self.parseRooms()

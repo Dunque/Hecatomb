@@ -34,7 +34,6 @@ class ButtonRestart(ButtonGUI):
 
     def action(self):
         Music.volumemusic(self,1)
-        Music.effectsvolume(self,0.25)
         self.screen.menu.restartScene()
 
 
@@ -56,7 +55,9 @@ class ButtonBack(ButtonGUI):
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 0)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
 
+
     def action(self):
+        Music.volumemusic(self, 1)
         self.screen.menu.showInitialScreen()
 
 
@@ -145,6 +146,7 @@ class PauseMenu(Scene):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:    # Tecla Esc, continuar
                     self.continueGame()
+                    Music.volumemusic(self, 1)
             elif event.type == pg.QUIT:
                 self.director.exitProgram()
 

@@ -24,36 +24,22 @@ BGCOLOR = DARKGREY
 
 # Map settings
 TILESIZE = 64
+
 ROOMWIDTH = 24
 ROOMHEIGHT = 16
 
 GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 
-# Player settings
-PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 35)
+# Sprite rect settings
+HIT_RECT = pg.Rect(0, 0, 35, 35)
 TRUCK_HIT_RECT = pg.Rect(0, 0, 423, 255)
 
-CAMERA_X = 0
-CAMERA_Y = 0
-
-# MOBS Settings
-# Fire Ball settings
-
-#ANIMATION STUFF
-#player sprite size
+#default humanoid sprite size
 CHARACTER_SPRITE_SIZE = 96
 
-# SOUNDS
-FIRE_BULLET_SOUND = pg.mixer.Sound("./sounds/Fire_4.wav")
-DEATH_SOUND = pg.mixer.Sound("./sounds/Game_Over.wav")
-CHANGE_SOUND = pg.mixer.Sound("./sounds/recharge.wav")
-ENEMY_DEATH_SOUND = pg.mixer.Sound("./sounds/Hit_1.wav")
-SWORD_SOUND = pg.mixer.Sound("./sounds/sword.wav")
-PLAYER_DAMAGE_SOUND = pg.mixer.Sound("./sounds/Fire_2.wav")
-EXPLOSION_SOUND = pg.mixer.Sound("./sounds/explosion.wav")
-DODGE_SOUND = pg.mixer.Sound("./sounds/roll.wav")
-WIN_ROOM_SOUND=pg.mixer.Sound("./sounds/win_sound.wav")
+
+
 #SPRITE LAYERS top > bottom
 HUD_LAYER = 9
 PICKUP_LAYER = 8
@@ -61,15 +47,6 @@ WEAPON_LAYER = 7
 CHARACTER_LAYER = 6
 WALL_LAYER = 1
 FLOOR_LAYER = 0
-
-
-
-#TODO borrar esta trapallada
-
-ROCK_IMAGE= pg.image.load("./sprites/RockPile.png")
-
-
-
 
 # ---------------------------------------------------------
 # GUI settings

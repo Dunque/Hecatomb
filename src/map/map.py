@@ -21,7 +21,7 @@ class Notifier(ABC):
         pass
 
 class Map(Notifier):
-    def __init__(self, scene, roomsfile, tileset, backgrounds):
+    def __init__(self, scene, tileset, backgrounds):
         self.scene = scene
         #Load the tileset
         self.tileset = tileset
@@ -38,6 +38,32 @@ class Map(Notifier):
         self.scene.camera = Camera(self.width, self.height)
 
         self.isPlaying = True
+
+    #This function gets called each time the symbol parser detects a "-" (a door), and it checks
+    #if this door is connected to another door. If it is not, thie function replaces it with a 
+    #wall.
+    def removeUnusedDoors(self, room, wallChar, row, col):
+        nearbyDoorCounter = 0
+        try:
+            #These are the limits of the map, so we skip the check
+            if row == 0 or col == 0 or row == self.finalMap.shape[1]-1 or row == self.finalMap.shape[0]-1:
+                nearbyDoorCounter = 0
+            else:
+                if self.finalMap[row+1][col] == wallChar:
+                    nearbyDoorCounter += 1
+                if self.finalMap[row-1][col] == wallChar:
+                    nearbyDoorCounter += 1
+                if self.finalMap[row][col+1] == wallChar:
+                    nearbyDoorCounter += 1
+                if self.finalMap[row][col-1] == wallChar:
+                    nearbyDoorCounter += 1
+        except IndexError as e:
+            pass
+
+        if nearbyDoorCounter >= 2:
+            room.addDoor(Door(self.scene, col, row, self.tileset.tiles[0]))
+        else:
+            Wall(self.scene, col, row, self.tileset.tiles[15])
 
     def generateTiles(self):
         for room in self.rooms:
@@ -76,7 +102,7 @@ class Map(Notifier):
                              self.tileset.tiles[15 * randint(1, 7)])
 
                     elif self.finalMap[row][col] == '-':
-                        room.addDoor(Door(self.scene, col, row, ROCK_IMAGE))
+                        self.removeUnusedDoors(room, '-', row, col)
 
                     elif self.finalMap[row][col] == '8':
                         room.addObject(Candelabro(self.scene, col, row))

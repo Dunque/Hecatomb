@@ -35,12 +35,12 @@ class RoomStatePlaying(RoomState):
     
     def update(self):
         if self.room.enemies == []:
-
+            self.room.scene.WIN_ROOM_SOUND.play()
             self.toState(RoomStateCleared(self.room, "CLEARED"))
         else:
             for enemy in self.room.enemies:
                 if not enemy.entityData.isAlive:
-                    WIN_ROOM_SOUND.play()
+
                     self.room.enemies.remove(enemy)
 
 class RoomStateCleared(RoomState):

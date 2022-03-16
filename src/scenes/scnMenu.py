@@ -259,6 +259,7 @@ class Menu(Scene):
 
     def playAdventure(self):
         scene = Cutscene1(self.director)
+        Music.changemusic(self, 0)
         self.director.stackScene(scene)
 
     def playSurvival(self):

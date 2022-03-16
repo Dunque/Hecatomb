@@ -178,4 +178,5 @@ class Medkit(pg.sprite.Sprite):
 				self.interaccion.deactivate()
 
 	def healPlayer(self):
+		self.scene.HEAL_SOUND.play()
 		self.scene.player.entityData.heal(self.healAmount)

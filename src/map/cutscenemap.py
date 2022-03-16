@@ -6,7 +6,7 @@ from src.map.map import Map
 
 class CutsceneMap(Map):
     def __init__(self, scene, roomsfile, tileset, backgrounds):
-        super(CutsceneMap,self).__init__(scene, roomsfile, tileset, backgrounds)
+        super(CutsceneMap, self).__init__(scene, tileset, backgrounds)
         self.parseRooms(roomsfile)
 
         self.generateTiles()

@@ -1,8 +1,10 @@
 import pygame as pg
+import random
 from src.sprites.anim import *
 from src.entities.character import *
 from src.entities.states.enemystates import *
 from src.hud.hud import Interaccion, DialogoInGame, DialogueOptions
+from src.scenes.music import *
 
 vec = pg.math.Vector2
 
@@ -48,6 +50,8 @@ class NPCBase(Character):
 			if not self.talking:
 				self.interaccion.activate()
 				if player.interact:
+					m = random.randint(0, 10)
+					Music.playvoice(self, self.scene, m)
 					self.talk()
 			elif player.interact:
 					self.talkFast()
@@ -142,6 +146,8 @@ class TacoTruck(pg.sprite.Sprite):
 				self.interaccion.activate()
 				if self.scene.player.interact:
 					self.talk()
+					m = random.randint(0, 10)
+					Music.playvoice(self, self.scene, m)
 			elif self.scene.player.interact:
 				self.talkFast()
 			else:
