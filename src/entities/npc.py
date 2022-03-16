@@ -168,6 +168,8 @@ class TacoTruck(pg.sprite.Sprite):
 			self.currentAnim = self.animList[1]
 
 		if self.options.opcion is not None:
+			dialogue_tmp = self.dialogue2[0]
+			self.dialogue2[0] += self.dialogue_options[self.options.opcion]
 			self.dialogo.end()
 			#self.scene.completly_finished = True
 			self.options.deactivate()
@@ -175,6 +177,7 @@ class TacoTruck(pg.sprite.Sprite):
 			self.dialogo.text = self.dialogue2
 			self.to_finish = True
 			self.talk()
+			self.dialogue2[0] = dialogue_tmp
 
 	def talk(self):
 		self.talking = True

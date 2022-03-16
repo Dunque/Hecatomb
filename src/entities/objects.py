@@ -60,7 +60,6 @@ class Chest(pg.sprite.Sprite):
 				self.talking = False
 				if self.opened:
 					self.interacted = True
-		print(self.interacted)
 
 	def open(self):
 		self.opened = True
