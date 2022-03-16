@@ -127,14 +127,14 @@ class OptionPicker(pg.sprite.Sprite):
 
 
 class DialogueOptions(pg.sprite.Sprite):
-	def __init__(self, scene, text):
+	def __init__(self, scene, options=None):
 		self._layer = HUD_LAYER
 		self.scene = scene
 		pg.sprite.Sprite.__init__(self, [])
 		self.image = self.scene.dialogueOptions
 		self.rect = self.image.get_rect()
 		self.rect.center = HEIGHT - 300, -400
-		self.text = text
+		self.text = options
 		self.picker = OptionPicker(scene)
 		self.opcion = None
 
@@ -149,6 +149,9 @@ class DialogueOptions(pg.sprite.Sprite):
 		mouse = pg.mouse.get_pressed()
 		if mouse[0]:
 			self.opcion = self.picker.option
+			#self.scene.completly_finished = True
+			self.scene.resetDialogue()
+			#self.scene.dialogu
 
 	def activate(self):
 		self.scene.all_hud.add(self)
@@ -229,7 +232,7 @@ class DialogoInGame(pg.sprite.Sprite):
 		self.text = text
 		self.stopMove = stopMove
 		self.continuation = ContinuationDialogue(scene)
-		if options:
+		if options is not None:
 			self.opciones = DialogueOptions(scene, options)
 			self.opcion_escoger = None
 		else:
@@ -251,9 +254,10 @@ class DialogoInGame(pg.sprite.Sprite):
 		else:
 			self.continuation.deactivate()
 
-		if self.opciones and self.opciones.opcion:
+		if self.opciones and self.opciones.opcion is not None:
 			self.opcion_escoger = self.opciones.opcion
 			self.opciones.deactivate()
+			self.end()
 
 
 	def drawText(self):
@@ -272,6 +276,9 @@ class DialogoInGame(pg.sprite.Sprite):
 		self.continuation.deactivate()
 		if self.opciones:
 			self.opciones.deactivate()
+		self.scene.dialogue = None
+		self.scene.text_lines[0] = []
+		self.scene.resetDialogue()
 
 	def showOptions(self):
 		self.opciones.activate()

@@ -2,7 +2,7 @@ import pygame as pg
 from src.sprites.anim import *
 from src.entities.character import *
 from src.entities.states.enemystates import *
-from src.hud.hud import Interaccion, DialogoInGame
+from src.hud.hud import Interaccion, DialogoInGame, DialogueOptions
 
 vec = pg.math.Vector2
 
@@ -95,7 +95,7 @@ class NPCBase(Character):
 
 
 class TacoTruck(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, textLines = 10, options = 11):
+	def __init__(self, scene, x, y, textLines = 10, options = 12):
 		self.scene = scene
 		self.groups = self.scene.all_sprites, self.scene.npc_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
@@ -121,13 +121,18 @@ class TacoTruck(pg.sprite.Sprite):
 		self.interaccion = Interaccion(self.scene, vec(self.talk_rect.x + 70, self.talk_rect.y - 50), self.scene.hablarImg)
 		with open(self.scene.dialogues_src) as f:
 			for i, line in enumerate(f):
-				if i == textLines:
-					dialogue = line
+				if i == textLines[0]:
+					self.dialogue1 = line.rstrip("\n").split('\\n')
+				if i == textLines[1]:
+					self.dialogue2 = line.rstrip("\n").split('\\n')
 				if i == options:
-					options = line
+					options = line.rstrip("\n").split('\\n')
 		self.profileImg = self.scene.tacoProfile
-		self.dialogo = DialogoInGame(self.scene, dialogue.rstrip("\n").split('\\n'), stopMove=True, profileImg=self.profileImg, options=options.rstrip("\n").split('\\n'))
+		#self.dialogo = DialogoInGame(self.scene, self.dialogue1, stopMove=True, profileImg=self.profileImg, options=options)
+		self.dialogo = DialogoInGame(self.scene, self.dialogue1, stopMove=True, profileImg=self.profileImg)
+		self.options = DialogueOptions(self.scene, options=options)
 		self.talking = False
+		self.to_finish = False
 
 	def update(self):
 		self.image = self.currentAnim.get_frame()
@@ -140,9 +145,12 @@ class TacoTruck(pg.sprite.Sprite):
 			elif self.scene.player.interact:
 				self.talkFast()
 			else:
-				if self.dialogo.opcion_escoger:
+				if hasattr(self.dialogo,'opcion_escoger') and self.dialogo.opcion_escoger is not None:
 					self.dialogo.end()
-					self.scene.completly_finished = True
+					#self.scene.completly_finished = True
+
+					self.scene.resetDialogue()
+					self.talking = False
 				else:
 					self.stopTalkFast()
 
@@ -152,11 +160,21 @@ class TacoTruck(pg.sprite.Sprite):
 				self.scene.completly_finished = False
 			self.talking = False
 			self.currentAnim = self.animList[0]
+			self.to_finish = False
 
 		if not self.talking or self.scene.dialogue_continuation:
 			self.currentAnim = self.animList[0]
 		else:
 			self.currentAnim = self.animList[1]
+
+		if self.options.opcion is not None:
+			self.dialogo.end()
+			#self.scene.completly_finished = True
+			self.options.deactivate()
+			self.options.opcion = None
+			self.dialogo.text = self.dialogue2
+			self.to_finish = True
+			self.talk()
 
 	def talk(self):
 		self.talking = True
@@ -168,9 +186,12 @@ class TacoTruck(pg.sprite.Sprite):
 		if not self.scene.completly_finished:
 			self.dialogo.drawText()
 		else:
-			self.dialogo.showOptions()
-			#self.dialogo.end()
-			self.scene.completly_finished = False
+			if not self.to_finish:
+				self.options.activate()
+			else:
+				self.dialogo.end()
+				self.scene.completly_finished = True
+				self.dialogo.text = self.dialogue1
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()

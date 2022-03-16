@@ -40,21 +40,7 @@ class Level(Scene):
         self.canExit = True
 
         #Dialogue variables
-        self.dialogue = None
-        self.remainder_dialogue = None
-        self.active_dialogue = False
-        self.skip_dialogue = False
-        self.dialogue_cooldown = 0
-        self.prev_text = []
-        self.text_line0 = []
-        self.text_line1 = []
-        self.text_line2 = []
-        self.text_lines = [self.text_line0, self.text_line1, self.text_line2]
-        self.dialogue_length = 0
-        self.dialogue_line = 0
-        self.lines = 0
-        self.completly_finished = False
-        self.dialogue_continuation = False
+        self.resetDialogue()
 
         self.text_menu = None
 
@@ -164,6 +150,25 @@ class Level(Scene):
 
     def stopText(self):
         self.skip_dialogue = False
+
+    def resetDialogue(self):
+        self.dialogue = None
+        self.remainder_dialogue = None
+        self.active_dialogue = False
+        self.skip_dialogue = False
+        self.dialogue_cooldown = 0
+        self.prev_text = []
+        self.text_line0 = []
+        self.text_line1 = []
+        self.text_line2 = []
+        self.text_lines = [self.text_line0, self.text_line1, self.text_line2]
+        self.dialogue_length = 0
+        self.dialogue_line = 0
+        self.lines = 0
+        self.completly_finished = False
+        self.dialogue_continuation = False
+        if self.player:
+            self.player.allowMovement()
 
     def drawMenu(self):
         if self.text_menu:

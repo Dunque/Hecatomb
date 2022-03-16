@@ -113,7 +113,7 @@ class Map(Notifier):
                     elif self.finalMap[row][col] == 'R':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=5))
                     elif self.finalMap[row][col] == 'T':
-                        TacoTruck(self.scene, col, row, textLines=10)
+                        TacoTruck(self.scene, col, row, textLines=[10,11])
 
                     #----------------------OBJECTS--------------------------
                     elif self.finalMap[row][col] == 'C':
