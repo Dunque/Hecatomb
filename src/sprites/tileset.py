@@ -1,4 +1,5 @@
 import pygame as pg
+from src.scenes.resourceManager import ResourceManager
 
 
 class Tileset:
@@ -7,7 +8,7 @@ class Tileset:
         self.size = size
         self.margin = margin
         self.spacing = spacing
-        self.image = pg.image.load(file).convert_alpha()
+        self.image = ResourceManager.LoadSprite(file)
         self.rect = self.image.get_rect()
         self.tiles = []
         self.load()

@@ -1,15 +1,19 @@
-import pygame as pg
 import random
+import pygame as pg
 from src.scenes.cutscenes.scnCutscene1 import Cutscene1
 from src.scenes.guiElems import *
 from src.scenes.guiUtils import UtilsGUI
+from src.scenes.music import *
 from src.scenes.scene import Scene
+from src.scenes.screens.screenCredits import CreditsScreenGUI
+from src.scenes.screens.screenOptions import OptionsScreenGUI
+from src.scenes.screens.screenRecords import RecordsScreenGUI
 from src.scenes.survival.scnSurvival import Survival
 from src.settings.settings import *
-from src.scenes.music import *
+
 
 # ---------------------------------------------------------
-# Elementos de pantalla Menu
+# Elementos de la pantalla inicial
 
 class TextHecatomb(CenteredTextGUI):
     def __init__(self, screen):
@@ -75,83 +79,8 @@ class ButtonExit(ButtonGUI):
         self.screen.menu.exitProgram()
 
 
-                 # ---------------------------------------------------------
-# Elementos de pantalla Records
-
-class TextRecords(CenteredTextGUI):
-    def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 112)
-        pos = (WIDTH/2, HEIGHT/5)
-        CenteredTextGUI.__init__(self, screen, font, MAROON, 'Récords', pos)
-
-    def action(self):
-        pass
-
-
-class ButtonBackRecords(ButtonGUI):
-    def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, RECORDS_MENU_LAYOUT, 0)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
-
-    def action(self):
-        self.screen.menu.showInitialScreen()
-
-
 # ---------------------------------------------------------
-# Elementos de pantalla Options
-
-class TextOptions(CenteredTextGUI):
-    def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 112)
-        pos = (WIDTH/2, HEIGHT/5)
-        CenteredTextGUI.__init__(self, screen, font, MAROON, 'Opciones', pos)
-
-    def action(self):
-        pass
-
-
-class ButtonBackOptions(ButtonGUI):
-    def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 0)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
-
-    def action(self):
-        self.screen.menu.showInitialScreen()
-
-
-# ---------------------------------------------------------
-# Elementos de pantalla Credits
-
-class TextCredits(CenteredTextGUI):
-    def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 112)
-        pos = (WIDTH/2, HEIGHT/5)
-        CenteredTextGUI.__init__(self, screen, font, MAROON, 'Créditos', pos)
-
-    def action(self):
-        pass
-
-class TextAuthor(CenteredTextGUI):
-    def __init__(self, screen, n, name):
-        font = pg.font.Font(HANSHAND_FONT, 50)
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, 0, CREDITS_MENU_LAYOUT, n)
-        CenteredTextGUI.__init__(self, screen, font, WHITE, name, pos)
-
-    def action(self):
-        pass
-
-
-class ButtonBackCredits(ButtonGUI):
-    def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, 0, CREDITS_MENU_LAYOUT, 5)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
-
-    def action(self):
-        self.screen.menu.showInitialScreen()
-
-
-# ---------------------------------------------------------
-# Pantallas
+# Pantalla inicial
 
 class InitialScreenGUI(ScreenGUI):
     def __init__(self, menu):
@@ -172,49 +101,6 @@ class InitialScreenGUI(ScreenGUI):
         self.elementsGUI.append(buttonOptions)
         self.elementsGUI.append(buttonCredits)
         self.elementsGUI.append(buttonExit)
-
-
-class RecordsScreenGUI(ScreenGUI):
-    def __init__(self, menu):
-        ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
-        # Creamos los elementos GUI
-        textTitle = TextRecords(self)
-        buttonBack = ButtonBackRecords(self)
-        # Y los metemos en la lista
-        self.elementsGUI.append(textTitle)
-        self.elementsGUI.append(buttonBack)
-
-
-class OptionsScreenGUI(ScreenGUI):
-    def __init__(self, menu):
-        ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
-        # Creamos los elementos GUI
-        textTitle = TextOptions(self)
-        buttonBack = ButtonBackOptions(self)
-        # Y los metemos en la lista
-        self.elementsGUI.append(textTitle)
-        self.elementsGUI.append(buttonBack)
-
-
-class CreditsScreenGUI(ScreenGUI):
-    def __init__(self, menu):
-        ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
-        # Creamos los elementos GUI
-        textTitle = TextCredits(self)
-        textAuthor0 = TextAuthor(self, 0, 'Roi Santos Ríos')
-        textAuthor1 = TextAuthor(self, 1, 'Antón Concheiro Fernández')
-        textAuthor2 = TextAuthor(self, 2, 'Iago Fernández Garrido')
-        textAuthor3 = TextAuthor(self, 3, 'Jorge Rivadulla Brey')
-        textAuthor4 = TextAuthor(self, 4, 'Xes Garbajosa Fernández')
-        buttonBack = ButtonBackCredits(self)
-        # Y los metemos en la lista
-        self.elementsGUI.append(textTitle)
-        self.elementsGUI.append(textAuthor0)
-        self.elementsGUI.append(textAuthor1)
-        self.elementsGUI.append(textAuthor2)
-        self.elementsGUI.append(textAuthor3)
-        self.elementsGUI.append(textAuthor4)
-        self.elementsGUI.append(buttonBack)
 
 
 # ---------------------------------------------------------
@@ -252,7 +138,7 @@ class Menu(Scene):
 
 
     # -----------------------------------------------------
-    # Scene transitions
+    # Transiciones de pantalla/escena
 
     def showInitialScreen(self):
         self.currentScreen = 0
