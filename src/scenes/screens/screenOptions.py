@@ -17,15 +17,69 @@ class TextOptions(CenteredTextGUI):
     def action(self):
         pass
 
+class TextMusicVolume(CenteredTextGUI):
+    def __init__(self, screen):
+        font = pg.font.Font(HANSHAND_FONT, 42)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 4)
+        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Volumen música', pos)
+
+    def action(self):
+        pass
+
+class TextSoundVolume(CenteredTextGUI):
+    def __init__(self, screen):
+        font = pg.font.Font(HANSHAND_FONT, 42)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 5)
+        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Volumen sonidos', pos)
+
+    def action(self):
+        pass
+
 # ---------------------------------------------------------
 # Botones
+
+class ButtonMusicDown(ButtonGUI):
+    def __init__(self, screen):
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 0)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
+
+    def action(self):
+        print(f"Music volume DOWN")
+
+
+class ButtonMusicUp(ButtonGUI):
+    def __init__(self, screen):
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 8)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
+
+    def action(self):
+        print(f"Music volume UP")
+
+
+class ButtonSoundDown(ButtonGUI):
+    def __init__(self, screen):
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 1)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
+
+    def action(self):
+        print(f"Sound volume DOWN")
+
+
+class ButtonSoundUp(ButtonGUI):
+    def __init__(self, screen):
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 9)
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
+
+    def action(self):
+        print(f"Sound volume UP")
+
 
 class ButtonDifficulty(ButtonGUI):
     difficulty = 1
 
     def __init__(self, screen):
         text = self.getText()
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 0)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 6)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, text)
 
     def getText(self):
@@ -58,7 +112,7 @@ class ButtonDifficulty(ButtonGUI):
 
 class ButtonBackOptions(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 1)
+        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 7)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
 
     def action(self):
@@ -72,9 +126,21 @@ class OptionsScreenGUI(ScreenGUI):
         ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
         # Creamos los elementos GUI
         textTitle = TextOptions(self)
+        textMusicVolume = TextMusicVolume(self)
+        buttonMusicDown = ButtonMusicDown(self)
+        buttonMusicUp = ButtonMusicUp(self)
+        textSoundVolume = TextSoundVolume(self)
+        buttonSoundDown = ButtonSoundDown(self)
+        buttonSoundUp = ButtonSoundUp(self)
         buttonDifficulty = ButtonDifficulty(self)
         buttonBack = ButtonBackOptions(self)
         # Y los metemos en la lista
         self.elementsGUI.append(textTitle)
+        self.elementsGUI.append(textMusicVolume)
+        self.elementsGUI.append(buttonMusicDown)
+        self.elementsGUI.append(buttonMusicUp)
+        self.elementsGUI.append(textSoundVolume)
+        self.elementsGUI.append(buttonSoundDown)
+        self.elementsGUI.append(buttonSoundUp)
         self.elementsGUI.append(buttonDifficulty)
         self.elementsGUI.append(buttonBack)
