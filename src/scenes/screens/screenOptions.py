@@ -1,12 +1,8 @@
+import sys
 import pygame as pg
 from src.scenes.guiElems import *
 from src.scenes.guiUtils import UtilsGUI
 from src.settings.settings import *
-
-
-# TODO: dónde y cómo declarar esta variable?
-global difficulty
-difficulty = 0
 
 
 # ---------------------------------------------------------
@@ -25,44 +21,36 @@ class TextOptions(CenteredTextGUI):
 # Botones
 
 class ButtonDifficulty(ButtonGUI):
+    difficulty = 1
+
     def __init__(self, screen):
-        self.screen = screen
-
-        assert difficulty in range(3), f"Invalid difficulty value (value = {difficulty})"
-        text = "Dificultad: "
-        if difficulty == 0:
-            text += "Fácil"
-        elif difficulty == 1:
-            text += "Normal"
-        elif difficulty == 2:
-            text += "Difícil"
-
+        text = self.getText()
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 0)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, text)
 
-    @staticmethod
-    def changeDifficulty():
-        global difficulty
-        difficulty = (difficulty + 1) % 3
-        print(f"new {difficulty = }")   # TODO: borrar
+    def getText(self):
+        text = "Dificultad: "
+        if ButtonDifficulty.difficulty == 0:
+            text += "Fácil"
+        elif ButtonDifficulty.difficulty == 1:
+            text += "Normal"
+        elif ButtonDifficulty.difficulty == 2:
+            text += "Difícil"
+        else:
+            sys.exit("Invalid difficulty value")
+        return text
+
+    def changeDifficulty(self):
+        ButtonDifficulty.difficulty = (ButtonDifficulty.difficulty + 1) % 3
 
     def changeButtonText(self):
-        assert difficulty in range(3), f"Invalid difficulty value (value = {difficulty})"
-        text = "Dificultad: "
-        if difficulty == 0:
-            text += "Fácil"
-        elif difficulty == 1:
-            text += "Normal"
-        elif difficulty == 2:
-            text += "Difícil"
-
-        # Se carga el texto del botón
+        # Se vuelve a cargar el texto del botón
+        text = self.getText()
         font = pg.font.Font(HANSHAND_FONT, 42)
         self.text = font.render(text, True, BROWN)
         pos = self.rect.center
         self.textRect = self.text.get_rect(center=pos)
-        print(f"new {self.text = }")   # TODO: borrar
-        
+
     def action(self):
         self.changeDifficulty()
         self.changeButtonText()
