@@ -3,10 +3,11 @@ from src.hud.hud import Hud
 from src.map.staticmap import StaticMap
 from src.scenes.cutscenes.scnCutscene3 import Cutscene3
 from src.scenes.levels.scnLevel import Level
-from src.settings.settings import *
-from src.hud.hud import Hud
 from src.scenes.music import *
+from src.scenes.resourceManager import ResourceManager
+from src.settings.settings import *
 from src.sprites.tileset import Tileset
+
 
 class Level2(Level):
 
@@ -16,71 +17,71 @@ class Level2(Level):
 
     def load_data(self):
         #PLAYER DATA
-        self.playerWalkSheet = pg.image.load("./sprites/Player/playerWalkSheet.png").convert_alpha()
-        self.playerIdleSheet = pg.image.load("./sprites/Player/playerIdleSheet.png").convert_alpha()
-        self.playerDodgeSheet =  pg.image.load("./sprites/Player/playerDodgeSheet.png").convert_alpha()
-        self.playerDeathSheet =  pg.image.load("./sprites/Player/playerDeathSheet.png").convert_alpha()
-        self.playerTalkingSheet =  pg.image.load("./sprites/Player/playerTalkingSheet.png").convert_alpha()
+        self.playerWalkSheet = ResourceManager.LoadSprite("./sprites/Player/playerWalkSheet.png")
+        self.playerIdleSheet = ResourceManager.LoadSprite("./sprites/Player/playerIdleSheet.png")
+        self.playerDodgeSheet =  ResourceManager.LoadSprite("./sprites/Player/playerDodgeSheet.png")
+        self.playerDeathSheet =  ResourceManager.LoadSprite("./sprites/Player/playerDeathSheet.png")
+        self.playerTalkingSheet =  ResourceManager.LoadSprite("./sprites/Player/playerTalkingSheet.png")
 
         #WEAPONS
-        self.playerGunImg = pg.image.load("./sprites/Weapons/gun.png").convert_alpha()
-        self.playerShotgunImg = pg.image.load("./sprites/Weapons/shotgun.png").convert_alpha()
-        self.playerSwordImg = pg.image.load("./sprites/Weapons/sword.png").convert_alpha()
+        self.playerGunImg = ResourceManager.LoadSprite("./sprites/Weapons/gun.png")
+        self.playerShotgunImg = ResourceManager.LoadSprite("./sprites/Weapons/shotgun.png")
+        self.playerSwordImg = ResourceManager.LoadSprite("./sprites/Weapons/sword.png")
 
         #OBJECTS
-        self.medkitImg = pg.image.load("./sprites/Objects/medkit.png").convert_alpha()
-        self.chestImg = pg.image.load("./sprites/Objects/chest.png").convert_alpha()
-        self.candelabroImg = pg.image.load("./sprites/Objects/candelabro.png").convert_alpha()
-        self.exitImg = pg.image.load("./sprites/Objects/exit.png").convert_alpha()
+        self.medkitImg = ResourceManager.LoadSprite("./sprites/Objects/medkit.png")
+        self.chestImg = ResourceManager.LoadSprite("./sprites/Objects/chest.png")
+        self.candelabroImg = ResourceManager.LoadSprite("./sprites/Objects/candelabro.png")
+        self.exitImg = ResourceManager.LoadSprite("./sprites/Objects/exit.png")
 
         #BULLETS/AMMUNITION/EXPLOSIONS DATA
-        self.gunBulletImg = pg.image.load("./sprites/Fire_Ball/gun_bullet.png").convert_alpha()
+        self.gunBulletImg = ResourceManager.LoadSprite("./sprites/Fire_Ball/gun_bullet.png")
         
-        self.fire_ballExplosionSheet = pg.image.load("./sprites/Fire_Ball/Explosion.png").convert_alpha()
-        self.fire_ballExplosion2Sheet = pg.image.load("./sprites/Fire_Ball/Explosion2.png").convert_alpha()
+        self.fire_ballExplosionSheet = ResourceManager.LoadSprite("./sprites/Fire_Ball/Explosion.png")
+        self.fire_ballExplosion2Sheet = ResourceManager.LoadSprite("./sprites/Fire_Ball/Explosion2.png")
 
         #HUD
-        self.radialMenuImg = pg.image.load("./sprites/Hud/radial_menu.png").convert_alpha()
-        self.abrirImg = pg.image.load("./sprites/Hud/abrir.png").convert_alpha()
-        self.hablarImg = pg.image.load("./sprites/Hud/hablar.png").convert_alpha()
-        self.gunCrosshairImg = pg.image.load("./sprites/Hud/gun_crosshair.png").convert_alpha()
-        self.shotgunCrosshairImg = pg.image.load("./sprites/Hud/shotgun_crosshair.png").convert_alpha()
-        self.dialogueBox = pg.image.load("./sprites/Hud/dialoguebox.png").convert_alpha()
-        self.dialogueContinuation = pg.image.load("./sprites/Hud/continuation.png").convert_alpha()
+        self.radialMenuImg = ResourceManager.LoadSprite("./sprites/Hud/radial_menu.png")
+        self.abrirImg = ResourceManager.LoadSprite("./sprites/Hud/abrir.png")
+        self.hablarImg = ResourceManager.LoadSprite("./sprites/Hud/hablar.png")
+        self.gunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/gun_crosshair.png")
+        self.shotgunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/shotgun_crosshair.png")
+        self.dialogueBox = ResourceManager.LoadSprite("./sprites/Hud/dialoguebox.png")
+        self.dialogueContinuation = ResourceManager.LoadSprite("./sprites/Hud/continuation.png")
         self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
-        self.light_mask = pg.transform.scale(pg.image.load("./sprites/Hud/light_350_soft.png").convert_alpha(), (1500, 1500))
+        self.light_mask = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/light_350_soft.png"), (1500, 1500))
 
         #NPC
-        self.npc1Profile = pg.image.load("./sprites/Player/profile1.png").convert_alpha()
+        self.npc1Profile = ResourceManager.LoadSprite("./sprites/Player/profile1.png")
 
         # EYE DATA
-        self.eyeWalkSheet = pg.image.load("./sprites/Eye/eye_ball_4.png").convert_alpha()
-        self.eyeDeathSheet = pg.image.load("./sprites/Eye/eye_boom_4.png").convert_alpha()
+        self.eyeWalkSheet = ResourceManager.LoadSprite("./sprites/Eye/eye_ball_4.png")
+        self.eyeDeathSheet = ResourceManager.LoadSprite("./sprites/Eye/eye_boom_4.png")
 
         # WORM DATA
-        self.wormWalkSheet = pg.image.load("./sprites/Worm/Walk.png").convert_alpha()
-        self.wormDeathSheet = pg.image.load("./sprites/Worm/Death.png").convert_alpha()
-        self.wormAttackSheet = pg.image.load("./sprites/Worm/Attack.png").convert_alpha()
+        self.wormWalkSheet = ResourceManager.LoadSprite("./sprites/Worm/Walk.png")
+        self.wormDeathSheet = ResourceManager.LoadSprite("./sprites/Worm/Death.png")
+        self.wormAttackSheet = ResourceManager.LoadSprite("./sprites/Worm/Attack.png")
 
         #Khan DATA
-        self.khanWalkSheet = pg.image.load("./sprites/Khan/khanWalkSheet.png").convert_alpha()
-        self.khanDeathSheet = pg.image.load("./sprites/Khan/khanDeathSheet.png").convert_alpha()
+        self.khanWalkSheet = ResourceManager.LoadSprite("./sprites/Khan/khanWalkSheet.png")
+        self.khanDeathSheet = ResourceManager.LoadSprite("./sprites/Khan/khanDeathSheet.png")
 
-        self.khan2WalkSheet = pg.image.load("./sprites/Khan/khan2WalkSheet.png").convert_alpha()
-        self.khan2DeathSheet = pg.image.load("./sprites/Khan/khan2DeathSheet.png").convert_alpha()
+        self.khan2WalkSheet = ResourceManager.LoadSprite("./sprites/Khan/khan2WalkSheet.png")
+        self.khan2DeathSheet = ResourceManager.LoadSprite("./sprites/Khan/khan2DeathSheet.png")
 
         #HERALD DATA
-        self.heraldWalkSheet = pg.image.load("./sprites/Herald/herald2WalkSheet.png").convert_alpha()
-        self.heraldDeathSheet = pg.image.load("./sprites/Herald/herald2DeathSheet.png").convert_alpha()
+        self.heraldWalkSheet = ResourceManager.LoadSprite("./sprites/Herald/herald2WalkSheet.png")
+        self.heraldDeathSheet = ResourceManager.LoadSprite("./sprites/Herald/herald2DeathSheet.png")
 
-        self.herald2WalkSheet = pg.image.load("./sprites/Herald/heraldWalkSheet.png").convert_alpha()
-        self.herald2DeathSheet = pg.image.load("./sprites/Herald/heraldDeathSheet.png").convert_alpha()
+        self.herald2WalkSheet = ResourceManager.LoadSprite("./sprites/Herald/heraldWalkSheet.png")
+        self.herald2DeathSheet = ResourceManager.LoadSprite("./sprites/Herald/heraldDeathSheet.png")
 
         #MAP BACKGROUNDS
-        self.backgrounds = [pg.image.load("./sprites/background1.png").convert_alpha(),
-                            pg.image.load("./sprites/background2.png").convert_alpha(),
-                            pg.image.load("./sprites/background3.png").convert_alpha(),
-                            pg.image.load("./sprites/background4.png").convert_alpha()]
+        self.backgrounds = [ResourceManager.LoadSprite("./sprites/background1.png"),
+                            ResourceManager.LoadSprite("./sprites/background2.png"),
+                            ResourceManager.LoadSprite("./sprites/background3.png"),
+                            ResourceManager.LoadSprite("./sprites/background4.png")]
 
         #MAP TILESET
         self.tileset = Tileset("./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0)
