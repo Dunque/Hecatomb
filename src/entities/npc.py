@@ -99,7 +99,7 @@ class NPCBase(Character):
 
 
 class TacoTruck(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, textLines = 10, options = 12):
+	def __init__(self, scene, x, y, textLines = 10, options = 13, salir = 12):
 		self.scene = scene
 		self.groups = self.scene.all_sprites, self.scene.npc_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
@@ -128,6 +128,8 @@ class TacoTruck(pg.sprite.Sprite):
 					self.dialogue2 = line.rstrip("\n").split('\\n')
 				if i == options:
 					self.dialogue_options = line.rstrip("\n").split('\\n')
+				if i == salir:
+					self.dialogue_salir = line.rstrip("\n").split('\\n')
 		self.profileImg = self.scene.tacoProfile
 		self.dialogo = DialogoInGame(self.scene, self.dialogue1, stopMove=True, profileImg=self.profileImg)
 		self.options = DialogueOptions(self.scene, options=self.dialogue_options)
@@ -168,16 +170,22 @@ class TacoTruck(pg.sprite.Sprite):
 			self.currentAnim = self.animList[1]
 
 		if self.options.opcion is not None:
-			dialogue_tmp = self.dialogue2[0]
-			self.dialogue2[0] += self.dialogue_options[self.options.opcion]
+			if self.options.opcion < 4:
+				dialogue_tmp = self.dialogue2[0]
+				self.dialogue2[0] += self.dialogue_options[self.options.opcion] + '.'
+				self.dialogo.text = self.dialogue2
+			else:
+				self.dialogo.text = self.dialogue_salir
+
 			self.dialogo.end()
-			#self.scene.completly_finished = True
 			self.options.deactivate()
-			self.options.opcion = None
-			self.dialogo.text = self.dialogue2
+
 			self.to_finish = True
 			self.talk()
-			self.dialogue2[0] = dialogue_tmp
+
+			if self.options.opcion < 4:
+				self.dialogue2[0] = dialogue_tmp
+			self.options.opcion = None
 
 	def talk(self):
 		self.talking = True

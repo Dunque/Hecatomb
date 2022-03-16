@@ -5,9 +5,10 @@ Sven, toma este Stop y un revolver. Para cambiar\nde arma manten pulsado Tab y m
 Vamos a ayudar a los heridos y apagar los incendios. Te\nenviaremos refuerzos en cuanto podamos. Recuerda que\nmientras te mueves, si pulsas ESPACIO daras una\nvoltereta y esquivaras todos los disparos o ataques.
 Gracias por audarme, Sven. Por favor, busca a los\ndemas, no te vayas sin encontrarnos a todos.
 #COFRES
-Has obtenido mil hostias.
+Has encontrado
 
 #CAMION
 Bienvenido al camion de tacos.
 Aquí tienes tu taco \n\nGracias por darme tu dinero.
-Cochinita\nDe birria\nCarnitas\nAl Pastor\nVolver
+Vuelve pronto pendejo.
+Cochinita 100$\nDe birria 200$\nCarnitas 300$\nAl Pastor 500$\nVolver

@@ -40,7 +40,7 @@ class Player(Character):
         self.interact = False
         self.state = PlayerGroundedState(self, "GROUNDED")
 
-
+        self.los_dineros = 0
 
     def die(self):
         if self.weapon:
@@ -55,6 +55,12 @@ class Player(Character):
 
     def stopMovement(self):
         self.state.move = False
+
+    def mas_dineros(self, dineros):
+        self.los_dineros += dineros
+
+    def menos_dineros(self, dineros):
+        self.los_dineros -= dineros
 
     def update(self):
         super(Player, self).update()
