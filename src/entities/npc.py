@@ -99,7 +99,7 @@ class NPCBase(Character):
 
 
 class TacoTruck(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, textLines = 10, options = 13, salir = 12):
+	def __init__(self, scene, x, y, textLines = 10, options = 14, salir = 12, no_dineros=13):
 		self.scene = scene
 		self.groups = self.scene.all_sprites, self.scene.npc_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
@@ -120,7 +120,9 @@ class TacoTruck(pg.sprite.Sprite):
 
 		self.talk_rect = pg.Rect((self.rect.x + 200, self.rect.y + 200, 120, 50))
 		self.interaccion = Interaccion(self.scene, vec(self.talk_rect.x + 70, self.talk_rect.y - 50), self.scene.hablarImg)
+
 		with open(self.scene.dialogues_src) as f:
+			linea_precios = None
 			for i, line in enumerate(f):
 				if i == textLines[0]:
 					self.dialogue1 = line.rstrip("\n").split('\\n')
@@ -128,8 +130,14 @@ class TacoTruck(pg.sprite.Sprite):
 					self.dialogue2 = line.rstrip("\n").split('\\n')
 				if i == options:
 					self.dialogue_options = line.rstrip("\n").split('\\n')
+					linea_precios = i + 1
+				if linea_precios and i == linea_precios:
+					self.precios = [int(elem) for elem in line.split(" ")]
 				if i == salir:
 					self.dialogue_salir = line.rstrip("\n").split('\\n')
+				if i == no_dineros:
+					self.dialogue_no_dineros = line.rstrip("\n").split('\\n')
+
 		self.profileImg = self.scene.tacoProfile
 		self.dialogo = DialogoInGame(self.scene, self.dialogue1, stopMove=True, profileImg=self.profileImg)
 		self.options = DialogueOptions(self.scene, options=self.dialogue_options)
@@ -171,9 +179,15 @@ class TacoTruck(pg.sprite.Sprite):
 
 		if self.options.opcion is not None:
 			if self.options.opcion < 4:
+				print(self.scene.player.los_dineros)
+				print(self.precios[self.options.opcion])
 				dialogue_tmp = self.dialogue2[0]
-				self.dialogue2[0] += self.dialogue_options[self.options.opcion] + '.'
-				self.dialogo.text = self.dialogue2
+				if self.scene.player.los_dineros >= self.precios[self.options.opcion]:
+					self.scene.player.menos_dineros(self.precios[self.options.opcion])
+					self.dialogue2[0] += self.dialogue_options[self.options.opcion] + '.'
+					self.dialogo.text = self.dialogue2
+				else:
+					self.dialogo.text = self.dialogue_no_dineros
 			else:
 				self.dialogo.text = self.dialogue_salir
 
