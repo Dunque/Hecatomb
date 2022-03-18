@@ -57,7 +57,10 @@ class Player(Character):
         self.state.move = False
 
     def mas_dineros(self, dineros):
+        self.scene.time_dineros = None
+        self.scene.draw_dineros = True
         self.los_dineros += dineros
+        self.los_dineros = round(self.los_dineros, 2)
 
     def menos_dineros(self, dineros):
         self.los_dineros -= dineros

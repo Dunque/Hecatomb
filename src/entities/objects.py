@@ -32,8 +32,8 @@ class Chest(pg.sprite.Sprite):
 				for i, line in enumerate(f):
 					if i == textLines:
 						dialogue = line.rstrip("\n").split('\\n')
-			self.value = random.randint(2,5) * 100
-			dialogue[0] += ' ' + str(self.value) + ' dineros.'
+			self.value = random.randint(3,5) * 100
+			dialogue[0] += ' ' + str(self.value) + ' rublos.'
 			self.dialogo = DialogoInGame(self.scene, dialogue, stopMove=True)
 
 		self.opened = False
@@ -81,8 +81,9 @@ class Chest(pg.sprite.Sprite):
 			self.dialogo.end()
 			self.scene.completly_finished = True
 			if not self.dineros_given:
-				self.scene.player.mas_dineros(self.value)
+				self.scene.player.mas_dineros(round(self.value / 107.75, 2))
 				self.dineros_given = True
+				self.scene.drawDineros()
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()

@@ -1,3 +1,5 @@
+import time
+
 import pygame as pg
 from src.scenes.scene import Scene
 from src.scenes.scnLosing import LosingMenu
@@ -36,6 +38,9 @@ class Level(Scene):
 
         self.text_menu = None
         self.has_menu = False
+        self.draw_dineros = False
+        self.time_dineros = None
+        self.show_time_dineros = 3
 
         # Dialogue variables
         self.resetDialogue()
@@ -78,6 +83,7 @@ class Level(Scene):
         for hud in self.all_hud:
             self.screen.blit(hud.image, self.camera.apply(hud))
         self.drawDialogue()
+        self.drawDineros()
         self.hud.draw_health(screen)
 
     def drawDialogue(self):
@@ -188,7 +194,16 @@ class Level(Scene):
             self.screen.blit(text_surface4, (WIDTH / 2 + 230, (HEIGHT / 2) + 140))
             self.screen.blit(text_surface5, (WIDTH / 2 - 500, (HEIGHT / 2) + 250))
 
-
+    def drawDineros(self):
+        if self.draw_dineros:
+            if not self.time_dineros:
+                self.time_dineros = time.time()
+            time_fin = time.time()
+            text_surface5, rect5 = self.game_font.render(str(self.player.los_dineros)+'$', (200, 200, 200))
+            self.screen.blit(text_surface5, (WIDTH / 2 - 700, (HEIGHT / 2) - 350))
+            if time_fin - self.time_dineros > self.show_time_dineros:
+                self.draw_dineros = False
+                self.time_dineros = None
 
 
     def events(self, eventList):

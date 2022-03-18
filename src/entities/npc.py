@@ -179,11 +179,10 @@ class TacoTruck(pg.sprite.Sprite):
 
 		if self.options.opcion is not None:
 			if self.options.opcion < 4:
-				print(self.scene.player.los_dineros)
-				print(self.precios[self.options.opcion])
+				coste_producto = self.precios[self.options.opcion]
 				dialogue_tmp = self.dialogue2[0]
-				if self.scene.player.los_dineros >= self.precios[self.options.opcion]:
-					self.scene.player.menos_dineros(self.precios[self.options.opcion])
+				if self.scene.player.los_dineros >= coste_producto:
+					self.scene.player.menos_dineros(coste_producto)
 					self.dialogue2[0] += self.dialogue_options[self.options.opcion] + '.'
 					self.dialogo.text = self.dialogue2
 				else:

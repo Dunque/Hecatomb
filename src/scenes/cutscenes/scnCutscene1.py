@@ -53,7 +53,7 @@ class Cutscene1(Level):
         self.dialogueOptions = ResourceManager.LoadSprite("./sprites/Hud/chatOpciones.png")
         self.dialogueOptionsPicker = ResourceManager.LoadSprite("./sprites/Hud/chatOpcionesPicker.png")
         self.dialogueContinuation = ResourceManager.LoadSprite("./sprites/Hud/continuation.png")
-        self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
+        self.game_font = pg.freetype.Font("./resources/fonts/main_font.ttf", 24)
         self.light_mask = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/light_350_soft.png"), (1500, 1500))
 
         #NPC
@@ -143,6 +143,7 @@ class Cutscene1(Level):
             self.screen.blit(hud.image, self.camera.apply(hud))
         self.drawDialogue()
         self.drawMenu()
+        self.drawDineros()
         self.hud.draw_health(screen)
 
     def render_fog(self, sprite = None):

@@ -12,5 +12,5 @@ Bienvenido al camion de tacos.
 Aqui tienes tu taco \n\nGracias por darme tu dinero.
 Vuelve pronto pendejo.
 Anda a la verga no tienes dineros.
-Cochinita 100$\nDe birria 200$\nCarnitas 300$\nAl Pastor 500$\nVolver
+Cochinita 100$\nDe birria 200$\nCarnitas  300$\nAl Pastor 500$\nVolver
 100 200 300 500
