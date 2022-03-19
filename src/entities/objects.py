@@ -33,7 +33,7 @@ class Chest(pg.sprite.Sprite):
 					if i == textLines:
 						dialogue = line.rstrip("\n").split('\\n')
 			self.value = random.randint(3,5) * 100
-			dialogue[0] += ' ' + str(self.value) + ' rublos.'
+			dialogue[0] += ' ' + str(self.value) + ' RUBLOS.'
 			self.dialogo = DialogoInGame(self.scene, dialogue, stopMove=True)
 
 		self.opened = False

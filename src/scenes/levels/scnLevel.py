@@ -199,11 +199,14 @@ class Level(Scene):
             if not self.time_dineros:
                 self.time_dineros = time.time()
             time_fin = time.time()
+            self.hud.dineros.activate()
             text_surface5, rect5 = self.game_font.render(str(self.player.los_dineros)+'$', (200, 200, 200))
-            self.screen.blit(text_surface5, (WIDTH / 2 - 700, (HEIGHT / 2) - 350))
+            #self.game_font.set_bold(True)
+            self.screen.blit(text_surface5, (WIDTH / 2 - 680, (HEIGHT / 2) - 340))
             if time_fin - self.time_dineros > self.show_time_dineros:
                 self.draw_dineros = False
                 self.time_dineros = None
+                self.hud.dineros.deactivate()
 
 
     def events(self, eventList):

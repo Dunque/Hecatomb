@@ -132,7 +132,7 @@ class TacoTruck(pg.sprite.Sprite):
 					self.dialogue_options = line.rstrip("\n").split('\\n')
 					linea_precios = i + 1
 				if linea_precios and i == linea_precios:
-					self.precios = [int(elem) for elem in line.split(" ")]
+					self.precios = [float(elem) for elem in line.split(" ")]
 				if i == salir:
 					self.dialogue_salir = line.rstrip("\n").split('\\n')
 				if i == no_dineros:

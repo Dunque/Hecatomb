@@ -1,16 +1,16 @@
 #EJEMPLOS DE DIALOGO. 1 LÍNEA POR CADA WEY.
-Sven, los Khan nos han traicionado. Llegaron de la nada\ny han arrasado con todo. Muchos de los nuestros han\nmuerto, y varias personas han desaparecido.
-Vete hacia el monte del norte, y mira si queda gente con\nvida. Debemos ayudar a todos los nuestros que podamos.\nHabla con el armero y preparate.
-Sven, toma este Stop y un revolver. Para cambiar\nde arma manten pulsado Tab y mueve el raton hacia\nel arma que quieras.\nLuego con levantar Tab te la equiparas.\nPara disparar o atacar, pulsa Click izquierdo.
-Vamos a ayudar a los heridos y apagar los incendios. Te\nenviaremos refuerzos en cuanto podamos. Recuerda que\nmientras te mueves, si pulsas ESPACIO daras una\nvoltereta y esquivaras todos los disparos o ataques.
-Gracias por audarme, Sven. Por favor, busca a los\ndemas, no te vayas sin encontrarnos a todos.
+SVEN, LOS KHAN NOS HAN TRAICIONADO. LLEGARON DE LA NADA\nY HAN ARRASADO CON TODO. MUCHOS DE LOS NUESTROS HAN\nMUERTO, Y VARIAS PERSONAS HAN DESAPARECIDO.
+VETE HACIA EL MONTE DEL NORTE, Y MIRA SI QUEDA GENTE CON\nVIDA. DEBEMOS AYUDAR A TODOS LOS NUESTROS QUE PODAMOS.\nHABLA CON EL ARMERO Y PREPARATE.
+SVEN, TOMA ESTE STOP Y UN REVOLVER.\nPARA CAMBIAR DE ARMA MANTEN PULSADO [TAB] Y MUEVE\nEL RATON HACIA EL ARMA QUE QUIERAS.\nLUEGO CON LEVANTAR [TAB] TE LA EQUIPARAS.\nPARA DISPARAR O ATACAR, PULSA CLICK IZQUIERDO.
+VAMOS A AYUDAR A LOS HERIDOS Y APAGAR LOS INCENDIOS.\nTE ENVIAREMOS REFUERZOS EN CUANTO PODAMOS.\n\nRECUERDA QUE MIENTRAS TE MUEVES, SI PULSAS [ESPACIO]\nDARAS UNA VOLTERETA Y ESQUIVARAS TODOS LOS DISPAROS\nO ATAQUES.
+GRACIAS POR AYUDARME, SVEN. POR FAVOR, BUSCA A LOS\nDEMAS, NO TE VAYAS SIN ENCONTRARNOS A TODOS.
 #COFRES
-Has encontrado
+HAS ENCONTRADO
 
 #CAMION
-Bienvenido al camion de tacos.
-Aqui tienes tu taco \n\nGracias por darme tu dinero.
-Vuelve pronto pendejo.
-Anda a la verga no tienes dineros.
-Cochinita 100$\nDe birria 200$\nCarnitas  300$\nAl Pastor 500$\nVolver
-100 200 300 500
+BIENVENIDO AL CAMION DE TACOS.
+AQUI TIENES TU TACO \n\nGRACIAS POR DARME TU DINERO.
+VUELVE PRONTO PENDEJO.
+ANDA A LA VERGA NO TIENES DINEROS.
+COCHINITA    1.00$\nDE BIRRIA     1.50$\nCARNITAS    2.00$\nAL PASTOR  3.50$\nVOLVER
+1 1.5 2 3.5

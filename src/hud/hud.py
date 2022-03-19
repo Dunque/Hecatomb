@@ -8,6 +8,7 @@ class Hud:
 		self.scene = scene
 		self.player = scene.player
 		self.camera = scene.camera
+		self.dineros = Dineros(scene)
 
 	def draw_health_bar(self,surface, position, size, color_border, color_background, color_health, progress):
 		pg.draw.rect(surface, color_background, (*position, *size))
@@ -76,6 +77,29 @@ class CrosshairShotGun(CrossHair, pg.sprite.Sprite):
 		super().__init__(scene, scene.shotgunCrosshairImg)
 
 
+class Dineros(pg.sprite.Sprite):
+	def __init__(self, scene):
+		self._layer = HUD_LAYER
+		self.scene = scene
+		pg.sprite.Sprite.__init__(self, [])
+		self.image = self.scene.dinerosImg
+		self.rect = self.image.get_rect()
+		self.x = (WIDTH / 2) - 740
+		self.y = (HEIGHT / 2) - 330
+		self.rect.center = self.x, self.y
+
+	def update(self):
+		cam_moved = self.scene.camera.get_moved()
+		pos_x = (WIDTH / 2) - cam_moved[0] - 740
+		pos_y = (HEIGHT / 2) - cam_moved[1] - 330
+		self.rect.center = pos_x, pos_y
+
+	def activate(self):
+		self.scene.all_hud.add(self)
+
+	def deactivate(self):
+		self.scene.all_hud.remove(self)
+
 class Line:
 	def __init__(self, text, line, last):
 		self.text = text
@@ -90,7 +114,7 @@ class OptionPicker(pg.sprite.Sprite):
 		pg.sprite.Sprite.__init__(self, [])
 		self.image = self.scene.dialogueOptionsPicker
 		self.rect = self.image.get_rect()
-		self.yOffsets = [-115, -55, 5, 65, 150]
+		self.yOffsets = [-120, -60, 0, 60, 150]
 		self.x = 1010
 		self.y = self.yOffsets[0]
 		self.rect.center = self.x, self.y

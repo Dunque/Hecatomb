@@ -53,7 +53,9 @@ class Cutscene1(Level):
         self.dialogueOptions = ResourceManager.LoadSprite("./sprites/Hud/chatOpciones.png")
         self.dialogueOptionsPicker = ResourceManager.LoadSprite("./sprites/Hud/chatOpcionesPicker.png")
         self.dialogueContinuation = ResourceManager.LoadSprite("./sprites/Hud/continuation.png")
-        self.game_font = pg.freetype.Font("./resources/fonts/main_font.ttf", 24)
+        self.dinerosImg = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/dineros.png"), (80, 80))
+        self.game_font = pg.freetype.Font("./resources/fonts/main_font.ttf", 28)
+        self.game_font.strong = True
         self.light_mask = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/light_350_soft.png"), (1500, 1500))
 
         #NPC
