@@ -2,6 +2,7 @@ import pygame as pg
 from src.settings.settings import *
 from operator import sub
 from abc import ABC, abstractmethod
+from src.weapons.weapons import Gun, Shotgun, Sword
 
 vec = pg.math.Vector2
 
@@ -41,14 +42,24 @@ class WeaponMenu(MenuManager):
 
 		self._observers = []
 
-		self.attach(WeaponMenuElement(self.scene, 'top'))
-		self.attach(WeaponMenuElement(self.scene, 'down'))
-		self.attach(WeaponMenuElement(self.scene, 'left'))
-		self.attach(WeaponMenuElement(self.scene, 'right'))
+		self.top_element = WeaponMenuElement(self.scene, 'top')
+		self.down_element = WeaponMenuElement(self.scene, 'down')
+		self.left_element = WeaponMenuElement(self.scene, 'left')
+		self.right_element = WeaponMenuElement(self.scene, 'right')
+
+		self.attach(self.down_element)
 
 		self.active_pos = None
 		self.final_pos = None
 		self.update()
+
+	def add_weapon(self, weapon):
+		if weapon is Gun:
+			self.attach(self.top_element)
+		elif weapon is Shotgun:
+			self.attach(self.left_element)
+		elif weapon is Sword:
+			self.attach(self.right_element)
 
 	def attach(self, observer):
 		self._observers.append(observer)
@@ -83,19 +94,20 @@ class WeaponMenu(MenuManager):
 			self.is_active = False
 
 	def highlight(self):
+		print(self.active_pos)
 		mouse_pos = pg.mouse.get_pos()
 		if ((WIDTH * mouse_pos[1]) / HEIGHT) > mouse_pos[0]:
-			if ((mouse_pos[0] - WIDTH) / -WIDTH) * HEIGHT > mouse_pos[1]:
+			if ((mouse_pos[0] - WIDTH) / -WIDTH) * HEIGHT > mouse_pos[1] and self.left_element in self._observers:
 				self.active_pos = "left"
 				self.notify("hover")
-			else:
+			elif ((mouse_pos[0] - WIDTH) / -WIDTH) * HEIGHT < mouse_pos[1]:
 				self.active_pos = "down"
 				self.notify("hover")
 		else:
-			if ((mouse_pos[0] - WIDTH) / -WIDTH) * HEIGHT > mouse_pos[1]:
+			if ((mouse_pos[0] - WIDTH) / -WIDTH) * HEIGHT > mouse_pos[1] and self.top_element in self._observers:
 				self.active_pos = "top"
 				self.notify("hover")
-			else:
+			elif self.right_element in self._observers:
 				self.active_pos = "right"
 				self.notify("hover")
 
@@ -109,14 +121,22 @@ class WeaponMenuElement(pg.sprite.Sprite, Observer):
 		height_dif = 0
 		side_dif = 0
 		self.scale = self.scene.radialMenuImg.get_size()
-		self.image = self.scene.radialMenuImg
-		self.rect = self.image.get_rect()
 		self.pos_string = pos
+
+		if self.pos_string == 'right':
+			self.image = self.scene.swordRadialMenuImg
+		elif self.pos_string == 'left':
+			self.image = self.scene.shotgunRadialMenuImg
+		elif self.pos_string == 'top':
+			self.image = self.scene.gunRadialMenuImg
+		elif self.pos_string == 'down':
+			self.image = self.scene.manoRadialMenuImg
+		self.rect = self.image.get_rect()
+
 
 		self.start_pos = vec(WIDTH / 2 + side_dif, HEIGHT / 2 + height_dif)
 		self.orig_size = vec(self.image.get_rect()[2], self.image.get_rect()[3])
-		if self.pos_string == 'right' or self.pos_string == 'left':
-			self.orig_size = vec(self.orig_size[::-1])
+
 
 		self.is_hovered = False
 		self.hovered_x = 0
@@ -128,18 +148,18 @@ class WeaponMenuElement(pg.sprite.Sprite, Observer):
 		height_dif = 0
 		if self.pos_string == 'top':
 			height_dif = -separation
-			self.image = pg.transform.smoothscale(self.scene.radialMenuImg, self.scale)
+			self.image = pg.transform.smoothscale(self.scene.gunRadialMenuImg, self.scale)
 		elif self.pos_string == 'down':
 			height_dif = separation
-			self.image = pg.transform.smoothscale(pg.transform.flip(self.scene.radialMenuImg, False, True), self.scale)
+			self.image = pg.transform.smoothscale(self.scene.manoRadialMenuImg, self.scale)
 		elif self.pos_string == 'left':
-			side_dif = -separation + (self.orig_size[0] / 2)
-			height_dif = - (self.orig_size[0] / 2)
-			self.image = pg.transform.rotate(pg.transform.scale(self.scene.radialMenuImg, self.scale), 90)
+			side_dif = -100
+			height_dif = 0
+			self.image = pg.transform.scale(self.scene.shotgunRadialMenuImg, (self.scale[1],self.scale[0]))
 		elif self.pos_string == 'right':
-			side_dif = separation + (self.orig_size[0] / 2)
-			height_dif = - (self.orig_size[0] / 2)
-			self.image = pg.transform.rotate(pg.transform.scale(self.scene.radialMenuImg, self.scale), -90)
+			side_dif = 100
+			height_dif = 0
+			self.image = pg.transform.scale(self.scene.swordRadialMenuImg, (self.scale[1],self.scale[0]))
 
 		cam_moved = self.scene.camera.get_moved()
 		self.pos = self.start_pos[0] - cam_moved[0] + side_dif + self.hovered_x, self.start_pos[1] - cam_moved[

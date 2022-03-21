@@ -45,6 +45,10 @@ class Cutscene1(Level):
 
         #HUD
         self.radialMenuImg = ResourceManager.LoadSprite("./sprites/Hud/radial_menu.png")
+        self.swordRadialMenuImg = ResourceManager.LoadSprite("./sprites/Hud/sword_radial_menu.png")
+        self.gunRadialMenuImg = ResourceManager.LoadSprite("./sprites/Hud/gun_radial_menu.png")
+        self.shotgunRadialMenuImg = ResourceManager.LoadSprite("./sprites/Hud/shotgun_radial_menu.png")
+        self.manoRadialMenuImg = ResourceManager.LoadSprite("./sprites/Hud/mano_radial_menu.png")
         self.abrirImg = ResourceManager.LoadSprite("./sprites/Hud/abrir.png")
         self.hablarImg = ResourceManager.LoadSprite("./sprites/Hud/hablar.png")
         self.gunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/gun_crosshair.png")
