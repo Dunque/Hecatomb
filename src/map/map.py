@@ -79,6 +79,8 @@ class Map(Notifier):
                         Wall(self.scene, col, row, self.tileset.tiles[25])
                     elif self.finalMap[row][col] == '2':
                         Wall(self.scene, col, row, self.tileset.tiles[23])
+                    elif self.finalMap[row][col] == '3':
+                        Wall(self.scene, col, row, self.tileset.tiles[15 * randint(1, 7)])
                     elif self.finalMap[row][col] == 'E':
                         Wall(self.scene, col, row, self.tileset.tiles[68])
                     elif self.finalMap[row][col] == 'S':
@@ -111,9 +113,6 @@ class Map(Notifier):
                         Wall(self.scene, col, row, self.tileset.tiles[2])
                     elif self.finalMap[row][col] == 'R':
                         Wall(self.scene, col, row, self.tileset.tiles[3])
-                    elif self.finalMap[row][col] == '3':
-                        Wall(self.scene, col, row,
-                             self.tileset.tiles[15 * randint(1, 7)])
 
                     elif self.finalMap[row][col] == '-':
                         self.removeUnusedDoors(room, '-', row, col)

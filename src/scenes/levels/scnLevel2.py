@@ -16,12 +16,8 @@ class Level2(Level):
         super(Level2,self).__init__(director)
 
     def load_data(self):
-        #PLAYER DATA
-        self.playerWalkSheet = ResourceManager.LoadSprite("./sprites/Player/playerWalkSheet.png")
-        self.playerIdleSheet = ResourceManager.LoadSprite("./sprites/Player/playerIdleSheet.png")
-        self.playerDodgeSheet =  ResourceManager.LoadSprite("./sprites/Player/playerDodgeSheet.png")
-        self.playerDeathSheet =  ResourceManager.LoadSprite("./sprites/Player/playerDeathSheet.png")
-        self.playerTalkingSheet =  ResourceManager.LoadSprite("./sprites/Player/playerTalkingSheet.png")
+
+        super().load_data()
 
         #WEAPONS
         self.playerGunImg = ResourceManager.LoadSprite("./sprites/Weapons/gun.png")
@@ -39,21 +35,6 @@ class Level2(Level):
         
         self.fire_ballExplosionSheet = ResourceManager.LoadSprite("./sprites/Fire_Ball/Explosion.png")
         self.fire_ballExplosion2Sheet = ResourceManager.LoadSprite("./sprites/Fire_Ball/Explosion2.png")
-
-        #HUD
-        self.radialMenuImg = ResourceManager.LoadSprite("./sprites/Hud/radial_menu.png")
-        self.abrirImg = ResourceManager.LoadSprite("./sprites/Hud/abrir.png")
-        self.hablarImg = ResourceManager.LoadSprite("./sprites/Hud/hablar.png")
-        self.gunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/gun_crosshair.png")
-        self.shotgunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/shotgun_crosshair.png")
-        self.dialogueBox = ResourceManager.LoadSprite("./sprites/Hud/dialoguebox.png")
-        self.dialogueOptions = ResourceManager.LoadSprite("./sprites/Hud/chatOpciones.png")
-        self.dialogueOptionsPicker = ResourceManager.LoadSprite("./sprites/Hud/chatOpcionesPicker.png")
-        self.dialogueContinuation = ResourceManager.LoadSprite("./sprites/Hud/continuation.png")
-        self.dinerosImg = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/dineros.png"), (80, 80))
-        self.game_font = pg.freetype.Font("./resources/fonts/main_font.ttf", 28)
-        self.game_font.strong = True
-        self.light_mask = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/light_350_soft.png"), (1500, 1500))
 
         #NPC
         self.npc1Profile = ResourceManager.LoadSprite("./sprites/Player/profile1.png")
@@ -85,8 +66,9 @@ class Level2(Level):
         self.herald2DeathSheet = ResourceManager.LoadSprite("./sprites/Herald/heraldDeathSheet.png")
 
         #MAP BACKGROUNDS
-        self.backgrounds = [ResourceManager.LoadSprite("./sprites/background1.png"),
-                            ResourceManager.LoadSprite("./sprites/background2.png")]
+        self.backgrounds = [ResourceManager.LoadSprite("./sprites/background5.png"),
+                            ResourceManager.LoadSprite("./sprites/background6.png"),
+                            ResourceManager.LoadSprite("./sprites/background7.png")]
 
         #MAP TILESET
         self.tileset = Tileset("./sprites/Bosque2.png", (TILESIZE, TILESIZE), 0, 0)
@@ -99,30 +81,6 @@ class Level2(Level):
 
         #Heads up display
         self.hud = Hud(self)
-
-        # SOUNDS
-        self.FIRE_BULLET_SOUND = pg.mixer.Sound("./sounds/Fire_4.wav")
-        self.DEATH_SOUND = pg.mixer.Sound("./sounds/Game_Over.wav")
-        self.CHANGE_SOUND = pg.mixer.Sound("./sounds/recharge.wav")
-        self.ENEMY_DEATH_SOUND = pg.mixer.Sound("./sounds/Hit_1.wav")
-        self.SWORD_SOUND = pg.mixer.Sound("./sounds/sword.wav")
-        self.PLAYER_DAMAGE_SOUND = pg.mixer.Sound("./sounds/Fire_2.wav")
-        self.EXPLOSION_SOUND = pg.mixer.Sound("./sounds/explosion.wav")
-        self.DODGE_SOUND = pg.mixer.Sound("./sounds/roll.wav")
-        self.WIN_ROOM_SOUND = pg.mixer.Sound("./sounds/win_sound.wav")
-        self.HEAL_SOUND = pg.mixer.Sound("./sounds/heal.wav")
-        self.VOICE_SOUND_0 = pg.mixer.Sound("./sounds/voices/Crossbowman_See_001.wav")
-        self.VOICE_SOUND_1 = pg.mixer.Sound("./sounds/voices/greetings-3.wav")
-        self.VOICE_SOUND_2 = pg.mixer.Sound("./sounds/voices/joy-2.wav")
-        self.VOICE_SOUND_3 = pg.mixer.Sound("./sounds/voices/doh_wav_cut.wav")
-        self.VOICE_SOUND_4 = pg.mixer.Sound("./sounds/voices/Guard_See_001.wav")
-        self.VOICE_SOUND_5 = pg.mixer.Sound("./sounds/voices/oh_yeah_wav_cut.wav")
-        self.VOICE_SOUND_6 = pg.mixer.Sound("./sounds/voices/Hero_See_001.wav")
-        self.VOICE_SOUND_7 = pg.mixer.Sound("./sounds/voices/Paladin_See_001.wav")
-        self.VOICE_SOUND_8 = pg.mixer.Sound("./sounds/voices/greetings-1.wav")
-        self.VOICE_SOUND_9 = pg.mixer.Sound("./sounds/voices/joy-1.wav")
-        self.VOICE_SOUND_10 = pg.mixer.Sound("./sounds/voices/soldierintro.wav")
-
 
     # -----------------------------------------------------
     # Scene transitions

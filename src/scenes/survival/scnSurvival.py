@@ -18,12 +18,8 @@ class Survival(Level):
         super(Survival, self).__init__(director)
 
     def load_data(self):
-        #PLAYER DATA
-        self.playerWalkSheet = ResourceManager.LoadSprite("./sprites/Player/playerWalkSheet.png")
-        self.playerIdleSheet = ResourceManager.LoadSprite("./sprites/Player/playerIdleSheet.png")
-        self.playerDodgeSheet = ResourceManager.LoadSprite("./sprites/Player/playerDodgeSheet.png")
-        self.playerDeathSheet = ResourceManager.LoadSprite("./sprites/Player/playerDeathSheet.png")
-        self.playerTalkingSheet = ResourceManager.LoadSprite("./sprites/Player/playerTalkingSheet.png")
+        
+        super().load_data()
 
         #WEAPONS
         self.playerGunImg = ResourceManager.LoadSprite("./sprites/Weapons/gun.png")
@@ -41,19 +37,11 @@ class Survival(Level):
         self.fire_ballExplosionSheet = ResourceManager.LoadSprite("./sprites/Fire_Ball/Explosion.png")
         self.fire_ballExplosion2Sheet = ResourceManager.LoadSprite("./sprites/Fire_Ball/Explosion2.png")
 
-        #HUD
-        self.radialMenuImg = ResourceManager.LoadSprite("./sprites/Hud/radial_menu.png")
-        self.abrirImg = ResourceManager.LoadSprite("./sprites/Hud/abrir.png")
-        self.hablarImg = ResourceManager.LoadSprite("./sprites/Hud/hablar.png")
-        self.gunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/gun_crosshair.png")
-        self.shotgunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/shotgun_crosshair.png")
-        self.dialogueBox = ResourceManager.LoadSprite("./sprites/Hud/dialoguebox.png")
-        self.dialogueContinuation = ResourceManager.LoadSprite("./sprites/Hud/continuation.png")
-        self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
-        self.light_mask = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/light_350_soft.png"), (1500, 1500))
-
         #NPC
         self.npc1Profile = ResourceManager.LoadSprite("./sprites/Player/profile1.png")
+        self.tacoTruck = ResourceManager.LoadSprite("./sprites/NPC/tacotruck.png")
+        self.tacoTruckTalking = ResourceManager.LoadSprite("./sprites/NPC/truckTalking.png")
+        self.tacoProfile = ResourceManager.LoadSprite("./sprites/NPC/profileBoxTruck.png")
 
         # EYE DATA
         self.eyeWalkSheet = ResourceManager.LoadSprite("./sprites/Eye/eye_ball_4.png")
@@ -82,27 +70,24 @@ class Survival(Level):
         self.backgrounds = [ResourceManager.LoadSprite("./sprites/background1.png"),
                             ResourceManager.LoadSprite("./sprites/background2.png"),
                             ResourceManager.LoadSprite("./sprites/background3.png"),
-                            ResourceManager.LoadSprite("./sprites/background4.png")]
+                            ResourceManager.LoadSprite("./sprites/background4.png"),
+                            ResourceManager.LoadSprite("./sprites/background5.png"),
+                            ResourceManager.LoadSprite("./sprites/background6.png"),
+                            ResourceManager.LoadSprite("./sprites/background7.png"),
+                            ResourceManager.LoadSprite("./sprites/background8.png"),
+                            ResourceManager.LoadSprite("./sprites/background9.png"),
+                            ResourceManager.LoadSprite("./sprites/background10.png")]
 
         #MAP TILESET
         self.tileset = Tileset("./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0)
 
         #Dialogue file
-        self.dialogues_src = "./resources/text/dialogues.txt"
+        self.dialogues_src = "./resources/text/dialogues1.txt"
 
         #Map generation
         self.map = RandMap(self, './maps/rooms.txt',
                              self.tileset, self.backgrounds)
-        # SOUNDS
-        self.FIRE_BULLET_SOUND = pg.mixer.Sound("./sounds/Fire_4.wav")
-        self.DEATH_SOUND = pg.mixer.Sound("./sounds/Game_Over.wav")
-        self.CHANGE_SOUND = pg.mixer.Sound("./sounds/recharge.wav")
-        self.ENEMY_DEATH_SOUND = pg.mixer.Sound("./sounds/Hit_1.wav")
-        self.SWORD_SOUND = pg.mixer.Sound("./sounds/sword.wav")
-        self.PLAYER_DAMAGE_SOUND = pg.mixer.Sound("./sounds/Fire_2.wav")
-        self.EXPLOSION_SOUND = pg.mixer.Sound("./sounds/explosion.wav")
-        self.DODGE_SOUND = pg.mixer.Sound("./sounds/roll.wav")
-        self.WIN_ROOM_SOUND = pg.mixer.Sound("./sounds/win_sound.wav")
+
         #Heads up display
         self.hud = Hud(self)
 
