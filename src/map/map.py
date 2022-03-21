@@ -9,7 +9,7 @@ from src.entities.ground import *
 from src.map.camera import *
 from src.map.room import Room
 from abc import ABC, abstractmethod
-from src.entities.npc import NPCBase, TacoTruck
+from src.entities.npc import NPCBase, TacoTruck, NPCStop
 
 vec = pg.math.Vector2
 
@@ -147,7 +147,7 @@ class Map(Notifier):
                     elif self.finalMap[row][col] == '5':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=2))
                     elif self.finalMap[row][col] == '6':
-                        room.addNPC(NPCBase(self.scene, col, row, textLines=3))
+                        room.addNPC(NPCStop(self.scene, col, row, textLines=3))
                     elif self.finalMap[row][col] == '7':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=4))
                     elif self.finalMap[row][col] == 'R':

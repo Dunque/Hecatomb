@@ -5,6 +5,7 @@ from src.entities.character import *
 from src.entities.states.enemystates import *
 from src.hud.hud import Interaccion, DialogoInGame, DialogueOptions
 from src.scenes.music import *
+from src.weapons.weapons import Sword
 
 vec = pg.math.Vector2
 
@@ -91,12 +92,24 @@ class NPCBase(Character):
 		if not self.scene.completly_finished:
 			self.dialogo.drawText()
 		else:
-			self.dialogo.end()
-			self.scene.completly_finished = True
+			self.finish_dialogue()
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()
 
+	def finish_dialogue(self):
+		self.dialogo.end()
+		self.scene.completly_finished = True
+
+
+class NPCStop(NPCBase):
+	def __init__(self, scene, x, y, textLines, anims=None):
+		super(NPCStop, self).__init__(scene, x, y, textLines, anims)
+
+	def finish_dialogue(self):
+		self.dialogo.end()
+		self.scene.completly_finished = True
+		self.scene.player.give_weapon(Sword)
 
 class TacoTruck(pg.sprite.Sprite):
 	def __init__(self, scene, x, y, textLines = 10, options = 14, salir = 12, no_dineros=13):

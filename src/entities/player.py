@@ -75,6 +75,9 @@ class Player(Character):
             self.weapon.updatePos(self.pos.x - self.weaponOffsetX,
                                   self.pos.y - self.weaponOffsetY, self.rect)
 
+    def give_weapon(self, weapon):
+        self.weapon_menu.add_weapon(weapon)
+
     def change_weapon(self, slot):
         if self.weapon_slot != slot and slot == "top":
             if self.weapon is not None:
