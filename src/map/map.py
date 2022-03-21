@@ -97,6 +97,20 @@ class Map(Notifier):
                         Wall(self.scene, col, row, self.tileset.tiles[57])
                     elif self.finalMap[row][col] == 'o':
                         Wall(self.scene, col, row, self.tileset.tiles[58])
+    #######################MAPA2##############################################
+                    elif self.finalMap[row][col] == 'R':
+                        Wall(self.scene, col, row, self.tileset.tiles[2])
+                    elif self.finalMap[row][col] == 'I':
+                        Wall(self.scene, col, row, self.tileset.tiles[15])
+                    elif self.finalMap[row][col] == 'O':
+                        Wall(self.scene, col, row, self.tileset.tiles[16])
+    #######################MAPA3##############################################
+                    elif self.finalMap[row][col] == 'M':
+                        Wall(self.scene, col, row, self.tileset.tiles[1])
+                    elif self.finalMap[row][col] == 'U':
+                        Wall(self.scene, col, row, self.tileset.tiles[2])
+                    elif self.finalMap[row][col] == 'R':
+                        Wall(self.scene, col, row, self.tileset.tiles[3])
                     elif self.finalMap[row][col] == '3':
                         Wall(self.scene, col, row,
                              self.tileset.tiles[15 * randint(1, 7)])

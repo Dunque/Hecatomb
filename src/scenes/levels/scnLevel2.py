@@ -79,12 +79,10 @@ class Level2(Level):
 
         #MAP BACKGROUNDS
         self.backgrounds = [ResourceManager.LoadSprite("./sprites/background1.png"),
-                            ResourceManager.LoadSprite("./sprites/background2.png"),
-                            ResourceManager.LoadSprite("./sprites/background3.png"),
-                            ResourceManager.LoadSprite("./sprites/background4.png")]
+                            ResourceManager.LoadSprite("./sprites/background2.png")]
 
         #MAP TILESET
-        self.tileset = Tileset("./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0)
+        self.tileset = Tileset("./sprites/Bosque2.png", (TILESIZE, TILESIZE), 0, 0)
 
         #Dialogue file
         self.dialogues_src = "./resources/text/dialogues.txt"

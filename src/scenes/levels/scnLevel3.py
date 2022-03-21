@@ -84,7 +84,7 @@ class Level3(Level):
                             ResourceManager.LoadSprite("./sprites/background4.png")]
 
         #MAP TILESET
-        self.tileset = Tileset("./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0)
+        self.tileset = Tileset("./sprites/Ruinas.png", (TILESIZE, TILESIZE), 0, 0)
 
         #Dialogue file
         self.dialogues_src = "./resources/text/dialogues.txt"

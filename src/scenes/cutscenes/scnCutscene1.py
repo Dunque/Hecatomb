@@ -93,6 +93,7 @@ class Cutscene1(Level):
         #MAP TILESET
         self.tileset = Tileset("./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0)
 
+
         #Dialogue file
         self.dialogues_src = "./resources/text/dialogues.txt"
 
