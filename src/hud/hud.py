@@ -163,6 +163,7 @@ class DialogueOptions(pg.sprite.Sprite):
 		self.opcion = None
 
 	def update(self):
+		self.scene.draw_dineros = True
 		cam_moved = self.scene.camera.get_moved()
 		y_offset = 10
 		pos_x = (WIDTH / 2) - cam_moved[0] + 350

@@ -64,6 +64,7 @@ class Player(Character):
 
     def menos_dineros(self, dineros):
         self.los_dineros -= dineros
+        self.los_dineros = round(self.los_dineros, 2)
 
     def update(self):
         super(Player, self).update()

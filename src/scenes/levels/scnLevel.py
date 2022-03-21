@@ -142,7 +142,6 @@ class Level(Scene):
                 self.text_lines[1] = []
                 self.text_lines[2] = []
             self.dialogue_line = 0
-            self.player.allowMovement()
             if len(self.remainderBatch) > 0:
                 self.updateDialogue(self.remainderBatch)
             else:
