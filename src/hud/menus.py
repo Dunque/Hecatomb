@@ -94,7 +94,6 @@ class WeaponMenu(MenuManager):
 			self.is_active = False
 
 	def highlight(self):
-		print(self.active_pos)
 		mouse_pos = pg.mouse.get_pos()
 		if ((WIDTH * mouse_pos[1]) / HEIGHT) > mouse_pos[0]:
 			if ((mouse_pos[0] - WIDTH) / -WIDTH) * HEIGHT > mouse_pos[1] and self.left_element in self._observers:
