@@ -121,7 +121,7 @@ class TacoTruck(pg.sprite.Sprite):
 		self.talk_rect = pg.Rect((self.rect.x + 200, self.rect.y + 200, 120, 50))
 		self.interaccion = Interaccion(self.scene, vec(self.talk_rect.x + 70, self.talk_rect.y - 50), self.scene.hablarImg)
 
-		with open(self.scene.dialogues_src) as f:
+		with open(self.scene.dialogues_src,encoding='utf-8') as f:
 			linea_precios = None
 			for i, line in enumerate(f):
 				if i == textLines[0]:

@@ -50,12 +50,19 @@ class Cutscene2(Level):
         self.gunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/gun_crosshair.png")
         self.shotgunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/shotgun_crosshair.png")
         self.dialogueBox = ResourceManager.LoadSprite("./sprites/Hud/dialoguebox.png")
+        self.dialogueOptions = ResourceManager.LoadSprite("./sprites/Hud/chatOpciones.png")
+        self.dialogueOptionsPicker = ResourceManager.LoadSprite("./sprites/Hud/chatOpcionesPicker.png")
         self.dialogueContinuation = ResourceManager.LoadSprite("./sprites/Hud/continuation.png")
-        self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
+        self.dinerosImg = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/dineros.png"), (80, 80))
+        self.game_font = pg.freetype.Font("./resources/fonts/main_font.ttf", 28)
+        self.game_font.strong = True
         self.light_mask = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/light_350_soft.png"), (1500, 1500))
 
         #NPC
         self.npc1Profile = ResourceManager.LoadSprite("./sprites/Player/profile1.png")
+        self.tacoTruck = ResourceManager.LoadSprite("./sprites/NPC/tacotruck.png")
+        self.tacoTruckTalking = ResourceManager.LoadSprite("./sprites/NPC/truckTalking.png")
+        self.tacoProfile = ResourceManager.LoadSprite("./sprites/NPC/profileBoxTruck.png")
 
         # EYE DATA
         self.eyeWalkSheet = ResourceManager.LoadSprite("./sprites/Eye/eye_ball_4.png")
@@ -118,6 +125,9 @@ class Cutscene2(Level):
         self.VOICE_SOUND_9 = pg.mixer.Sound("./sounds/voices/joy-1.wav")
         self.VOICE_SOUND_10 = pg.mixer.Sound("./sounds/voices/soldierintro.wav")
 
+        #Heads up display
+        self.hud = Hud(self)
+
     def draw(self, screen):
         #Background color
         self.screen = screen
@@ -137,6 +147,8 @@ class Cutscene2(Level):
         for hud in self.all_hud:
             self.screen.blit(hud.image, self.camera.apply(hud))
         self.drawDialogue()
+        self.drawMenu()
+        self.drawDineros()
         self.hud.draw_health(screen)
 
     def render_fog(self, sprite = None):

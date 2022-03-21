@@ -46,12 +46,19 @@ class Cutscene4(Level):
         self.gunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/gun_crosshair.png")
         self.shotgunCrosshairImg = ResourceManager.LoadSprite("./sprites/Hud/shotgun_crosshair.png")
         self.dialogueBox = ResourceManager.LoadSprite("./sprites/Hud/dialoguebox.png")
+        self.dialogueOptions = ResourceManager.LoadSprite("./sprites/Hud/chatOpciones.png")
+        self.dialogueOptionsPicker = ResourceManager.LoadSprite("./sprites/Hud/chatOpcionesPicker.png")
         self.dialogueContinuation = ResourceManager.LoadSprite("./sprites/Hud/continuation.png")
-        self.game_font = pg.freetype.Font("./sprites/Hud/impostor.ttf", 24)
+        self.dinerosImg = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/dineros.png"), (80, 80))
+        self.game_font = pg.freetype.Font("./resources/fonts/main_font.ttf", 28)
+        self.game_font.strong = True
         self.light_mask = pg.transform.scale(ResourceManager.LoadSprite("./sprites/Hud/light_350_soft.png"), (1500, 1500))
 
         #NPC
         self.npc1Profile = ResourceManager.LoadSprite("./sprites/Player/profile1.png")
+        self.tacoTruck = ResourceManager.LoadSprite("./sprites/NPC/tacotruck.png")
+        self.tacoTruckTalking = ResourceManager.LoadSprite("./sprites/NPC/truckTalking.png")
+        self.tacoProfile = ResourceManager.LoadSprite("./sprites/NPC/profileBoxTruck.png")
 
         # EYE DATA
         self.eyeWalkSheet = ResourceManager.LoadSprite("./sprites/Eye/eye_ball_4.png")
@@ -90,6 +97,7 @@ class Cutscene4(Level):
 
         #Heads up display
         self.hud = Hud(self)
+
         # SOUNDS
         self.FIRE_BULLET_SOUND = pg.mixer.Sound("./sounds/Fire_4.wav")
         self.DEATH_SOUND = pg.mixer.Sound("./sounds/Game_Over.wav")
@@ -100,7 +108,7 @@ class Cutscene4(Level):
         self.EXPLOSION_SOUND = pg.mixer.Sound("./sounds/explosion.wav")
         self.DODGE_SOUND = pg.mixer.Sound("./sounds/roll.wav")
         self.WIN_ROOM_SOUND = pg.mixer.Sound("./sounds/win_sound.wav")
-        self.HEAL_SOUND= pg.mixer.Sound("./sounds/heal.wav")
+        self.HEAL_SOUND = pg.mixer.Sound("./sounds/heal.wav")
         self.VOICE_SOUND_0 = pg.mixer.Sound("./sounds/voices/Crossbowman_See_001.wav")
         self.VOICE_SOUND_1 = pg.mixer.Sound("./sounds/voices/greetings-3.wav")
         self.VOICE_SOUND_2 = pg.mixer.Sound("./sounds/voices/joy-2.wav")
