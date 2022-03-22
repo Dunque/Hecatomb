@@ -8,7 +8,7 @@ from src.settings.settings import *
 
 # ---------------------------------------------------------
 # Textos
-
+CLICK_SOUND = pg.mixer.Sound("./sounds/beep.wav")
 class TextOptions(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(HANSHAND_FONT, 112)
@@ -45,6 +45,7 @@ class ButtonMusicDown(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
 
     def action(self):
+        CLICK_SOUND.play()
         print(f"Music volume DOWN")
 
 
@@ -54,6 +55,7 @@ class ButtonMusicUp(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
 
     def action(self):
+        CLICK_SOUND.play()
         print(f"Music volume UP")
 
 
@@ -63,6 +65,7 @@ class ButtonSoundDown(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
 
     def action(self):
+        CLICK_SOUND.play()
         print(f"Sound volume DOWN")
 
 
@@ -72,6 +75,7 @@ class ButtonSoundUp(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
 
     def action(self):
+        CLICK_SOUND.play()
         print(f"Sound volume UP")
 
 
@@ -107,6 +111,7 @@ class ButtonDifficulty(ButtonGUI):
         self.textRect = self.text.get_rect(center=pos)
 
     def action(self):
+        CLICK_SOUND.play()
         self.changeDifficulty()
         self.changeButtonText()
 
@@ -117,7 +122,7 @@ class ButtonBackOptions(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
 
     def action(self):
-        Music.volumemusic(self, 1)
+        CLICK_SOUND.play()
         self.screen.menu.showInitialScreen()
 
 # ---------------------------------------------------------

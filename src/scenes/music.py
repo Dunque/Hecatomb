@@ -50,6 +50,7 @@ class Music():
         scene.DODGE_SOUND.set_volume(num)
         scene.WIN_ROOM_SOUND.set_volume(num)
         scene.HEAL_SOUND.set_volume(num)
+        scene.OPEN_SOUND.set_volume(num)
         scene.VOICE_SOUND_0.set_volume(num)
         scene.VOICE_SOUND_1.set_volume(num)
         scene.VOICE_SOUND_2.set_volume(num)
@@ -63,11 +64,12 @@ class Music():
         scene.VOICE_SOUND_10.set_volume(num)
 
     def getvolumemusic(self): #Devuelve el volumen actual de la musica
-        return pg.mixer.music.get_volume
+        volumen=pg.mixer.music.get_volume
+        return  float(volumen)
 
 
-    def geteffectsvolume(self): #Devuelve el volumen actual de los efectos
-        return FIRE_BULLET_SOUND.get_volume
+    def geteffectsvolume(self,scene): #Devuelve el volumen actual de los efectos
+        return scene.FIRE_BULLET_SOUND.get_volume
 
     def playvoice(self,scene,num):
         if (num==0):

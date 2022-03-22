@@ -6,7 +6,7 @@ from src.settings.settings import *
 
 # ---------------------------------------------------------
 # Textos
-
+CLICK_SOUND = pg.mixer.Sound("./sounds/beep.wav")
 class TextCredits(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(HANSHAND_FONT, 112)
@@ -34,6 +34,7 @@ class ButtonBackCredits(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
 
     def action(self):
+        CLICK_SOUND.play()
         self.screen.menu.showInitialScreen()
 
 # ---------------------------------------------------------

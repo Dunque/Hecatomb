@@ -50,10 +50,12 @@ class Chest(pg.sprite.Sprite):
 					if not self.talking:
 						self.interaccion.activate()
 						if player.interact:
+							self.scene.OPEN_SOUND.play()
 							self.open()
 				else:
 					if player.interact:
 						self.talkFast()
+
 					else:
 						self.stopTalkFast()
 			else:

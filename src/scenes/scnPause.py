@@ -9,7 +9,7 @@ from src.settings.settings import *
 
 # ---------------------------------------------------------
 # Elementos de la pantalla inicial
-
+CLICK_SOUND = pg.mixer.Sound("./sounds/beep.wav")
 class TextPause(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(HANSHAND_FONT, 112)
@@ -26,6 +26,7 @@ class ButtonContinue(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Continuar')
 
     def action(self):
+        CLICK_SOUND.play()
         Music.volumemusic(self, 1)
         self.screen.menu.continueGame()
 
@@ -36,6 +37,7 @@ class ButtonOptions(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Opciones')
 
     def action(self):
+        CLICK_SOUND.play()
         self.screen.menu.showOptionsScreen()
 
 
@@ -45,7 +47,8 @@ class ButtonRestart(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Reiniciar')
 
     def action(self):
-        Music.volumemusic(self,1)
+        CLICK_SOUND.play()
+        Music.volumemusic(self, 1)
         self.screen.menu.restartScene()
 
 
@@ -55,6 +58,7 @@ class ButtonExitToMenu(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menú')
 
     def action(self):
+        CLICK_SOUND.play()
         Music.changemusic(self, 0)
         self.screen.menu.exitToMenu()
 

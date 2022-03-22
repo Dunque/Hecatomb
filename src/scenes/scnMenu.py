@@ -14,7 +14,7 @@ from src.settings.settings import *
 
 # ---------------------------------------------------------
 # Elementos de la pantalla inicial
-
+CLICK_SOUND = pg.mixer.Sound("./sounds/beep.wav")
 class TextHecatomb(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(HANSHAND_FONT, 160)
@@ -31,6 +31,7 @@ class ButtonAdventure(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Aventura')
 
     def action(self):
+        CLICK_SOUND.play()
         self.screen.menu.playAdventure()
 
 
@@ -40,6 +41,7 @@ class ButtonSurvival(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Supervivencia')
 
     def action(self):
+        CLICK_SOUND.play()
         self.screen.menu.playSurvival()
 
 
@@ -49,6 +51,7 @@ class ButtonRecords(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Récords')
 
     def action(self):
+        CLICK_SOUND.play()
         self.screen.menu.showRecordsScreen()
 
 
@@ -58,6 +61,7 @@ class ButtonOptions(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Opciones')
 
     def action(self):
+        CLICK_SOUND.play()
         self.screen.menu.showOptionsScreen()
 
 
@@ -67,6 +71,7 @@ class ButtonCredits(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Créditos')
 
     def action(self):
+        CLICK_SOUND.play()
         self.screen.menu.showCreditsScreen()
 
 
@@ -76,6 +81,7 @@ class ButtonExit(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir')
 
     def action(self):
+        CLICK_SOUND.play()
         self.screen.menu.exitProgram()
 
 
@@ -85,6 +91,7 @@ class ButtonExit(ButtonGUI):
 class InitialScreenGUI(ScreenGUI):
     def __init__(self, menu):
         ScreenGUI.__init__(self, menu, 'resources/images/menu.png')
+
         # Creamos los elementos GUI
         textTitle = TextHecatomb(self)
         buttonAdventure = ButtonAdventure(self)
@@ -158,6 +165,7 @@ class Menu(Scene):
         self.currentScreen = 1
     
     def showOptionsScreen(self):
+
         self.currentScreen = 2
 
     def showCreditsScreen(self):

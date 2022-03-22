@@ -58,6 +58,30 @@ class Cutscene1(Level):
         #Map generation
         self.map = CutsceneMap(self, './maps/cutscenemap1.txt', self.tileset, self.backgrounds)
 
+        # SOUNDS
+        self.FIRE_BULLET_SOUND = pg.mixer.Sound("./sounds/Fire_4.wav")
+        self.DEATH_SOUND = pg.mixer.Sound("./sounds/Game_Over.wav")
+        self.CHANGE_SOUND = pg.mixer.Sound("./sounds/recharge.wav")
+        self.ENEMY_DEATH_SOUND = pg.mixer.Sound("./sounds/Hit_1.wav")
+        self.SWORD_SOUND = pg.mixer.Sound("./sounds/sword.wav")
+        self.PLAYER_DAMAGE_SOUND = pg.mixer.Sound("./sounds/Fire_2.wav")
+        self.EXPLOSION_SOUND = pg.mixer.Sound("./sounds/explosion.wav")
+        self.DODGE_SOUND = pg.mixer.Sound("./sounds/roll.wav")
+        self.WIN_ROOM_SOUND = pg.mixer.Sound("./sounds/win_sound.wav")
+        self.HEAL_SOUND = pg.mixer.Sound("./sounds/heal.wav")
+        self.OPEN_SOUND = pg.mixer.Sound("./sounds/chest_sound.wav")
+        self.VOICE_SOUND_0 = pg.mixer.Sound("./sounds/voices/Crossbowman_See_001.wav")
+        self.VOICE_SOUND_1 = pg.mixer.Sound("./sounds/voices/greetings-3.wav")
+        self.VOICE_SOUND_2 = pg.mixer.Sound("./sounds/voices/joy-2.wav")
+        self.VOICE_SOUND_3 = pg.mixer.Sound("./sounds/voices/doh_wav_cut.wav")
+        self.VOICE_SOUND_4 = pg.mixer.Sound("./sounds/voices/Guard_See_001.wav")
+        self.VOICE_SOUND_5 = pg.mixer.Sound("./sounds/voices/oh_yeah_wav_cut.wav")
+        self.VOICE_SOUND_6 = pg.mixer.Sound("./sounds/voices/Hero_See_001.wav")
+        self.VOICE_SOUND_7 = pg.mixer.Sound("./sounds/voices/Paladin_See_001.wav")
+        self.VOICE_SOUND_8 = pg.mixer.Sound("./sounds/voices/greetings-1.wav")
+        self.VOICE_SOUND_9 = pg.mixer.Sound("./sounds/voices/joy-1.wav")
+        self.VOICE_SOUND_10 = pg.mixer.Sound("./sounds/voices/soldierintro.wav")
+
         #Heads up display
         self.hud = Hud(self)
 
