@@ -8,12 +8,18 @@ from src.scenes.resourceManager import ResourceManager
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
 
+from src.weapons.weapons import Shotgun, Gun, Sword
 
 class Level3(Level):
 
     def __init__(self, director):
         #Initialize superclass
         super(Level3,self).__init__(director)
+
+        #Player starts with all weapons
+        self.player.give_weapon(Sword)
+        self.player.give_weapon(Gun)
+        self.player.give_weapon(Shotgun)
 
     def load_data(self):
 
@@ -71,10 +77,10 @@ class Level3(Level):
                             ResourceManager.LoadSprite("./sprites/background10.png")]
 
         #MAP TILESET
-        self.tileset = Tileset("./sprites/Ruinas.png", (TILESIZE, TILESIZE), 0, 0)
+        self.tileset = Tileset("./sprites/tilesetCitadel.png", (TILESIZE, TILESIZE), 0, 0)
 
         #Dialogue file
-        self.dialogues_src = "./resources/text/dialogues.txt"
+        self.dialogues_src = "./resources/text/dialogues3.txt"
 
         #Map generation
         self.map = StaticMap(self, './maps/map3.txt', self.tileset, self.backgrounds)

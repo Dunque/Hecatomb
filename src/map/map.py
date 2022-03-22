@@ -63,7 +63,7 @@ class Map(Notifier):
         if nearbyDoorCounter >= 2:
             room.addDoor(Door(self.scene, col, row, self.tileset.tiles[0]))
         else:
-            Wall(self.scene, col, row, self.tileset.tiles[15])
+            Wall(self.scene, col, row, self.tileset.tiles[4])
 
     def generateTiles(self):
         for room in self.rooms:
@@ -76,42 +76,12 @@ class Map(Notifier):
 
                     #-----------------------TILES-------------------------
                     if self.finalMap[row][col] == '1':
-                        Wall(self.scene, col, row, self.tileset.tiles[25])
+                        Wall(self.scene, col, row, self.tileset.tiles[2])
                     elif self.finalMap[row][col] == '2':
-                        Wall(self.scene, col, row, self.tileset.tiles[23])
-                    elif self.finalMap[row][col] == '3':
-                        Wall(self.scene, col, row, self.tileset.tiles[15 * randint(1, 7)])
-                    elif self.finalMap[row][col] == 'E':
-                        Wall(self.scene, col, row, self.tileset.tiles[68])
-                    elif self.finalMap[row][col] == 'S':
-                        Wall(self.scene, col, row, self.tileset.tiles[69])
-                    elif self.finalMap[row][col] == 'c':
-                        Wall(self.scene, col, row, self.tileset.tiles[70])
-                    elif self.finalMap[row][col] == 'u':
-                        Wall(self.scene, col, row, self.tileset.tiles[27])
-                    elif self.finalMap[row][col] == 'v':
-                        Wall(self.scene, col, row, self.tileset.tiles[28])
-                    elif self.finalMap[row][col] == 'e':
-                        Wall(self.scene, col, row, self.tileset.tiles[42])
-                    elif self.finalMap[row][col] == 'a':
-                        Wall(self.scene, col, row, self.tileset.tiles[43])
-                    elif self.finalMap[row][col] == 'm':
-                        Wall(self.scene, col, row, self.tileset.tiles[57])
-                    elif self.finalMap[row][col] == 'o':
-                        Wall(self.scene, col, row, self.tileset.tiles[58])
-    #######################MAPA2##############################################
-                    elif self.finalMap[row][col] == 'R':
-                        Wall(self.scene, col, row, self.tileset.tiles[2])
-                    elif self.finalMap[row][col] == 'I':
-                        Wall(self.scene, col, row, self.tileset.tiles[15])
-                    elif self.finalMap[row][col] == 'O':
-                        Wall(self.scene, col, row, self.tileset.tiles[16])
-    #######################MAPA3##############################################
-                    elif self.finalMap[row][col] == 'M':
                         Wall(self.scene, col, row, self.tileset.tiles[1])
-                    elif self.finalMap[row][col] == 'U':
-                        Wall(self.scene, col, row, self.tileset.tiles[2])
-                    elif self.finalMap[row][col] == 'R':
+                    elif self.finalMap[row][col] == '3':
+                        Wall(self.scene, col, row, self.tileset.tiles[3 + randint(1, 7)])
+                    elif self.finalMap[row][col] == 'S':
                         Wall(self.scene, col, row, self.tileset.tiles[3])
 
                     elif self.finalMap[row][col] == '-':
@@ -146,9 +116,13 @@ class Map(Notifier):
                     elif self.finalMap[row][col] == '5':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=2))
                     elif self.finalMap[row][col] == '6':
-                        room.addNPC(NPCStop(self.scene, col, row, textLines=3))
+                        room.addNPC(NPCBase(self.scene, col, row, textLines=3))
+
+                    #Special NPC that gives you weapons
                     elif self.finalMap[row][col] == '7':
-                        room.addNPC(NPCBase(self.scene, col, row, textLines=4))
+                        room.addNPC(NPCStop(self.scene, col, row, textLines=4))
+
+                    #Special NPC to be rescued in levels
                     elif self.finalMap[row][col] == 'R':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=5))
                     elif self.finalMap[row][col] == 'T':

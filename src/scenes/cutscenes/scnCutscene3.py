@@ -8,12 +8,17 @@ from src.scenes.resourceManager import ResourceManager
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
 
+from src.weapons.weapons import Gun, Sword
 
 class Cutscene3(Level):
 
     def __init__(self, director):
         #Initialize superclass
         super(Cutscene3,self).__init__(director)
+
+        #Player starts with the sword and the gun
+        self.player.give_weapon(Sword)
+        self.player.give_weapon(Gun)
 
     def load_data(self):
 
@@ -43,10 +48,10 @@ class Cutscene3(Level):
         self.tacoProfile = ResourceManager.LoadSprite("./sprites/NPC/profileBoxTruck.png")
 
         #MAP BACKGROUNDS
-        self.backgrounds = [ResourceManager.LoadSprite("./sprites/background1.png")]
+        self.backgrounds = [ResourceManager.LoadSprite("./sprites/background8.png")]
 
         #MAP TILESET
-        self.tileset = Tileset("./sprites/Ruinas.png", (TILESIZE, TILESIZE), 0, 0)
+        self.tileset = Tileset("./sprites/tilesetCitadel.png", (TILESIZE, TILESIZE), 0, 0)
 
         #Dialogue file
         self.dialogues_src = "./resources/text/dialogues3.txt"

@@ -8,6 +8,7 @@ from src.scenes.resourceManager import ResourceManager
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
 
+from src.weapons.weapons import Sword
 
 class Level1(Level):
 
@@ -21,6 +22,9 @@ class Level1(Level):
         #Exit condition: player must interact with an amount of npcs to exit the level
         self.talkedCount = 0
         self.canExit = False
+
+        #Player starts with the sword
+        self.player.give_weapon(Sword)
 
     def load_data(self):
 

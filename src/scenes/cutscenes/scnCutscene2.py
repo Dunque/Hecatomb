@@ -8,12 +8,17 @@ from src.scenes.resourceManager import ResourceManager
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
 
+from src.weapons.weapons import Gun, Sword
 
 class Cutscene2(Level):
 
     def __init__(self, director):
         #Initialize superclass
         super(Cutscene2,self).__init__(director)
+
+        #Player starts with the sword and the gun
+        self.player.give_weapon(Sword)
+        self.player.give_weapon(Gun)
 
         #Fog
         self.fog = pg.Surface((WIDTH, HEIGHT))
@@ -49,7 +54,7 @@ class Cutscene2(Level):
         self.backgrounds = [ResourceManager.LoadSprite("./sprites/background5.png")]
 
         #MAP TILESET
-        self.tileset = Tileset("./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0)
+        self.tileset = Tileset("./sprites/tilesetForest.png", (TILESIZE, TILESIZE), 0, 0)
 
         #Dialogue file
         self.dialogues_src = "./resources/text/dialogues2.txt"

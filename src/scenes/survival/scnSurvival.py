@@ -1,4 +1,5 @@
 import random
+from random import choice
 import pygame as pg
 from src.hud.hud import Hud
 from src.map.randmap import RandMap
@@ -10,12 +11,18 @@ from src.scenes.survival.scnSurvivalEnd import SurvivalEnd
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
 
+from src.weapons.weapons import Shotgun, Gun, Sword
 
 class Survival(Level):
 
     def __init__(self, director):
         #Initialize superclass
         super(Survival, self).__init__(director)
+
+        #Player starts with all weapons
+        self.player.give_weapon(Sword)
+        self.player.give_weapon(Gun)
+        self.player.give_weapon(Shotgun)
 
     def load_data(self):
         
@@ -79,7 +86,11 @@ class Survival(Level):
                             ResourceManager.LoadSprite("./sprites/background10.png")]
 
         #MAP TILESET
-        self.tileset = Tileset("./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0)
+        self.tilesets = [Tileset("./sprites/tilesetAshlands.png", (TILESIZE, TILESIZE), 0, 0),
+                         Tileset("./sprites/tilesetForest.png", (TILESIZE, TILESIZE), 0, 0),
+                         Tileset("./sprites/tilesetCitadel.png", (TILESIZE, TILESIZE), 0, 0)]
+                         
+        self.tileset = choice(self.tilesets)
 
         #Dialogue file
         self.dialogues_src = "./resources/text/dialogues1.txt"

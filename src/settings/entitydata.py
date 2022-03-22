@@ -13,7 +13,7 @@ class CharacterStats:
         #Stablishing invencibility frames in order to not be able
         #to be damaged several times in the span of miliseconds
         self.vulnerable = True
-        self.iframes = 0
+        self.iframes = 10
         self.currentIframe = 0
 
     def takeDamage(self, dmg):

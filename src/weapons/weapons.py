@@ -115,7 +115,7 @@ class Sword(Weapon, pg.sprite.Sprite):
 		self.image = self.scene.playerSwordImg
 		self.rect = self.image.get_rect()
 
-		self.damage = 50
+		self.damage = 30
 
 		self.rot_attack = 0
 		self.reached = 0
@@ -240,7 +240,7 @@ class Gun(FireWeapon, pg.sprite.Sprite):
 
 		self.barrel_offset = vec(55, -10)
 		self.bullet_rate = 300
-		self.damage = 12
+		self.damage = 20
 		self.kickback = 200
 		self.spread = 5
 		self.crosshair = CrosshairGun(self.scene)
@@ -279,7 +279,7 @@ class Shotgun(FireWeapon, pg.sprite.Sprite):
 
 		self.barrel_offset = vec(55, -10)
 		self.bullet_rate = 1000
-		self.damage = 20
+		self.damage = 25
 		self.kickback = 1000
 		self.spread = 5
 		self.crosshair = CrosshairShotGun(self.scene)
