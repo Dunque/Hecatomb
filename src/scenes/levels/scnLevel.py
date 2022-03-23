@@ -123,7 +123,7 @@ class Level(Scene):
         for hud in self.all_hud:
             self.screen.blit(hud.image, self.camera.apply(hud))
         self.hud.drawDialogue()
-        self.drawDineros()
+        self.hud.drawDineros()
         self.hud.draw_health(screen)
 
 

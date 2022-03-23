@@ -112,7 +112,7 @@ class Level1(Level):
         #Hud
         for hud in self.all_hud:
             self.screen.blit(hud.image, self.camera.apply(hud))
-        self.drawDialogue()
+        self.hud.drawDialogue()
         self.hud.draw_health(screen)
 
 
