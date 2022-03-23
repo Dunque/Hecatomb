@@ -1,12 +1,15 @@
 import time
 
 import pygame as pg
+from src.scenes.music import *
+from src.scenes.recordManager import updateRecords
+from src.scenes.resourceManager import ResourceManager
 from src.scenes.scene import Scene
 from src.scenes.scnLosing import LosingMenu
 from src.scenes.scnPause import PauseMenu
+from src.scenes.score import getScore
 from src.settings.settings import *
-from src.scenes.music import *
-from src.scenes.resourceManager import ResourceManager
+
 
 class Level(Scene):
 
@@ -110,9 +113,24 @@ class Level(Scene):
         self.all_hud.update()
         self.camera.update(self.player)
 
-        # Player died
+        # If player died
         if not self.player_SG.has(self.player):
-            self.losingScene()
+
+            from src.scenes.survival.scnSurvival import \
+                Survival  # TODO: para evitar bucle en imports
+
+            # Si estamos en Survival
+            if type(self) == Survival:
+                # Actualizamos mejores puntuaciones
+                currentScore = getScore()
+                updateRecords(currentScore)
+                # Go to SurvivalEnd
+                self.nextScene()
+
+            # Si estamos en Level1, Level2, Level3
+            else:
+                self.losingScene()
+
 
         for menu in self.menus:
             menu.update()

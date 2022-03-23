@@ -1,5 +1,5 @@
 import pygame as pg
-import src.scenes.recordManager as recordManager
+from src.scenes.recordManager import getRecord
 from src.scenes.guiElems import *
 from src.scenes.guiUtils import UtilsGUI
 from src.settings.settings import *
@@ -32,14 +32,14 @@ class TextBestScores(CenteredTextGUI):
 
 class Board1(ButtonGUI):
     def __init__(self, screen):
-        scoreText = recordManager.getRecord(1)
+        scoreText = getRecord(1)
         # pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0 + 50, 0, RECORDS_MENU_LAYOUT, 3)
         pos = (1000, 350)
         ButtonGUI.__init__(self, screen, 'resources/images/button_yellow.png', (600, 160), pos, scoreText)
 
     def changeButtonText(self):
         # Se vuelve a cargar el texto
-        scoreText = recordManager.getRecord(1)
+        scoreText = getRecord(1)
         font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(scoreText, True, BROWN)
         pos = self.rect.center
@@ -51,14 +51,14 @@ class Board1(ButtonGUI):
 
 class Board2(ButtonGUI):
     def __init__(self, screen):
-        scoreText = recordManager.getRecord(2)
+        scoreText = getRecord(2)
         # pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0 + 50, 0, RECORDS_MENU_LAYOUT, 4)
         pos = (1000, 550)
         ButtonGUI.__init__(self, screen, 'resources/images/button_blue.png', (600, 160), pos, scoreText)
 
     def changeButtonText(self):
         # Se vuelve a cargar el texto
-        scoreText = recordManager.getRecord(2)
+        scoreText = getRecord(2)
         font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(scoreText, True, BROWN)
         pos = self.rect.center
@@ -70,14 +70,14 @@ class Board2(ButtonGUI):
 
 class Board3(ButtonGUI):
     def __init__(self, screen):
-        scoreText = recordManager.getRecord(3)
+        scoreText = getRecord(3)
         # pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0 + 50, 0, RECORDS_MENU_LAYOUT, 5)
         pos = (1000, 750)
         ButtonGUI.__init__(self, screen, 'resources/images/button_red.png', (600, 160), pos, scoreText)
 
     def changeButtonText(self):
         # Se vuelve a cargar el texto
-        scoreText = recordManager.getRecord(3)
+        scoreText = getRecord(3)
         font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(scoreText, True, BROWN)
         pos = self.rect.center
