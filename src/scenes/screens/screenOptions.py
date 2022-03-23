@@ -124,6 +124,15 @@ class ButtonBackOptions(ButtonGUI):
 # Pantalla
 
 class OptionsScreenGUI(ScreenGUI):
+    _instance = None
+
+    def __new__(cls, menu):
+        # Si la instancia no existe, creamos la instancia
+        if cls._instance is None:
+            cls._instance = super(OptionsScreenGUI, cls).__new__(cls)
+        # Devolvemos la instancia
+        return cls._instance
+
     def __init__(self, menu):
         ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
         # Creamos los elementos GUI
