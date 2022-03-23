@@ -17,7 +17,7 @@ from src.settings.settings import *
 
 class TextHecatomb(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 160)
+        font = pg.font.Font(TITLE_FONT, 160)
         pos = (WIDTH/2, HEIGHT*3/10)
         CenteredTextGUI.__init__(self, screen, font, MAROON, 'HECATOMB', pos)
 

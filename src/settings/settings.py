@@ -52,7 +52,8 @@ FLOOR_LAYER = 0
 # GUI settings
 
 # Font settings
-HANSHAND_FONT = 'resources/fonts/hanshand.ttf'
+TITLE_FONT = 'resources/fonts/hanshand.ttf'
+GUI_FONT = 'resources/fonts/hanshand.ttf'
 
 # Button settings
 BUTTON_IMAGE = 'resources/images/gold_button.png'

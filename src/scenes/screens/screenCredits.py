@@ -9,7 +9,7 @@ from src.settings.settings import *
 
 class TextCredits(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 112)
+        font = pg.font.Font(GUI_FONT, 112)
         pos = (WIDTH/2, HEIGHT/5)
         CenteredTextGUI.__init__(self, screen, font, MAROON, 'Créditos', pos)
 
@@ -18,7 +18,7 @@ class TextCredits(CenteredTextGUI):
 
 class TextAuthor(CenteredTextGUI):
     def __init__(self, screen, n, name):
-        font = pg.font.Font(HANSHAND_FONT, 50)
+        font = pg.font.Font(GUI_FONT, 50)
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, 0, CREDITS_MENU_LAYOUT, n)
         CenteredTextGUI.__init__(self, screen, font, WHITE, name, pos)
 

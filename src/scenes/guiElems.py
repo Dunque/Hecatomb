@@ -50,7 +50,7 @@ class ButtonGUI(ElementGUI):
         self.setCenterPosition(position)
 
         # Se carga el texto del botón
-        font = pg.font.Font(HANSHAND_FONT, 42)
+        font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(text, True, BROWN)
         self.textRect = self.text.get_rect(center=position)
 

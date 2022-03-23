@@ -10,7 +10,7 @@ from src.settings.settings import *
 
 class TextRecords(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 112)
+        font = pg.font.Font(GUI_FONT, 112)
         pos = (WIDTH/2, HEIGHT/5)
         CenteredTextGUI.__init__(self, screen, font, MAROON, 'Récords', pos)
 
@@ -19,7 +19,7 @@ class TextRecords(CenteredTextGUI):
 
 class TextBestScores(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 50)
+        font = pg.font.Font(GUI_FONT, 50)
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, 0, RECORDS_MENU_LAYOUT, 0)
         CenteredTextGUI.__init__(self, screen, font, WHITE, 'Mejores puntuaciones:', pos)
 
@@ -40,7 +40,7 @@ class Board1(ButtonGUI):
     def changeButtonText(self):
         # Se vuelve a cargar el texto
         scoreText = recordManager.getRecord(1)
-        font = pg.font.Font(HANSHAND_FONT, 42)
+        font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(scoreText, True, BROWN)
         pos = self.rect.center
         self.textRect = self.text.get_rect(center=pos)
@@ -59,7 +59,7 @@ class Board2(ButtonGUI):
     def changeButtonText(self):
         # Se vuelve a cargar el texto
         scoreText = recordManager.getRecord(2)
-        font = pg.font.Font(HANSHAND_FONT, 42)
+        font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(scoreText, True, BROWN)
         pos = self.rect.center
         self.textRect = self.text.get_rect(center=pos)
@@ -78,7 +78,7 @@ class Board3(ButtonGUI):
     def changeButtonText(self):
         # Se vuelve a cargar el texto
         scoreText = recordManager.getRecord(3)
-        font = pg.font.Font(HANSHAND_FONT, 42)
+        font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(scoreText, True, BROWN)
         pos = self.rect.center
         self.textRect = self.text.get_rect(center=pos)

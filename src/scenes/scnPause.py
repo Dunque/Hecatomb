@@ -12,7 +12,7 @@ from src.settings.settings import *
 
 class TextPause(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 112)
+        font = pg.font.Font(GUI_FONT, 112)
         pos = (WIDTH/2, HEIGHT/5)
         CenteredTextGUI.__init__(self, screen, font, MAROON, 'Pausa', pos)
 

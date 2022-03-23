@@ -12,7 +12,7 @@ from src.settings.settings import *
 
 class TextOptions(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 112)
+        font = pg.font.Font(GUI_FONT, 112)
         pos = (WIDTH/2, HEIGHT/5)
         CenteredTextGUI.__init__(self, screen, font, MAROON, 'Opciones', pos)
 
@@ -21,7 +21,7 @@ class TextOptions(CenteredTextGUI):
 
 class TextMusicVolume(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 42)
+        font = pg.font.Font(GUI_FONT, 42)
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 4)
         CenteredTextGUI.__init__(self, screen, font, WHITE, 'Volumen música', pos)
 
@@ -30,7 +30,7 @@ class TextMusicVolume(CenteredTextGUI):
 
 class TextSoundVolume(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 42)
+        font = pg.font.Font(GUI_FONT, 42)
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 5)
         CenteredTextGUI.__init__(self, screen, font, WHITE, 'Volumen sonidos', pos)
 
@@ -101,7 +101,7 @@ class ButtonDifficulty(ButtonGUI):
     def changeButtonText(self):
         # Se vuelve a cargar el texto del botón
         text = self.getText()
-        font = pg.font.Font(HANSHAND_FONT, 42)
+        font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(text, True, BROWN)
         pos = self.rect.center
         self.textRect = self.text.get_rect(center=pos)
