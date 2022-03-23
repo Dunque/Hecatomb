@@ -61,11 +61,11 @@ class NPCBase(Character):
 		else:
 			self.interaccion.deactivate()
 			if self.talking:
-				self.scene.completly_finished = False
+				self.scene.hud.completly_finished = False
 			self.talking = False
 			self.currentAnim = self.animList[0]
 
-		if not self.talking or self.scene.dialogue_continuation:
+		if not self.talking or self.scene.hud.dialogue_continuation:
 			self.currentAnim = self.animList[0]
 		else:
 			self.currentAnim = self.animList[1]
@@ -85,11 +85,11 @@ class NPCBase(Character):
 			self.right = True
 
 		self.interaccion.deactivate()
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			self.dialogo.drawText()
 
 	def talkFast(self):
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			self.dialogo.drawText()
 		else:
 			self.finish_dialogue()
@@ -99,7 +99,7 @@ class NPCBase(Character):
 
 	def finish_dialogue(self):
 		self.dialogo.end()
-		self.scene.completly_finished = True
+		self.scene.hud.completly_finished = True
 
 
 class NPCStop(NPCBase):
@@ -108,7 +108,7 @@ class NPCStop(NPCBase):
 
 	def finish_dialogue(self):
 		self.dialogo.end()
-		self.scene.completly_finished = True
+		self.scene.hud.completly_finished = True
 		self.scene.player.give_weapon(Sword)
 
 class TacoTruck(pg.sprite.Sprite):
@@ -180,12 +180,12 @@ class TacoTruck(pg.sprite.Sprite):
 		else:
 			self.interaccion.deactivate()
 			if self.talking:
-				self.scene.completly_finished = False
+				self.scene.hud.completly_finished = False
 			self.talking = False
 			self.currentAnim = self.animList[0]
 			self.to_finish = False
 
-		if not self.talking or self.scene.dialogue_continuation:
+		if not self.talking or self.scene.hud.dialogue_continuation:
 			self.currentAnim = self.animList[0]
 		else:
 			self.currentAnim = self.animList[1]
@@ -217,18 +217,18 @@ class TacoTruck(pg.sprite.Sprite):
 		self.talking = True
 		self.scene.has_menu = True
 		self.interaccion.deactivate()
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			self.dialogo.drawText()
 
 	def talkFast(self):
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			self.dialogo.drawText()
 		else:
 			if not self.to_finish:
 				self.options.activate()
 			else:
 				self.dialogo.end()
-				self.scene.completly_finished = True
+				self.scene.hud.completly_finished = True
 				self.dialogo.text = self.dialogue1
 				self.scene.has_menu = False
 

@@ -59,7 +59,7 @@ class Chest(pg.sprite.Sprite):
 			else:
 				self.interaccion.deactivate()
 				if self.talking:
-					self.scene.completly_finished = False
+					self.scene.hud.completly_finished = False
 				self.talking = False
 				if self.opened:
 					self.interacted = True
@@ -70,20 +70,20 @@ class Chest(pg.sprite.Sprite):
 		self.interaccion.deactivate()
 		self.chestAnim.current_frame = 1
 		self.image = self.chestAnim.get_frame()
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			self.dialogo.drawText()
 
 	def talkFast(self):
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			if not self.interacted:
 				self.dialogo.drawText()
 		else:
 			self.dialogo.end()
-			self.scene.completly_finished = True
+			self.scene.hud.completly_finished = True
 			if not self.dineros_given:
 				self.scene.player.mas_dineros(round(self.value / 107.75, 2))
 				self.dineros_given = True
-				self.scene.drawDineros()
+				self.scene.hud.drawDineros()
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()
