@@ -71,9 +71,12 @@ MAIN_MENU_LAYOUT = (2, 3)
 # Other menus layout
 OTHER_MENU_Y0 = HEIGHT*38/100
 
-RECORDS_MENU_LAYOUT = (1, 1)
+RECORDS_MENU_LAYOUT = (3, 3)
 OPTIONS_MENU_LAYOUT = (3, 4)
 CREDITS_MENU_LAYOUT = (1, 6)
 
 PAUSE_MENU_LAYOUT = (1, 4)
 LOSING_MENU_LAYOUT = (1, 2)
+
+# ---------------------------------------------------------
+RECORDS_FILE = 'best_scores.txt'
