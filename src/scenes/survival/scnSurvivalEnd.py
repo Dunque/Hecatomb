@@ -30,7 +30,7 @@ class SurvivalEnd(Scene):
         screen.fill(GREEN)
 
         # Dibujamos nombre de escena (para debug)
-        font = pg.font.Font(HANSHAND_FONT, 192)
+        font = pg.font.Font(GUI_FONT, 192)
         text = font.render('SurvivalEnd', True, BLACK)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)

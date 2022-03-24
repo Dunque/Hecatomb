@@ -52,7 +52,8 @@ FLOOR_LAYER = 0
 # GUI settings
 
 # Font settings
-HANSHAND_FONT = 'resources/fonts/hanshand.ttf'
+TITLE_FONT = 'resources/fonts/hanshand.ttf'
+GUI_FONT = 'resources/fonts/hanshand.ttf'
 
 # Button settings
 BUTTON_IMAGE = 'resources/images/gold_button.png'
@@ -71,9 +72,10 @@ MAIN_MENU_LAYOUT = (2, 3)
 # Other menus layout
 OTHER_MENU_Y0 = HEIGHT*38/100
 
-RECORDS_MENU_LAYOUT = (1, 1)
+RECORDS_MENU_LAYOUT = (3, 3)
 OPTIONS_MENU_LAYOUT = (3, 4)
 CREDITS_MENU_LAYOUT = (1, 6)
 
 PAUSE_MENU_LAYOUT = (1, 4)
 LOSING_MENU_LAYOUT = (1, 2)
+
