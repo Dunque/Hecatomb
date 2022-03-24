@@ -112,6 +112,12 @@ class PauseMenu(Scene):
         self.screenList[self.currentScreen].events(eventList)
 
     def draw(self, screen):
+        # Para cada elemento de la pantalla actual
+        for elem in self.screenList[self.currentScreen].elementsGUI:
+            # Si tiene método refresh()
+            if hasattr(elem, 'refresh') and callable(elem.refresh):
+                elem.refresh()
+
         self.screenList[self.currentScreen].draw(screen)
 
 

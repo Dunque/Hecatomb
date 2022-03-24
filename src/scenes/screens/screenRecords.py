@@ -30,61 +30,34 @@ class TextBestScores(CenteredTextGUI):
 # ---------------------------------------------------------
 # Botones
 
-class Board1(ButtonGUI):
-    def __init__(self, screen):
-        scoreText = getRecord(1)
-        # pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0 + 50, 0, RECORDS_MENU_LAYOUT, 3)
-        pos = (1000, 350)
-        ButtonGUI.__init__(self, screen, 'resources/images/button_yellow.png', (600, 160), pos, scoreText)
+class BoardWithScore(ButtonGUI):
+    def __init__(self, screen, n):
+        self.n = n
+        image = self.getBoardImage()
+        pos = (1000, 350 + (n-1)*200)
+        scoreText = getRecord(self.n)
+        ButtonGUI.__init__(self, screen, image, (600, 160), pos, scoreText)
+    
+    def getBoardImage(self):
+        if self.n == 1:
+            return 'resources/images/button_yellow.png'
+        elif self.n == 2:
+            return 'resources/images/button_blue.png'
+        elif self.n == 3:
+            return 'resources/images/button_red.png'
 
-    def changeButtonText(self):
+    def changeText(self):
         # Se vuelve a cargar el texto
-        scoreText = getRecord(1)
+        scoreText = getRecord(self.n)
         font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(scoreText, True, BROWN)
         pos = self.rect.center
         self.textRect = self.text.get_rect(center=pos)
 
-    def action(self):
-        # self.changeButtonText()    # TODO: sacar de aquí esto
-        pass
-
-class Board2(ButtonGUI):
-    def __init__(self, screen):
-        scoreText = getRecord(2)
-        # pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0 + 50, 0, RECORDS_MENU_LAYOUT, 4)
-        pos = (1000, 550)
-        ButtonGUI.__init__(self, screen, 'resources/images/button_blue.png', (600, 160), pos, scoreText)
-
-    def changeButtonText(self):
-        # Se vuelve a cargar el texto
-        scoreText = getRecord(2)
-        font = pg.font.Font(GUI_FONT, 42)
-        self.text = font.render(scoreText, True, BROWN)
-        pos = self.rect.center
-        self.textRect = self.text.get_rect(center=pos)
+    def refresh(self):
+        self.changeText()
 
     def action(self):
-        # self.changeButtonText()    # TODO: sacar de aquí esto
-        pass
-
-class Board3(ButtonGUI):
-    def __init__(self, screen):
-        scoreText = getRecord(3)
-        # pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0 + 50, 0, RECORDS_MENU_LAYOUT, 5)
-        pos = (1000, 750)
-        ButtonGUI.__init__(self, screen, 'resources/images/button_red.png', (600, 160), pos, scoreText)
-
-    def changeButtonText(self):
-        # Se vuelve a cargar el texto
-        scoreText = getRecord(3)
-        font = pg.font.Font(GUI_FONT, 42)
-        self.text = font.render(scoreText, True, BROWN)
-        pos = self.rect.center
-        self.textRect = self.text.get_rect(center=pos)
-
-    def action(self):
-        # self.changeButtonText()    # TODO: sacar de aquí esto
         pass
 
 
@@ -94,7 +67,6 @@ class ButtonBackRecords(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
 
     def action(self):
-        # recordManager.updateRecords(10)   # TODO: borrar, debug
         self.screen.menu.showInitialScreen()
 
 # ---------------------------------------------------------
@@ -106,9 +78,9 @@ class RecordsScreenGUI(ScreenGUI):
         # Creamos los elementos GUI
         textTitle = TextRecords(self)
         textBestScores = TextBestScores(self)
-        boardRecord1 = Board1(self)
-        boardRecord2 = Board2(self)
-        boardRecord3 = Board3(self)
+        boardRecord1 = BoardWithScore(self, 1)
+        boardRecord2 = BoardWithScore(self, 2)
+        boardRecord3 = BoardWithScore(self, 3)
         buttonBack = ButtonBackRecords(self)
         # Y los metemos en la lista
         self.elementsGUI.append(textTitle)

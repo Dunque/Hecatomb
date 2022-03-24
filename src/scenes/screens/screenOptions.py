@@ -23,7 +23,22 @@ class TextMusicVolume(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(GUI_FONT, 42)
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 4)
-        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Volumen música', pos)
+        text = self.getVolumeStr()
+        CenteredTextGUI.__init__(self, screen, font, WHITE, text, pos)
+
+    def getVolumeStr(self):
+        return 'Volumen música: ' + str(int(Music.getvolumemusic(self) * 100)) + ' %'
+    
+    def changeText(self):
+        # Se vuelve a cargar el texto
+        text = self.getVolumeStr()
+        font = pg.font.Font(GUI_FONT, 42)
+        self.text = font.render(text, True, WHITE)
+        pos = self.rect.center
+        self.textRect = self.text.get_rect(center=pos)
+    
+    def refresh(self):
+        self.changeText()
 
     def action(self):
         pass
@@ -32,7 +47,24 @@ class TextSoundVolume(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(GUI_FONT, 42)
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 5)
-        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Volumen sonidos', pos)
+        # text = self.getVolumeStr()
+        text = 'Volumen sonidos: XXX %' # TODO: no funciona geteffectsvolume()
+        CenteredTextGUI.__init__(self, screen, font, WHITE, text, pos)
+
+    def getVolumeStr(self):
+        return 'Volumen sonidos: ' + str(int(Music.geteffectsvolume(self) * 100)) + ' %'
+    
+    def changeText(self):
+        # Se vuelve a cargar el texto
+        # text = self.getVolumeStr()
+        text = 'Volumen sonidos: XXX %' # TODO: no funciona geteffectsvolume()
+        font = pg.font.Font(GUI_FONT, 42)
+        self.text = font.render(text, True, WHITE)
+        pos = self.rect.center
+        self.textRect = self.text.get_rect(center=pos)
+    
+    def refresh(self):
+        self.changeText()
 
     def action(self):
         pass
@@ -46,7 +78,7 @@ class ButtonMusicDown(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
 
     def action(self):
-        print(f"Music volume DOWN")
+        print(f"Music volume DOWN") # TODO: cambiar print por llamada a función de Music
 
 
 class ButtonMusicUp(ButtonGUI):
@@ -55,7 +87,7 @@ class ButtonMusicUp(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
 
     def action(self):
-        print(f"Music volume UP")
+        print(f"Music volume UP")   # TODO: cambiar print por llamada a función de Music
 
 
 class ButtonSoundDown(ButtonGUI):
@@ -64,7 +96,7 @@ class ButtonSoundDown(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
 
     def action(self):
-        print(f"Sound volume DOWN")
+        print(f"Sound volume DOWN") # TODO: cambiar print por llamada a función de Music
 
 
 class ButtonSoundUp(ButtonGUI):
@@ -73,7 +105,7 @@ class ButtonSoundUp(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
 
     def action(self):
-        print(f"Sound volume UP")
+        print(f"Sound volume UP")   # TODO: cambiar print por llamada a función de Music
 
 
 class ButtonDifficulty(ButtonGUI):
@@ -95,20 +127,20 @@ class ButtonDifficulty(ButtonGUI):
             sys.exit("Invalid difficulty value")
         return text
 
-    def changeDifficulty(self):
-        Diffic.difficulty = (Diffic.difficulty + 1) % 3
-
-    def changeButtonText(self):
+    def changeText(self):
         # Se vuelve a cargar el texto del botón
         text = self.getText()
         font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(text, True, BROWN)
         pos = self.rect.center
         self.textRect = self.text.get_rect(center=pos)
+    
+    def refresh(self):
+        self.changeText()
 
     def action(self):
-        self.changeDifficulty()
-        self.changeButtonText()
+        Diffic.changeDifficulty()
+        self.changeText()
 
 
 class ButtonBackOptions(ButtonGUI):
@@ -124,15 +156,6 @@ class ButtonBackOptions(ButtonGUI):
 # Pantalla
 
 class OptionsScreenGUI(ScreenGUI):
-    _instance = None
-
-    def __new__(cls, menu):
-        # Si la instancia no existe, creamos la instancia
-        if cls._instance is None:
-            cls._instance = super(OptionsScreenGUI, cls).__new__(cls)
-        # Devolvemos la instancia
-        return cls._instance
-
     def __init__(self, menu):
         ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
         # Creamos los elementos GUI
