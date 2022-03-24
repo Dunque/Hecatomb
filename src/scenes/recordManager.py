@@ -1,21 +1,25 @@
 from src.settings.settings import *
 
-# Módulo para relizar accesos a archivo con records
+
+# Módulo para realizar accesos a archivo con mejores puntuaciones
+
+RECORDS_FILE = 'topScores.txt'
+NUMBER_SCORES = 3
 
 
 def getRecord(n):
-    "Devuelve la n-ésima mejor puntuación, n = {1, 2, 3}"
+    "Devuelve la n-ésima mejor puntuación, en forma de string"
 
     with open(RECORDS_FILE, 'r') as f:
-        scores = f.readline().split(',')
+        scores = f.readline().strip().split(',')
     return scores[n-1]
 
 
 def updateRecords(score):
-    "Actualiza el archivo de records teniendo en cuenta el nuevo score"
+    "Actualiza el archivo con los records teniendo en cuenta el nuevo score"
 
     with open(RECORDS_FILE, 'r') as f:
-        scores = f.readline().split(',')
+        scores = f.readline().strip().split(',')
 
     scores = [int(x) for x in scores]
 
@@ -24,7 +28,7 @@ def updateRecords(score):
 
     scores.append(score)
     scores.sort(reverse=True)
-    scores = scores[:3]
+    scores = scores[:NUMBER_SCORES]
 
     scores = [str(x) for x in scores]
     

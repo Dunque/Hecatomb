@@ -79,5 +79,3 @@ CREDITS_MENU_LAYOUT = (1, 6)
 PAUSE_MENU_LAYOUT = (1, 4)
 LOSING_MENU_LAYOUT = (1, 2)
 
-# ---------------------------------------------------------
-RECORDS_FILE = 'best_scores.txt'

@@ -40,8 +40,11 @@ class RoomStatePlaying(RoomState):
         if self.room.enemies == []:
             self.room.scene.WIN_ROOM_SOUND.play()
             self.toState(RoomStateCleared(self.room, "CLEARED"))
-            # Add score for clearing room
-            addScoreClearedRoom()
+
+            # In Survival, add score for clearing room
+            from src.scenes.survival.scnSurvival import Survival    # TODO: para evitar circular import
+            if type(self.room.scene) == Survival:
+                addScoreClearedRoom()
         else:
             for enemy in self.room.enemies:
                 if not enemy.entityData.isAlive:
