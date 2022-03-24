@@ -42,8 +42,7 @@ class RoomStatePlaying(RoomState):
             self.toState(RoomStateCleared(self.room, "CLEARED"))
 
             # In Survival, add score for clearing room
-            from src.scenes.survival.scnSurvival import Survival    # TODO: para evitar circular import
-            if type(self.room.scene) == Survival:
+            if self.room.scene.isSurvival:
                 addScoreClearedRoom()
         else:
             for enemy in self.room.enemies:

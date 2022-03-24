@@ -8,11 +8,13 @@ NUMBER_SCORES = 3
 
 
 def getRecord(n):
-    "Devuelve la n-ésima mejor puntuación, en forma de string"
+    "Devuelve la n-ésima mejor puntuación"
 
     with open(RECORDS_FILE, 'r') as f:
         scores = f.readline().strip().split(',')
-    return scores[n-1]
+
+    score = int(scores[n-1].strip())
+    return score
 
 
 def updateRecords(score):
@@ -21,7 +23,7 @@ def updateRecords(score):
     with open(RECORDS_FILE, 'r') as f:
         scores = f.readline().strip().split(',')
 
-    scores = [int(x) for x in scores]
+    scores = [int(x.strip()) for x in scores]
 
     if score <= scores[-1]:
         return

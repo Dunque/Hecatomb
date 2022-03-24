@@ -35,7 +35,7 @@ class BoardWithScore(ButtonGUI):
         self.n = n
         image = self.getBoardImage()
         pos = (1000, 350 + (n-1)*200)
-        scoreText = getRecord(self.n)
+        scoreText = str(getRecord(self.n))
         ButtonGUI.__init__(self, screen, image, (600, 160), pos, scoreText)
     
     def getBoardImage(self):
@@ -48,7 +48,7 @@ class BoardWithScore(ButtonGUI):
 
     def changeText(self):
         # Se vuelve a cargar el texto
-        scoreText = getRecord(self.n)
+        scoreText = str(getRecord(self.n))
         font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(scoreText, True, BROWN)
         pos = self.rect.center

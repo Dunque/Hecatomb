@@ -21,6 +21,8 @@ class Survival(Level):
         #Initialize superclass
         super(Survival, self).__init__(director)
 
+        self.isSurvival = True
+
         #Player starts with all weapons
         self.player.give_weapon(Sword)
         self.player.give_weapon(Gun)

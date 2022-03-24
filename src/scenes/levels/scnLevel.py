@@ -17,6 +17,8 @@ class Level(Scene):
         #Initialize superclass
         Scene.__init__(self, director)
 
+        self.isSurvival = False
+
         #Initialize sprite groups
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.all_hud = pg.sprite.LayeredUpdates()
@@ -107,11 +109,8 @@ class Level(Scene):
         # If player died
         if not self.player_SG.has(self.player):
 
-            from src.scenes.survival.scnSurvival import \
-                Survival  # TODO: para evitar bucle en imports
-
             # Si estamos en Survival
-            if type(self) == Survival:
+            if self.isSurvival:
                 # Actualizamos mejores puntuaciones
                 currentScore = getScore()
                 updateRecords(currentScore)
