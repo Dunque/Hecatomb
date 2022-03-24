@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.scenes.score import addScoreClearedRoom
+from src.scenes.score import Score
 from src.settings.settings import *
 
 
@@ -43,7 +43,7 @@ class RoomStatePlaying(RoomState):
 
             # In Survival, add score for clearing room
             if self.room.scene.isSurvival:
-                addScoreClearedRoom()
+                Score.addScoreClearedRoom()
         else:
             for enemy in self.room.enemies:
                 if not enemy.entityData.isAlive:

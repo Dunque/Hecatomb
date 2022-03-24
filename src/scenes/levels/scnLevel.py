@@ -7,7 +7,7 @@ from src.scenes.resourceManager import ResourceManager
 from src.scenes.scene import Scene
 from src.scenes.scnLosing import LosingMenu
 from src.scenes.scnPause import PauseMenu
-from src.scenes.score import getScore
+from src.scenes.score import Score
 from src.settings.settings import *
 
 
@@ -112,7 +112,7 @@ class Level(Scene):
             # Si estamos en Survival
             if self.isSurvival:
                 # Actualizamos mejores puntuaciones
-                currentScore = getScore()
+                currentScore = Score.getScore()
                 updateRecords(currentScore)
                 # Go to SurvivalEnd
                 self.nextScene()

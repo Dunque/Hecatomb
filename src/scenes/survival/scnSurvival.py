@@ -8,7 +8,7 @@ from src.scenes.levels.scnLevel import Level
 from src.scenes.music import *
 from src.scenes.resourceManager import ResourceManager
 from src.scenes.scnPause import PauseMenu
-from src.scenes.score import resetScore
+from src.scenes.score import Score
 from src.scenes.survival.scnSurvivalEnd import SurvivalEnd
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
@@ -29,7 +29,7 @@ class Survival(Level):
         self.player.give_weapon(Shotgun)
 
         # Reset survival score
-        resetScore()
+        Score.resetScore()
 
     def load_data(self):
         

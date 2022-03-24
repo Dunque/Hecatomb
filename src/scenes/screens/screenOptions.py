@@ -1,6 +1,6 @@
 import sys
 import pygame as pg
-import src.scenes.difficulty as Diffic
+from src.scenes.difficulty import Difficulty
 from src.scenes.guiElems import *
 from src.scenes.guiUtils import UtilsGUI
 from src.scenes.music import Music
@@ -116,16 +116,7 @@ class ButtonDifficulty(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, text)
 
     def getText(self):
-        text = "Dificultad: "
-        if Diffic.difficulty == 0:
-            text += "Fácil"
-        elif Diffic.difficulty == 1:
-            text += "Normal"
-        elif Diffic.difficulty == 2:
-            text += "Difícil"
-        else:
-            sys.exit("Invalid difficulty value")
-        return text
+        return "Dificultad: " + Difficulty.getDifficultyName()
 
     def changeText(self):
         # Se vuelve a cargar el texto del botón
@@ -139,7 +130,7 @@ class ButtonDifficulty(ButtonGUI):
         self.changeText()
 
     def action(self):
-        Diffic.changeDifficulty()
+        Difficulty.changeDifficulty()
         self.changeText()
 
 
