@@ -2,7 +2,7 @@
 
 class Score:
     # Valor inicial de la puntuación
-    score = 0
+    score = -1
 
     # Puntuación por cada habitación superada
     CLEARED_ROOM_SCORE = 1
@@ -16,7 +16,7 @@ class Score:
     # Reiniciar puntuación
     @classmethod
     def resetScore(cls):
-        cls.score = 0
+        cls.score = -1
 
     # Sumar la puntuación por superar habitación
     @classmethod

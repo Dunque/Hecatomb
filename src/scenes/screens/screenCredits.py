@@ -19,7 +19,7 @@ class TextCredits(CenteredTextGUI):
 class TextAuthor(CenteredTextGUI):
     def __init__(self, screen, n, name):
         font = pg.font.Font(GUI_FONT, 50)
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, 0, CREDITS_MENU_LAYOUT, n)
+        pos = (WIDTH/2, OTHER_MENU_Y0 + n*80)
         CenteredTextGUI.__init__(self, screen, font, WHITE, name, pos)
 
     def action(self):

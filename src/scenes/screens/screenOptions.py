@@ -48,7 +48,7 @@ class TextSoundVolume(CenteredTextGUI):
         font = pg.font.Font(GUI_FONT, 42)
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 5)
         # text = self.getVolumeStr()
-        text = 'Volumen sonidos: XXX %' # TODO: no funciona geteffectsvolume()
+        text = 'Volumen sonidos: 100 %' # TODO: no funciona geteffectsvolume()
         CenteredTextGUI.__init__(self, screen, font, WHITE, text, pos)
 
     def getVolumeStr(self):
@@ -69,13 +69,14 @@ class TextSoundVolume(CenteredTextGUI):
     def action(self):
         pass
 
+
 # ---------------------------------------------------------
 # Botones
 
 class ButtonMusicDown(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 0)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
+        pos = (320 + 150, 342)
+        ButtonGUI.__init__(self, screen, SMALL_BUTTON_IMAGE, SMALL_BUTTON_SIZE, pos, '-')
 
     def action(self):
         print(f"Music volume DOWN") # TODO: cambiar print por llamada a función de Music
@@ -83,8 +84,8 @@ class ButtonMusicDown(ButtonGUI):
 
 class ButtonMusicUp(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 8)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
+        pos = (1280 - 150, 342)
+        ButtonGUI.__init__(self, screen, SMALL_BUTTON_IMAGE, SMALL_BUTTON_SIZE, pos, '+')
 
     def action(self):
         print(f"Music volume UP")   # TODO: cambiar print por llamada a función de Music
@@ -92,8 +93,8 @@ class ButtonMusicUp(ButtonGUI):
 
 class ButtonSoundDown(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 1)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
+        pos = (320 + 150, 477)
+        ButtonGUI.__init__(self, screen, SMALL_BUTTON_IMAGE, SMALL_BUTTON_SIZE, pos, '-')
 
     def action(self):
         print(f"Sound volume DOWN") # TODO: cambiar print por llamada a función de Music
@@ -101,8 +102,8 @@ class ButtonSoundDown(ButtonGUI):
 
 class ButtonSoundUp(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 9)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
+        pos = (1280 - 150, 477)
+        ButtonGUI.__init__(self, screen, SMALL_BUTTON_IMAGE, SMALL_BUTTON_SIZE, pos, '+')
 
     def action(self):
         print(f"Sound volume UP")   # TODO: cambiar print por llamada a función de Music

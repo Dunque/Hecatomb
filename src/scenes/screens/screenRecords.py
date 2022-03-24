@@ -20,8 +20,8 @@ class TextRecords(CenteredTextGUI):
 class TextBestScores(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(GUI_FONT, 50)
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, 0, RECORDS_MENU_LAYOUT, 0)
-        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Mejores puntuaciones:', pos)
+        pos = (WIDTH*3/4, 300)
+        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Mejores puntuaciones', pos)
 
     def action(self):
         pass
@@ -34,9 +34,9 @@ class BoardWithScore(ButtonGUI):
     def __init__(self, screen, n):
         self.n = n
         image = self.getBoardImage()
-        pos = (1000, 350 + (n-1)*200)
+        pos = (WIDTH*3/4, 420 + (n-1)*160)
         scoreText = str(RecordManager.getRecord(self.n))
-        ButtonGUI.__init__(self, screen, image, (600, 160), pos, scoreText)
+        ButtonGUI.__init__(self, screen, image, (500, 130), pos, scoreText)
     
     def getBoardImage(self):
         if self.n == 1:
@@ -63,7 +63,7 @@ class BoardWithScore(ButtonGUI):
 
 class ButtonBackRecords(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, RECORDS_MENU_LAYOUT, 1)
+        pos = UtilsGUI.calculatePosition(MAIN_MENU_Y0, BUTTON_SEP_Y, MAIN_MENU_LAYOUT, 2)
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
 
     def action(self):

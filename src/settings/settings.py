@@ -57,13 +57,14 @@ GUI_FONT = 'resources/fonts/hanshand.ttf'
 
 # Button settings
 BUTTON_IMAGE = 'resources/images/gold_button.png'
-
 BUTTON_WIDTH = 400
 BUTTON_HEIGHT = 90
 BUTTON_SIZE = (BUTTON_WIDTH, BUTTON_HEIGHT)
-
 BUTTON_SEP_X = 80
 BUTTON_SEP_Y = 45
+
+SMALL_BUTTON_IMAGE = 'resources/images/gold_button_small.png'
+SMALL_BUTTON_SIZE = (130, 90)
 
 # Main menu layout
 MAIN_MENU_Y0 = HEIGHT/2

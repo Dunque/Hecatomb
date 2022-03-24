@@ -123,4 +123,4 @@ class Survival(Level):
         m = random.randint(1,5)
         Music.changemusic(self,m)
         scene = SurvivalEnd(self.director)
-        self.director.changeScene(scene)
+        self.director.stackScene(scene)
