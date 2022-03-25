@@ -191,9 +191,6 @@ class Sword(Weapon, pg.sprite.Sprite):
 
 		self.pos = vec(x, y)
 
-		pg.draw.circle(self.scene.screen, BLUE, (x - cam_moved[0], y - cam_moved[1]), 5)
-		pg.display.update()
-
 		# ROTATION
 		rel_x, rel_y = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
 		if 90 < self.rot + 180 < 270:

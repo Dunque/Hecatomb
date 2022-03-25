@@ -1,5 +1,6 @@
 import random
 from random import choice
+
 import pygame as pg
 from src.hud.hud import Hud
 from src.map.randmap import RandMap
@@ -7,11 +8,12 @@ from src.scenes.levels.scnLevel import Level
 from src.scenes.music import *
 from src.scenes.resourceManager import ResourceManager
 from src.scenes.scnPause import PauseMenu
+from src.scenes.score import Score
 from src.scenes.survival.scnSurvivalEnd import SurvivalEnd
 from src.settings.settings import *
 from src.sprites.tileset import Tileset
+from src.weapons.weapons import Gun, Shotgun, Sword
 
-from src.weapons.weapons import Shotgun, Gun, Sword
 
 class Survival(Level):
 
@@ -19,10 +21,15 @@ class Survival(Level):
         #Initialize superclass
         super(Survival, self).__init__(director)
 
+        self.isSurvival = True
+
         #Player starts with all weapons
         self.player.give_weapon(Sword)
         self.player.give_weapon(Gun)
         self.player.give_weapon(Shotgun)
+
+        # Reset survival score
+        Score.resetScore()
 
     def load_data(self):
         
@@ -108,12 +115,12 @@ class Survival(Level):
     def pauseScene(self):
         pg.mouse.set_visible(True)
         scene = PauseMenu(self.director)
-        Music.volumemusic(self, 0.25)
+        Music.volumeMusic(self,0.25)
         self.director.stackScene(scene)
 
     def nextScene(self):
         pg.mouse.set_visible(True)
         m = random.randint(1,5)
-        Music.changemusic(self,m)
+        Music.changeMusic(self,m)
         scene = SurvivalEnd(self.director)
-        self.director.changeScene(scene)
+        self.director.stackScene(scene)

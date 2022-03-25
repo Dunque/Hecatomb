@@ -17,9 +17,7 @@ class Level3(Level):
         super(Level3,self).__init__(director)
 
         #Player starts with all weapons
-        self.player.give_weapon(Sword)
-        self.player.give_weapon(Gun)
-        self.player.give_weapon(Shotgun)
+        self.player.give_weapon(self.player.entityData.load_weapons())
 
     def load_data(self):
 
@@ -117,5 +115,5 @@ class Level3(Level):
     def nextScene(self):
         pg.mouse.set_visible(True)
         scene = Cutscene4(self.director)
-        Music.changemusic(self, 0)
+        Music.changeMusic(self, 0)
         self.director.changeScene(scene)

@@ -17,7 +17,7 @@ from src.settings.settings import *
 CLICK_SOUND = pg.mixer.Sound("./sounds/beep.wav")
 class TextHecatomb(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 160)
+        font = pg.font.Font(TITLE_FONT, 160)
         pos = (WIDTH/2, HEIGHT*3/10)
         CenteredTextGUI.__init__(self, screen, font, MAROON, 'HECATOMB', pos)
 
@@ -141,6 +141,12 @@ class Menu(Scene):
         self.screenList[self.currentScreen].events(eventList)
 
     def draw(self, screen):
+        # Para cada elemento de la pantalla actual
+        for elem in self.screenList[self.currentScreen].elementsGUI:
+            # Si tiene método refresh()
+            if hasattr(elem, 'refresh') and callable(elem.refresh):
+                elem.refresh()
+
         self.screenList[self.currentScreen].draw(screen)
 
 
@@ -152,12 +158,12 @@ class Menu(Scene):
 
     def playAdventure(self):
         scene = Cutscene1(self.director)
-        Music.changemusic(self, 0)
+        Music.changeMusic(self, 0)
         self.director.stackScene(scene)
 
     def playSurvival(self):
         m = random.randint(1, 5)
-        Music.changemusic(self,m)
+        Music.changeMusic(self,m)
         scene = Survival(self.director)
         self.director.stackScene(scene)
 

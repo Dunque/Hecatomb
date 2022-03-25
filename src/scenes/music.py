@@ -6,10 +6,8 @@ from pygame.locals import *
 
 class Music():
 
-
-
-    def changemusic(self, num): #Cambia la musica que esta soando actualmente
-        Music.volumemusic(self, 1)
+    def changeMusic(self, num): #Cambia la musica que esta soando actualmente
+        Music.volumeMusic(self, 1)
         if (num==0):
             pg.mixer.music.stop
             pg.mixer.music.load("./sounds/music/menu_music.mp3")
@@ -36,10 +34,10 @@ class Music():
             pg.mixer.music.play(-1)
 
 
-    def volumemusic(self, num): #Controlamos el volumen de toda la musica
+    def volumeMusic(self, num): #Controlamos el volumen de toda la musica
         pg.mixer.music.set_volume(num)
 
-    def effectsvolume(self,num,scene): #Controlamos el volumen de todos los efectos
+    def effectsVolume(self,num,scene): #Controlamos el volumen de todos los efectos
         scene.FIRE_BULLET_SOUND.set_volume(num)
         scene.DEATH_SOUND.set_volume(num)
         scene.CHANGE_SOUND.set_volume(num)
@@ -50,7 +48,6 @@ class Music():
         scene.DODGE_SOUND.set_volume(num)
         scene.WIN_ROOM_SOUND.set_volume(num)
         scene.HEAL_SOUND.set_volume(num)
-        scene.OPEN_SOUND.set_volume(num)
         scene.VOICE_SOUND_0.set_volume(num)
         scene.VOICE_SOUND_1.set_volume(num)
         scene.VOICE_SOUND_2.set_volume(num)
@@ -63,18 +60,16 @@ class Music():
         scene.VOICE_SOUND_9.set_volume(num)
         scene.VOICE_SOUND_10.set_volume(num)
 
-    def getvolumemusic(self): #Devuelve el volumen actual de la musica
-        volumen=pg.mixer.music.get_volume
-        return  float(volumen)
+    def getVolumeMusic(self): #Devuelve el volumen actual de la musica
+        return pg.mixer.music.get_volume()
 
+    def getEffectsVolume(self): #Devuelve el volumen actual de los efectos
+        return FIRE_BULLET_SOUND.get_volume()
 
-    def geteffectsvolume(self,scene): #Devuelve el volumen actual de los efectos
-        return scene.FIRE_BULLET_SOUND.get_volume
-
-    def playvoice(self,scene,num):
-        if (num==0):
+    def playVoice(self,scene,num):
+        if (num == 0):
             scene.VOICE_SOUND_0.play()
-        elif (num==1):
+        elif (num == 1):
             scene.VOICE_SOUND_1.play()
         elif (num == 2):
             scene.VOICE_SOUND_2.play()
@@ -94,4 +89,3 @@ class Music():
             scene.VOICE_SOUND_9.play()
         elif (num == 10):
             scene.VOICE_SOUND_10.play()
-

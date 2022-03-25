@@ -9,7 +9,7 @@ from src.settings.settings import *
 CLICK_SOUND = pg.mixer.Sound("./sounds/beep.wav")
 class TextCredits(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 112)
+        font = pg.font.Font(GUI_FONT, 112)
         pos = (WIDTH/2, HEIGHT/5)
         CenteredTextGUI.__init__(self, screen, font, MAROON, 'Créditos', pos)
 
@@ -18,8 +18,8 @@ class TextCredits(CenteredTextGUI):
 
 class TextAuthor(CenteredTextGUI):
     def __init__(self, screen, n, name):
-        font = pg.font.Font(HANSHAND_FONT, 50)
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, 0, CREDITS_MENU_LAYOUT, n)
+        font = pg.font.Font(GUI_FONT, 50)
+        pos = (WIDTH/2, OTHER_MENU_Y0 + n*80)
         CenteredTextGUI.__init__(self, screen, font, WHITE, name, pos)
 
     def action(self):
@@ -45,11 +45,11 @@ class CreditsScreenGUI(ScreenGUI):
         ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
         # Creamos los elementos GUI
         textTitle = TextCredits(self)
-        textAuthor0 = TextAuthor(self, 0, 'Roi Santos Ríos')
-        textAuthor1 = TextAuthor(self, 1, 'Antón Concheiro Fernández')
-        textAuthor2 = TextAuthor(self, 2, 'Iago Fernández Garrido')
+        textAuthor0 = TextAuthor(self, 0, 'Roi Santos Rios')
+        textAuthor1 = TextAuthor(self, 1, 'Anton Concheiro Fernandez')
+        textAuthor2 = TextAuthor(self, 2, 'Iago Fernandez Garrido')
         textAuthor3 = TextAuthor(self, 3, 'Jorge Rivadulla Brey')
-        textAuthor4 = TextAuthor(self, 4, 'Xes Garbajosa Fernández')
+        textAuthor4 = TextAuthor(self, 4, 'Xes Garbajosa Fernandez')
         buttonBack = ButtonBackCredits(self)
         # Y los metemos en la lista
         self.elementsGUI.append(textTitle)

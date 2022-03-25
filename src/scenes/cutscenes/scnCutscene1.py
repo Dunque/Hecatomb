@@ -17,6 +17,7 @@ class Cutscene1(Level):
 
         #Fog
         self.fog = pg.Surface((WIDTH, HEIGHT))
+        self.player.entityData.reset()
 
     def load_data(self):
 
@@ -103,9 +104,9 @@ class Cutscene1(Level):
         #Hud
         for hud in self.all_hud:
             self.screen.blit(hud.image, self.camera.apply(hud))
-        self.drawDialogue()
-        self.drawMenu()
-        self.drawDineros()
+        self.hud.drawDialogue()
+        self.hud.drawMenu()
+        self.hud.drawDineros()
         self.hud.draw_health(screen)
 
     def render_fog(self, sprite = None):
@@ -123,5 +124,5 @@ class Cutscene1(Level):
     def nextScene(self):
         pg.mouse.set_visible(True)
         scene = Level1(self.director)
-        Music.changemusic(self, 1)
+        Music.changeMusic(self, 1)
         self.director.changeScene(scene)

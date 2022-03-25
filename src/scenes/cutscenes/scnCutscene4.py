@@ -16,9 +16,7 @@ class Cutscene4(Level):
         super(Cutscene4,self).__init__(director)
 
         #Player starts with all weapons
-        self.player.give_weapon(Sword)
-        self.player.give_weapon(Gun)
-        self.player.give_weapon(Shotgun)
+        self.player.give_weapon(self.player.entityData.load_weapons())
 
     def load_data(self):
 

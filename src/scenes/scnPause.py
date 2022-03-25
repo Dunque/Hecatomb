@@ -9,10 +9,10 @@ from src.settings.settings import *
 
 # ---------------------------------------------------------
 # Elementos de la pantalla inicial
-CLICK_SOUND = pg.mixer.Sound("./sounds/beep.wav")
+
 class TextPause(CenteredTextGUI):
     def __init__(self, screen):
-        font = pg.font.Font(HANSHAND_FONT, 112)
+        font = pg.font.Font(GUI_FONT, 112)
         pos = (WIDTH/2, HEIGHT/5)
         CenteredTextGUI.__init__(self, screen, font, MAROON, 'Pausa', pos)
 
@@ -26,8 +26,7 @@ class ButtonContinue(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Continuar')
 
     def action(self):
-        CLICK_SOUND.play()
-        Music.volumemusic(self, 1)
+        Music.volumeMusic(self, 1)
         self.screen.menu.continueGame()
 
 
@@ -37,7 +36,6 @@ class ButtonOptions(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Opciones')
 
     def action(self):
-        CLICK_SOUND.play()
         self.screen.menu.showOptionsScreen()
 
 
@@ -47,19 +45,17 @@ class ButtonRestart(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Reiniciar')
 
     def action(self):
-        CLICK_SOUND.play()
-        Music.volumemusic(self, 1)
+        Music.volumeMusic(self,1)
         self.screen.menu.restartScene()
 
 
 class ButtonExitToMenu(ButtonGUI):
     def __init__(self, screen):
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, PAUSE_MENU_LAYOUT, 3)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menú')
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menu')
 
     def action(self):
-        CLICK_SOUND.play()
-        Music.changemusic(self, 0)
+        Music.changeMusic(self, 0)
         self.screen.menu.exitToMenu()
 
 
@@ -108,7 +104,7 @@ class PauseMenu(Scene):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:    # Tecla Esc, continuar
                     self.continueGame()
-                    Music.volumemusic(self, 1)
+                    Music.volumeMusic(self, 1)
             elif event.type == pg.QUIT:
                 self.director.exitProgram()
 
@@ -116,6 +112,12 @@ class PauseMenu(Scene):
         self.screenList[self.currentScreen].events(eventList)
 
     def draw(self, screen):
+        # Para cada elemento de la pantalla actual
+        for elem in self.screenList[self.currentScreen].elementsGUI:
+            # Si tiene método refresh()
+            if hasattr(elem, 'refresh') and callable(elem.refresh):
+                elem.refresh()
+
         self.screenList[self.currentScreen].draw(screen)
 
 

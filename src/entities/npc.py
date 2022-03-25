@@ -22,7 +22,7 @@ class NPCBase(Character):
 		self.currentAnim=self.animList[0]
 
 		super(NPCBase, self).__init__(scene, x, y, self.animList,
-									 (scene.all_sprites, scene.npc_SG), PlayerStats())
+									 (scene.all_sprites, scene.npc_SG), PlayerStats(scene))
 		self.acc = vec(0, 0)
 		self.rect.center = self.pos
 		self.state = EnemyGroundedState(self, "GROUNDED")
@@ -52,7 +52,7 @@ class NPCBase(Character):
 				self.interaccion.activate()
 				if player.interact:
 					m = random.randint(0, 10)
-					Music.playvoice(self, self.scene, m)
+					Music.playVoice(self, self.scene, m)
 					self.talk()
 			elif player.interact:
 					self.talkFast()
@@ -61,11 +61,11 @@ class NPCBase(Character):
 		else:
 			self.interaccion.deactivate()
 			if self.talking:
-				self.scene.completly_finished = False
+				self.scene.hud.completly_finished = False
 			self.talking = False
 			self.currentAnim = self.animList[0]
 
-		if not self.talking or self.scene.dialogue_continuation:
+		if not self.talking or self.scene.hud.dialogue_continuation:
 			self.currentAnim = self.animList[0]
 		else:
 			self.currentAnim = self.animList[1]
@@ -85,11 +85,11 @@ class NPCBase(Character):
 			self.right = True
 
 		self.interaccion.deactivate()
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			self.dialogo.drawText()
 
 	def talkFast(self):
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			self.dialogo.drawText()
 		else:
 			self.finish_dialogue()
@@ -99,7 +99,7 @@ class NPCBase(Character):
 
 	def finish_dialogue(self):
 		self.dialogo.end()
-		self.scene.completly_finished = True
+		self.scene.hud.completly_finished = True
 
 
 class NPCStop(NPCBase):
@@ -108,11 +108,12 @@ class NPCStop(NPCBase):
 
 	def finish_dialogue(self):
 		self.dialogo.end()
-		self.scene.completly_finished = True
+		self.scene.hud.completly_finished = True
 		self.scene.player.give_weapon(Sword)
 
+
 class TacoTruck(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, textLines = 10, options = 14, salir = 12, no_dineros=13):
+	def __init__(self, scene, x, y, textLines = 10, options = 15, salir = 13, no_dineros=14):
 		self.scene = scene
 		self.groups = self.scene.all_sprites, self.scene.npc_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
@@ -166,7 +167,7 @@ class TacoTruck(pg.sprite.Sprite):
 				if self.scene.player.interact:
 					self.talk()
 					m = random.randint(0, 10)
-					Music.playvoice(self, self.scene, m)
+					Music.playVoice(self, self.scene, m)
 			elif self.scene.player.interact:
 				self.talkFast()
 			else:
@@ -180,12 +181,12 @@ class TacoTruck(pg.sprite.Sprite):
 		else:
 			self.interaccion.deactivate()
 			if self.talking:
-				self.scene.completly_finished = False
+				self.scene.hud.completly_finished = False
 			self.talking = False
 			self.currentAnim = self.animList[0]
 			self.to_finish = False
 
-		if not self.talking or self.scene.dialogue_continuation:
+		if not self.talking or self.scene.hud.dialogue_continuation:
 			self.currentAnim = self.animList[0]
 		else:
 			self.currentAnim = self.animList[1]
@@ -194,10 +195,11 @@ class TacoTruck(pg.sprite.Sprite):
 			if self.options.opcion < 4:
 				coste_producto = self.precios[self.options.opcion]
 				dialogue_tmp = self.dialogue2[0]
-				if self.scene.player.los_dineros >= coste_producto:
-					self.scene.player.menos_dineros(coste_producto)
+				if self.scene.player.entityData.los_dineros >= coste_producto:
+					self.scene.player.entityData.menos_dineros(coste_producto)
 					self.dialogue2[0] += self.dialogue_options[self.options.opcion][:-5].rstrip() + '.'
 					self.dialogo.text = self.dialogue2
+					self.scene.player.entityData.heal(coste_producto * 5)
 				else:
 					self.dialogo.text = self.dialogue_no_dineros
 			else:
@@ -217,18 +219,18 @@ class TacoTruck(pg.sprite.Sprite):
 		self.talking = True
 		self.scene.has_menu = True
 		self.interaccion.deactivate()
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			self.dialogo.drawText()
 
 	def talkFast(self):
-		if not self.scene.completly_finished:
+		if not self.scene.hud.completly_finished:
 			self.dialogo.drawText()
 		else:
 			if not self.to_finish:
 				self.options.activate()
 			else:
 				self.dialogo.end()
-				self.scene.completly_finished = True
+				self.scene.hud.completly_finished = True
 				self.dialogo.text = self.dialogue1
 				self.scene.has_menu = False
 

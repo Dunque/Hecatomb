@@ -1,5 +1,17 @@
 from src.settings.settings import *
 
+
+class SingletonMeta(type):
+
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            instance = super().__call__(*args, **kwargs)
+            cls._instances[cls] = instance
+        return cls._instances[cls]
+
+
 class CharacterStats:
     def __init__(self):
         #Life related stats
@@ -45,9 +57,10 @@ class CharacterStats:
             self.currentIframe = 0
 
 
-class PlayerStats(CharacterStats):
-    def __init__(self):
+class PlayerStats(CharacterStats, metaclass=SingletonMeta):
+    def __init__(self, scene):
         super(PlayerStats, self).__init__()
+        self.scene = scene
         #Health
         self.maxHP = 100
         self.actualHP = self.maxHP
@@ -63,6 +76,30 @@ class PlayerStats(CharacterStats):
         self.currentDodgeTimer = 0
 
         self.iframes = 20
+
+        self.los_dineros = 0
+        self.weapons = []
+
+    def mas_dineros(self, dineros):
+        self.scene.hud.time_dineros = None
+        self.scene.hud.draw_dineros = True
+        self.los_dineros += dineros
+        self.los_dineros = round(self.los_dineros, 2)
+
+    def menos_dineros(self, dineros):
+        self.los_dineros -= dineros
+        self.los_dineros = round(self.los_dineros, 2)
+
+    def add_weapon(self, weapon):
+        if weapon not in self.weapons:
+            self.weapons.append(weapon)
+
+    def load_weapons(self):
+        return self.weapons
+
+    def reset(self):
+        self.weapons = []
+        self.los_dineros = 0
 
 class HeraldStats(CharacterStats):
     def __init__(self):

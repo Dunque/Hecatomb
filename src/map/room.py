@@ -1,5 +1,8 @@
-from src.settings.settings import *
 from abc import ABC, abstractmethod
+
+from src.scenes.score import Score
+from src.settings.settings import *
+
 
 class Observer(ABC):
 
@@ -32,11 +35,15 @@ class RoomStatePlaying(RoomState):
         for enemy in self.room.enemies:
             self.room.scene.all_sprites.add(enemy)
             enemy.isActive = True
-    
+
     def update(self):
         if self.room.enemies == []:
             self.room.scene.WIN_ROOM_SOUND.play()
             self.toState(RoomStateCleared(self.room, "CLEARED"))
+
+            # In Survival, add score for clearing room
+            if self.room.scene.isSurvival:
+                Score.addScoreClearedRoom()
         else:
             for enemy in self.room.enemies:
                 if not enemy.entityData.isAlive:

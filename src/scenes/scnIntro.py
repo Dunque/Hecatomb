@@ -32,13 +32,13 @@ class Intro(Scene):
         screen.blit(self.image, self.image.get_rect())
 
         # Dibujamos título del juego
-        font = pg.font.Font(HANSHAND_FONT, 224)
+        font = pg.font.Font(TITLE_FONT, 224)
         text = font.render('HECATOMB', True, MAROON)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/2))
         screen.blit(text, textRect)
 
         # Dibujamos mensaje
-        font = pg.font.Font(HANSHAND_FONT, 48)
+        font = pg.font.Font(GUI_FONT, 48)
         text = font.render('Pulse cualquier tecla para continuar', True, BLACK)
         textRect = text.get_rect(center=(WIDTH/2, HEIGHT/3*2))
         screen.blit(text, textRect)

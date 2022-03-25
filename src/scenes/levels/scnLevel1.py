@@ -24,7 +24,7 @@ class Level1(Level):
         self.canExit = False
 
         #Player starts with the sword
-        self.player.give_weapon(Sword)
+        self.player.give_weapon(self.player.entityData.load_weapons())
 
     def load_data(self):
 
@@ -143,7 +143,9 @@ class Level1(Level):
         #Hud
         for hud in self.all_hud:
             self.screen.blit(hud.image, self.camera.apply(hud))
-        self.drawDialogue()
+        self.hud.drawDialogue()
+        self.hud.drawMenu()
+        self.hud.drawDineros()
         self.hud.draw_health(screen)
 
 
@@ -162,5 +164,5 @@ class Level1(Level):
     def nextScene(self):
         pg.mouse.set_visible(True)
         scene = Cutscene2(self.director)
-        Music.changemusic(self, 0)
+        Music.changeMusic(self, 0)
         self.director.changeScene(scene)
