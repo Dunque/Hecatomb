@@ -162,7 +162,7 @@ class Level(Scene):
     def pauseScene(self):
         pg.mouse.set_visible(True)
         scene = PauseMenu(self.director)
-        Music.volumemusic(self, 0.25)
+        Music.volumeMusic(self, 0.25)
         self.director.stackScene(scene)
     
     def losingScene(self):

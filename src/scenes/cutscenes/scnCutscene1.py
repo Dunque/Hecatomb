@@ -99,5 +99,5 @@ class Cutscene1(Level):
     def nextScene(self):
         pg.mouse.set_visible(True)
         scene = Level1(self.director)
-        Music.changemusic(self, 1)
+        Music.changeMusic(self, 1)
         self.director.changeScene(scene)

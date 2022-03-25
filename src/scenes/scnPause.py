@@ -26,7 +26,7 @@ class ButtonContinue(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Continuar')
 
     def action(self):
-        Music.volumemusic(self, 1)
+        Music.volumeMusic(self, 1)
         self.screen.menu.continueGame()
 
 
@@ -45,7 +45,7 @@ class ButtonRestart(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Reiniciar')
 
     def action(self):
-        Music.volumemusic(self,1)
+        Music.volumeMusic(self,1)
         self.screen.menu.restartScene()
 
 
@@ -55,7 +55,7 @@ class ButtonExitToMenu(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menu')
 
     def action(self):
-        Music.changemusic(self, 0)
+        Music.changeMusic(self, 0)
         self.screen.menu.exitToMenu()
 
 
@@ -104,7 +104,7 @@ class PauseMenu(Scene):
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:    # Tecla Esc, continuar
                     self.continueGame()
-                    Music.volumemusic(self, 1)
+                    Music.volumeMusic(self, 1)
             elif event.type == pg.QUIT:
                 self.director.exitProgram()
 
