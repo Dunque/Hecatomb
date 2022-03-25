@@ -8,6 +8,7 @@ from src.entities.objects import *
 from src.entities.ground import *
 from src.map.camera import *
 from src.map.room import Room
+from src.weapons.weapons import Gun, Shotgun
 from abc import ABC, abstractmethod
 from src.entities.npc import NPCBase, TacoTruck, NPCStop
 
@@ -126,11 +127,15 @@ class Map(Notifier):
                     elif self.finalMap[row][col] == 'R':
                         room.addNPC(NPCBase(self.scene, col, row, textLines=5))
                     elif self.finalMap[row][col] == 'T':
-                        TacoTruck(self.scene, col, row, textLines=[10,11])
+                        TacoTruck(self.scene, col, row, textLines=[11,12])
 
                     #----------------------OBJECTS--------------------------
                     elif self.finalMap[row][col] == 'C':
                         room.addObject(Chest(self.scene, col, row, textLines=7))
+                    elif self.finalMap[row][col] == 'G':
+                        room.addObject(Chest(self.scene, col, row, textLines=8, weapon=Gun))
+                    elif self.finalMap[row][col] == 'N':
+                        room.addObject(Chest(self.scene, col, row, textLines=8, weapon=Shotgun))
                     elif self.finalMap[row][col] == 'M':
                         room.addObject(Medkit(self.scene, col, row, 40))
                     elif self.finalMap[row][col] == '0':

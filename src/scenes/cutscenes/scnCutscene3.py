@@ -17,8 +17,7 @@ class Cutscene3(Level):
         super(Cutscene3,self).__init__(director)
 
         #Player starts with the sword and the gun
-        self.player.give_weapon(Sword)
-        self.player.give_weapon(Gun)
+        self.player.give_weapon(self.player.entityData.load_weapons())
 
     def load_data(self):
 
@@ -64,6 +63,23 @@ class Cutscene3(Level):
 
     # -----------------------------------------------------
     # Scene transitions
+
+    def draw(self, screen):
+        #Background color
+        self.screen = screen
+        self.screen.fill(BGCOLOR)
+
+        #Sprites
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, self.camera.apply(sprite))
+
+        #Hud
+        for hud in self.all_hud:
+            self.screen.blit(hud.image, self.camera.apply(hud))
+        self.hud.drawDialogue()
+        self.hud.drawMenu()
+        self.hud.drawDineros()
+        self.hud.draw_health(screen)
 
     def nextScene(self):
         pg.mouse.set_visible(True)

@@ -118,7 +118,7 @@ class Hud:
 				self.time_dineros = time.time()
 			time_fin = time.time()
 			self.dineros.activate()
-			text_surface5, rect5 = self.scene.game_font.render(str(self.player.los_dineros) + '$', (200, 200, 200))
+			text_surface5, rect5 = self.scene.game_font.render(str(self.player.entityData.los_dineros) + '$', (200, 200, 200))
 			self.scene.screen.blit(text_surface5, (WIDTH / 2 - 680, (HEIGHT / 2) - 340))
 			if time_fin - self.time_dineros > self.show_time_dineros:
 				self.draw_dineros = False

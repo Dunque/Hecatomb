@@ -9,7 +9,7 @@ vec = pg.math.Vector2
 
 
 class Chest(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, textLines = None):
+	def __init__(self, scene, x, y, textLines = None, weapon = None):
 		self.scene = scene
 		self._layer = WALL_LAYER
 		self.groups = self.scene.all_sprites, self.scene.walls_SG
@@ -26,14 +26,17 @@ class Chest(pg.sprite.Sprite):
 		self.pos = vec(self.rect.x + 50, self.rect.y)
 		self.interaccion = Interaccion(self.scene, self.pos, self.scene.abrirImg)
 
+		self.weapon = weapon
+
 		self.dialogo = None
 		if textLines:
 			with open(self.scene.dialogues_src,encoding='utf-8') as f:
 				for i, line in enumerate(f):
 					if i == textLines:
 						dialogue = line.rstrip("\n").split('\\n')
-			self.value = random.randint(3,5) * 100
-			dialogue[0] += ' ' + str(self.value) + ' RUBLOS.'
+			if not self.weapon:
+				self.value = random.randint(3,5) * 100
+				dialogue[0] += ' ' + str(self.value) + ' RUBLOS.'
 			self.dialogo = DialogoInGame(self.scene, dialogue, stopMove=True)
 
 		self.opened = False
@@ -80,10 +83,13 @@ class Chest(pg.sprite.Sprite):
 		else:
 			self.dialogo.end()
 			self.scene.hud.completly_finished = True
-			if not self.dineros_given:
-				self.scene.player.mas_dineros(round(self.value / 107.75, 2))
+			if not self.dineros_given and not self.weapon:
+				self.scene.player.entityData.mas_dineros(round(self.value / 107.75, 2))
 				self.dineros_given = True
-				self.scene.hud.drawDineros()
+				self.scene.hud.draw_dineros = True
+			elif not self.dineros_given:
+				self.scene.player.give_weapon(self.weapon)
+				self.dineros_given = True
 
 	def stopTalkFast(self):
 		self.dialogo.stopText()

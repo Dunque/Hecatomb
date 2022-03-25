@@ -17,6 +17,7 @@ class Cutscene1(Level):
 
         #Fog
         self.fog = pg.Surface((WIDTH, HEIGHT))
+        self.player.entityData.reset()
 
     def load_data(self):
 

@@ -22,7 +22,7 @@ class NPCBase(Character):
 		self.currentAnim=self.animList[0]
 
 		super(NPCBase, self).__init__(scene, x, y, self.animList,
-									 (scene.all_sprites, scene.npc_SG), PlayerStats())
+									 (scene.all_sprites, scene.npc_SG), PlayerStats(scene))
 		self.acc = vec(0, 0)
 		self.rect.center = self.pos
 		self.state = EnemyGroundedState(self, "GROUNDED")
@@ -111,8 +111,9 @@ class NPCStop(NPCBase):
 		self.scene.hud.completly_finished = True
 		self.scene.player.give_weapon(Sword)
 
+
 class TacoTruck(pg.sprite.Sprite):
-	def __init__(self, scene, x, y, textLines = 10, options = 14, salir = 12, no_dineros=13):
+	def __init__(self, scene, x, y, textLines = 10, options = 15, salir = 13, no_dineros=14):
 		self.scene = scene
 		self.groups = self.scene.all_sprites, self.scene.npc_SG
 		pg.sprite.Sprite.__init__(self, self.groups)
@@ -194,10 +195,11 @@ class TacoTruck(pg.sprite.Sprite):
 			if self.options.opcion < 4:
 				coste_producto = self.precios[self.options.opcion]
 				dialogue_tmp = self.dialogue2[0]
-				if self.scene.player.los_dineros >= coste_producto:
-					self.scene.player.menos_dineros(coste_producto)
+				if self.scene.player.entityData.los_dineros >= coste_producto:
+					self.scene.player.entityData.menos_dineros(coste_producto)
 					self.dialogue2[0] += self.dialogue_options[self.options.opcion][:-5].rstrip() + '.'
 					self.dialogo.text = self.dialogue2
+					self.scene.player.entityData.heal(coste_producto * 5)
 				else:
 					self.dialogo.text = self.dialogue_no_dineros
 			else:

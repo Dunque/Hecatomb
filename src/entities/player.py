@@ -26,7 +26,7 @@ class Player(Character):
         animList = [idleAnim, walkAnim, deathAnim]
 
         super(Player, self).__init__(scene, x, y, animList,
-                                     (scene.all_sprites, scene.player_SG), PlayerStats())
+                                     (scene.all_sprites, scene.player_SG), PlayerStats(scene))
         # AIMING
         self.weaponOffsetX = -20
         self.weaponOffsetY = -10
@@ -56,16 +56,6 @@ class Player(Character):
     def stopMovement(self):
         self.state.move = False
 
-    def mas_dineros(self, dineros):
-        self.scene.hud.time_dineros = None
-        self.scene.hud.draw_dineros = True
-        self.los_dineros += dineros
-        self.los_dineros = round(self.los_dineros, 2)
-
-    def menos_dineros(self, dineros):
-        self.los_dineros -= dineros
-        self.los_dineros = round(self.los_dineros, 2)
-
     def update(self):
         super(Player, self).update()
         self.state.handleInput()
@@ -76,7 +66,13 @@ class Player(Character):
                                   self.pos.y - self.weaponOffsetY, self.rect)
 
     def give_weapon(self, weapon):
-        self.weapon_menu.add_weapon(weapon)
+        if type(weapon)==list:
+            for wp in weapon:
+                self.weapon_menu.add_weapon(wp)
+        else:
+            self.entityData.add_weapon(weapon)
+            self.weapon_menu.add_weapon(weapon)
+
 
     def change_weapon(self, slot):
         if self.weapon_slot != slot and slot == "top":

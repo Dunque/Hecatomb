@@ -24,7 +24,7 @@ class Level1(Level):
         self.canExit = False
 
         #Player starts with the sword
-        self.player.give_weapon(Sword)
+        self.player.give_weapon(self.player.entityData.load_weapons())
 
     def load_data(self):
 
@@ -113,6 +113,8 @@ class Level1(Level):
         for hud in self.all_hud:
             self.screen.blit(hud.image, self.camera.apply(hud))
         self.hud.drawDialogue()
+        self.hud.drawMenu()
+        self.hud.drawDineros()
         self.hud.draw_health(screen)
 
 

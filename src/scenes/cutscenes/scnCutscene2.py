@@ -17,8 +17,7 @@ class Cutscene2(Level):
         super(Cutscene2,self).__init__(director)
 
         #Player starts with the sword and the gun
-        self.player.give_weapon(Sword)
-        self.player.give_weapon(Gun)
+        self.player.give_weapon(self.player.entityData.load_weapons())
 
         #Fog
         self.fog = pg.Surface((WIDTH, HEIGHT))
