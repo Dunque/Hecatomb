@@ -88,6 +88,7 @@ class Level(Scene):
         self.DODGE_SOUND = pg.mixer.Sound("./sounds/roll.wav")
         self.WIN_ROOM_SOUND = pg.mixer.Sound("./sounds/win_sound.wav")
         self.HEAL_SOUND = pg.mixer.Sound("./sounds/heal.wav")
+        self.OPEN_SOUND = pg.mixer.Sound("./sounds/chest_sound.wav")
         self.VOICE_SOUND_0 = pg.mixer.Sound("./sounds/voices/Crossbowman_See_001.wav")
         self.VOICE_SOUND_1 = pg.mixer.Sound("./sounds/voices/greetings-3.wav")
         self.VOICE_SOUND_2 = pg.mixer.Sound("./sounds/voices/joy-2.wav")

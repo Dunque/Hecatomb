@@ -63,9 +63,6 @@ class Music():
     def getVolumeMusic(self): #Devuelve el volumen actual de la musica
         return pg.mixer.music.get_volume()
 
-    def getEffectsVolume(self): #Devuelve el volumen actual de los efectos
-        return FIRE_BULLET_SOUND.get_volume()
-
     def playVoice(self,scene,num):
         if (num == 0):
             scene.VOICE_SOUND_0.play()

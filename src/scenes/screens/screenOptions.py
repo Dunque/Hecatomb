@@ -47,17 +47,16 @@ class TextSoundVolume(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(GUI_FONT, 42)
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 5)
-        # text = self.getVolumeStr()
-        text = 'Volumen sonidos: 100 %' # TODO: cuando funcione geteffectsvolume(), borrar línea
+        text = self.getVolumeStr()
         CenteredTextGUI.__init__(self, screen, font, WHITE, text, pos)
 
+    #No funciona la función del sonido, por ello hago que devuelva siempre 100%
     def getVolumeStr(self):
-        return 'Volumen sonidos: ' + str(int(Music.getEffectsVolume(self) * 100)) + ' %'
+        return 'Volumen sonidos: 100 %'
     
     def changeText(self):
         # Se vuelve a cargar el texto
-        # text = self.getVolumeStr()
-        text = 'Volumen sonidos: 100 %' # TODO: no funciona geteffectsvolume(), borrar línea
+        text = self.getVolumeStr()
         font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(text, True, WHITE)
         pos = self.rect.center
