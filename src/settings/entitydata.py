@@ -1,3 +1,4 @@
+from src.entities.states.playerstates import PlayerGroundedState
 from src.settings.settings import *
 
 
@@ -100,6 +101,8 @@ class PlayerStats(CharacterStats, metaclass=SingletonMeta):
     def reset(self):
         self.weapons = []
         self.los_dineros = 0
+        self.actualHP = self.maxHP
+        self.isAlive = True
 
 class HeraldStats(CharacterStats):
     def __init__(self):

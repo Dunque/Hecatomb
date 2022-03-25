@@ -19,6 +19,7 @@ class PlayerGroundedState(PlayerState):
     def __init__(self, character, name):
         super(PlayerGroundedState, self).__init__(character,name)
         self.move = True
+        self.character.show_menu = False
 
     def update(self):
         #Vibe check
