@@ -89,6 +89,7 @@ class Player(Character):
                 self.weapon.deactivate()
                 pg.mouse.set_visible(True)
                 self.weapon_slot = slot
+                self.weapon = None
         elif self.weapon_slot != slot and slot == "right":
             if self.weapon is not None:
                 self.weapon.deactivate()
