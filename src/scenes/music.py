@@ -6,8 +6,8 @@ from pygame.locals import *
 
 class Music():
 
-    def changemusic(self, num): #Cambia la musica que esta soando actualmente
-        Music.volumemusic(self, 1)
+    def changeMusic(self, num): #Cambia la musica que esta soando actualmente
+        Music.volumeMusic(self, 1)
         if (num==0):
             pg.mixer.music.stop
             pg.mixer.music.load("./sounds/music/menu_music.mp3")
@@ -34,10 +34,10 @@ class Music():
             pg.mixer.music.play(-1)
 
 
-    def volumemusic(self, num): #Controlamos el volumen de toda la musica
+    def volumeMusic(self, num): #Controlamos el volumen de toda la musica
         pg.mixer.music.set_volume(num)
 
-    def effectsvolume(self,num,scene): #Controlamos el volumen de todos los efectos
+    def effectsVolume(self,num,scene): #Controlamos el volumen de todos los efectos
         scene.FIRE_BULLET_SOUND.set_volume(num)
         scene.DEATH_SOUND.set_volume(num)
         scene.CHANGE_SOUND.set_volume(num)
@@ -60,13 +60,13 @@ class Music():
         scene.VOICE_SOUND_9.set_volume(num)
         scene.VOICE_SOUND_10.set_volume(num)
 
-    def getvolumemusic(self): #Devuelve el volumen actual de la musica
+    def getVolumeMusic(self): #Devuelve el volumen actual de la musica
         return pg.mixer.music.get_volume()
 
-    def geteffectsvolume(self): #Devuelve el volumen actual de los efectos
+    def getEffectsVolume(self): #Devuelve el volumen actual de los efectos
         return FIRE_BULLET_SOUND.get_volume()
 
-    def playvoice(self,scene,num):
+    def playVoice(self,scene,num):
         if (num == 0):
             scene.VOICE_SOUND_0.play()
         elif (num == 1):

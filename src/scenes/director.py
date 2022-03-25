@@ -45,7 +45,7 @@ class Director():
 
 
     def execute(self):
-        Music.changemusic(self, 4)
+        Music.changeMusic(self, 4)
         # Mientras haya escenas en la pila, ejecutaremos la de arriba
         while (len(self.stack)>0):
 

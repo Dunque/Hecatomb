@@ -151,12 +151,12 @@ class Menu(Scene):
 
     def playAdventure(self):
         scene = Cutscene1(self.director)
-        Music.changemusic(self, 0)
+        Music.changeMusic(self, 0)
         self.director.stackScene(scene)
 
     def playSurvival(self):
         m = random.randint(1, 5)
-        Music.changemusic(self,m)
+        Music.changeMusic(self,m)
         scene = Survival(self.director)
         self.director.stackScene(scene)
 

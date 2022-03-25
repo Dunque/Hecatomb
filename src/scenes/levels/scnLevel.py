@@ -2,12 +2,12 @@ import time
 
 import pygame as pg
 from src.scenes.music import *
-from src.scenes.recordManager import updateRecords
+from src.scenes.records import Records
 from src.scenes.resourceManager import ResourceManager
 from src.scenes.scene import Scene
 from src.scenes.scnLosing import LosingMenu
 from src.scenes.scnPause import PauseMenu
-from src.scenes.score import getScore
+from src.scenes.score import Score
 from src.settings.settings import *
 
 
@@ -16,6 +16,8 @@ class Level(Scene):
     def __init__(self, director):
         #Initialize superclass
         Scene.__init__(self, director)
+
+        self.isSurvival = False
 
         #Initialize sprite groups
         self.all_sprites = pg.sprite.LayeredUpdates()
@@ -107,14 +109,11 @@ class Level(Scene):
         # If player died
         if not self.player_SG.has(self.player):
 
-            from src.scenes.survival.scnSurvival import \
-                Survival  # TODO: para evitar bucle en imports
-
             # Si estamos en Survival
-            if type(self) == Survival:
+            if self.isSurvival:
                 # Actualizamos mejores puntuaciones
-                currentScore = getScore()
-                updateRecords(currentScore)
+                currentScore = Score.getScore()
+                Records.updateRecords(currentScore)
                 # Go to SurvivalEnd
                 self.nextScene()
 
@@ -163,7 +162,7 @@ class Level(Scene):
     def pauseScene(self):
         pg.mouse.set_visible(True)
         scene = PauseMenu(self.director)
-        Music.volumemusic(self, 0.25)
+        Music.volumeMusic(self, 0.25)
         self.director.stackScene(scene)
     
     def losingScene(self):

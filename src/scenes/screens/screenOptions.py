@@ -1,6 +1,6 @@
 import sys
 import pygame as pg
-import src.scenes.difficulty as Diffic
+from src.scenes.difficulty import Difficulty
 from src.scenes.guiElems import *
 from src.scenes.guiUtils import UtilsGUI
 from src.scenes.music import Music
@@ -27,7 +27,7 @@ class TextMusicVolume(CenteredTextGUI):
         CenteredTextGUI.__init__(self, screen, font, WHITE, text, pos)
 
     def getVolumeStr(self):
-        return 'Volumen música: ' + str(int(Music.getvolumemusic(self) * 100)) + ' %'
+        return 'Volumen musica: ' + str(int(Music.getVolumeMusic(self) * 100)) + ' %'
     
     def changeText(self):
         # Se vuelve a cargar el texto
@@ -48,16 +48,16 @@ class TextSoundVolume(CenteredTextGUI):
         font = pg.font.Font(GUI_FONT, 42)
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 5)
         # text = self.getVolumeStr()
-        text = 'Volumen sonidos: XXX %' # TODO: no funciona geteffectsvolume()
+        text = 'Volumen sonidos: 100 %' # TODO: cuando funcione geteffectsvolume(), borrar línea
         CenteredTextGUI.__init__(self, screen, font, WHITE, text, pos)
 
     def getVolumeStr(self):
-        return 'Volumen sonidos: ' + str(int(Music.geteffectsvolume(self) * 100)) + ' %'
+        return 'Volumen sonidos: ' + str(int(Music.getEffectsVolume(self) * 100)) + ' %'
     
     def changeText(self):
         # Se vuelve a cargar el texto
         # text = self.getVolumeStr()
-        text = 'Volumen sonidos: XXX %' # TODO: no funciona geteffectsvolume()
+        text = 'Volumen sonidos: 100 %' # TODO: no funciona geteffectsvolume(), borrar línea
         font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(text, True, WHITE)
         pos = self.rect.center
@@ -69,43 +69,44 @@ class TextSoundVolume(CenteredTextGUI):
     def action(self):
         pass
 
+
 # ---------------------------------------------------------
 # Botones
 
 class ButtonMusicDown(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 0)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
+        pos = (320 + 150, 342)
+        ButtonGUI.__init__(self, screen, SMALL_BUTTON_IMAGE, SMALL_BUTTON_SIZE, pos, '-')
 
     def action(self):
-        print(f"Music volume DOWN") # TODO: cambiar print por llamada a función de Music
+        print(f"Music volume DOWN") # TODO: cambiar print por llamada a pertinente función de Music
 
 
 class ButtonMusicUp(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 8)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
+        pos = (1280 - 150, 342)
+        ButtonGUI.__init__(self, screen, SMALL_BUTTON_IMAGE, SMALL_BUTTON_SIZE, pos, '+')
 
     def action(self):
-        print(f"Music volume UP")   # TODO: cambiar print por llamada a función de Music
+        print(f"Music volume UP")   # TODO: cambiar print por llamada a pertinente función de Music
 
 
 class ButtonSoundDown(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 1)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '-')
+        pos = (320 + 150, 477)
+        ButtonGUI.__init__(self, screen, SMALL_BUTTON_IMAGE, SMALL_BUTTON_SIZE, pos, '-')
 
     def action(self):
-        print(f"Sound volume DOWN") # TODO: cambiar print por llamada a función de Music
+        print(f"Sound volume DOWN") # TODO: cambiar print por llamada a pertinente función de Music
 
 
 class ButtonSoundUp(ButtonGUI):
     def __init__(self, screen):
-        pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, OPTIONS_MENU_LAYOUT, 9)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, '+')
+        pos = (1280 - 150, 477)
+        ButtonGUI.__init__(self, screen, SMALL_BUTTON_IMAGE, SMALL_BUTTON_SIZE, pos, '+')
 
     def action(self):
-        print(f"Sound volume UP")   # TODO: cambiar print por llamada a función de Music
+        print(f"Sound volume UP")   # TODO: cambiar print por llamada a pertinente función de Music
 
 
 class ButtonDifficulty(ButtonGUI):
@@ -116,16 +117,7 @@ class ButtonDifficulty(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, text)
 
     def getText(self):
-        text = "Dificultad: "
-        if Diffic.difficulty == 0:
-            text += "Fácil"
-        elif Diffic.difficulty == 1:
-            text += "Normal"
-        elif Diffic.difficulty == 2:
-            text += "Difícil"
-        else:
-            sys.exit("Invalid difficulty value")
-        return text
+        return "Dificultad: " + Difficulty.getDifficultyName()
 
     def changeText(self):
         # Se vuelve a cargar el texto del botón
@@ -139,7 +131,7 @@ class ButtonDifficulty(ButtonGUI):
         self.changeText()
 
     def action(self):
-        Diffic.changeDifficulty()
+        Difficulty.changeDifficulty()
         self.changeText()
 
 
@@ -149,7 +141,7 @@ class ButtonBackOptions(ButtonGUI):
         ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Volver')
 
     def action(self):
-        Music.volumemusic(self, 1)
+        Music.volumeMusic(self, 1)
         self.screen.menu.showInitialScreen()
 
 # ---------------------------------------------------------
