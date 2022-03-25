@@ -27,7 +27,7 @@ class TextMusicVolume(CenteredTextGUI):
         CenteredTextGUI.__init__(self, screen, font, WHITE, text, pos)
 
     def getVolumeStr(self):
-        return 'Volumen música: ' + str(int(Music.getvolumemusic(self) * 100)) + ' %'
+        return 'Volumen musica: ' + str(int(Music.getvolumemusic(self) * 100)) + ' %'
     
     def changeText(self):
         # Se vuelve a cargar el texto

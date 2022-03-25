@@ -44,11 +44,11 @@ class CreditsScreenGUI(ScreenGUI):
         ScreenGUI.__init__(self, menu, 'resources/images/menu_blur.png')
         # Creamos los elementos GUI
         textTitle = TextCredits(self)
-        textAuthor0 = TextAuthor(self, 0, 'Roi Santos Ríos')
-        textAuthor1 = TextAuthor(self, 1, 'Antón Concheiro Fernández')
-        textAuthor2 = TextAuthor(self, 2, 'Iago Fernández Garrido')
+        textAuthor0 = TextAuthor(self, 0, 'Roi Santos Rios')
+        textAuthor1 = TextAuthor(self, 1, 'Anton Concheiro Fernandez')
+        textAuthor2 = TextAuthor(self, 2, 'Iago Fernandez Garrido')
         textAuthor3 = TextAuthor(self, 3, 'Jorge Rivadulla Brey')
-        textAuthor4 = TextAuthor(self, 4, 'Xes Garbajosa Fernández')
+        textAuthor4 = TextAuthor(self, 4, 'Xes Garbajosa Fernandez')
         buttonBack = ButtonBackCredits(self)
         # Y los metemos en la lista
         self.elementsGUI.append(textTitle)

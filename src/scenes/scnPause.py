@@ -52,7 +52,7 @@ class ButtonRestart(ButtonGUI):
 class ButtonExitToMenu(ButtonGUI):
     def __init__(self, screen):
         pos = UtilsGUI.calculatePosition(OTHER_MENU_Y0, BUTTON_SEP_Y, PAUSE_MENU_LAYOUT, 3)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menú')
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menu')
 
     def action(self):
         Music.changemusic(self, 0)

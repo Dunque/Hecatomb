@@ -20,11 +20,11 @@ class Difficulty:
     @classmethod
     def getDifficultyName(cls):
         if cls.difficulty == 0:
-            text = "Fácil"
+            text = "Facil"
         elif cls.difficulty == 1:
             text = "Normal"
         elif cls.difficulty == 2:
-            text = "Difícil"
+            text = "Dificil"
         else:
             sys.exit("Invalid difficulty value")
         return text

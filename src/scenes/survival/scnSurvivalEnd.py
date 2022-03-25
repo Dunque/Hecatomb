@@ -13,7 +13,7 @@ class TextLosing(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(GUI_FONT, 112)
         pos = (WIDTH/2, HEIGHT/5)
-        CenteredTextGUI.__init__(self, screen, font, MAROON, '¡Has muerto!', pos)
+        CenteredTextGUI.__init__(self, screen, font, MAROON, 'Has muerto', pos)
 
     def action(self):
         pass
@@ -22,7 +22,7 @@ class TextActualScore(CenteredTextGUI):
     def __init__(self, screen):
         font = pg.font.Font(GUI_FONT, 50)
         pos = (WIDTH*3/4, 300 + 120)
-        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Puntuación', pos)
+        CenteredTextGUI.__init__(self, screen, font, WHITE, 'Puntuacion', pos)
 
     def action(self):
         pass
@@ -42,7 +42,7 @@ class ButtonRestart(ButtonGUI):
 class ButtonExitToMenu(ButtonGUI):
     def __init__(self, screen):
         pos = UtilsGUI.calculatePosition(MAIN_MENU_Y0, BUTTON_SEP_Y, MAIN_MENU_LAYOUT, 1)
-        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menú')
+        ButtonGUI.__init__(self, screen, BUTTON_IMAGE, BUTTON_SIZE, pos, 'Salir al menu')
 
     def action(self):
         self.screen.menu.exitToMenu()
