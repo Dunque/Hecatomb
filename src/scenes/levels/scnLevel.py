@@ -47,7 +47,6 @@ class Level(Scene):
     
     def reset(self):
         self.__init__(self.director)
-        print(1)
         self.player.entityData.reset()
 
     def load_data(self):
