@@ -1,5 +1,5 @@
 import pygame as pg
-from src.scenes.recordManager import RecordManager
+from src.scenes.records import Records
 from src.scenes.guiElems import *
 from src.scenes.guiUtils import UtilsGUI
 from src.settings.settings import *
@@ -35,7 +35,7 @@ class BoardWithScore(ButtonGUI):
         self.n = n
         image = self.getBoardImage()
         pos = (WIDTH*3/4, 420 + (n-1)*160)
-        scoreText = str(RecordManager.getRecord(self.n))
+        scoreText = str(Records.getRecord(self.n))
         ButtonGUI.__init__(self, screen, image, (500, 130), pos, scoreText)
     
     def getBoardImage(self):
@@ -48,7 +48,7 @@ class BoardWithScore(ButtonGUI):
 
     def changeText(self):
         # Se vuelve a cargar el texto
-        scoreText = str(RecordManager.getRecord(self.n))
+        scoreText = str(Records.getRecord(self.n))
         font = pg.font.Font(GUI_FONT, 42)
         self.text = font.render(scoreText, True, BROWN)
         pos = self.rect.center

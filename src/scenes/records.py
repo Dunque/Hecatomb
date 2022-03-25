@@ -2,7 +2,7 @@ from src.settings.settings import *
 
 # Clase para realizar accesos a archivo con mejores puntuaciones (records)
 
-class RecordManager:
+class Records:
     # Path del archivo con las mejores puntuaciones
     RECORDS_FILE = 'topScores.txt'
 

@@ -2,7 +2,7 @@ import time
 
 import pygame as pg
 from src.scenes.music import *
-from src.scenes.recordManager import RecordManager
+from src.scenes.records import Records
 from src.scenes.resourceManager import ResourceManager
 from src.scenes.scene import Scene
 from src.scenes.scnLosing import LosingMenu
@@ -113,7 +113,7 @@ class Level(Scene):
             if self.isSurvival:
                 # Actualizamos mejores puntuaciones
                 currentScore = Score.getScore()
-                RecordManager.updateRecords(currentScore)
+                Records.updateRecords(currentScore)
                 # Go to SurvivalEnd
                 self.nextScene()
 
